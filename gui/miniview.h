@@ -31,7 +31,7 @@
 class MiniView : public QGraphicsView {
 Q_OBJECT
 public:
-	explicit MiniView(QWidget* parent);
+    explicit MiniView(QWidget* parent = 0);
 
 	/// Set the source graphics view.
 	void setSource(QGraphicsView* source);
