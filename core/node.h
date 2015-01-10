@@ -1,0 +1,77 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Hugo Parente Lima <hugo.pl@gmail.com>           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
+ ***************************************************************************/
+
+#ifndef NODE_H
+#define NODE_H
+
+#include "item.h"
+#include <QSet>
+#include <QDomElement>
+
+class AbstractArc;
+
+/// A collection of arcs.
+typedef QSet<AbstractArc*> ArcCollection;
+
+/**
+* A node in the graph
+* @ingroup core
+*/
+class Node : public Item {
+public:
+	/// Constructs a new Item at the position \p pos.
+	Node(PetriNet* pn, const QPointF& pos, ItemId id) : Item(pn, id), mPos(pos) {}
+	/// Return the node name
+	const QString& name() const { return mName; }
+	/// Set the node name
+	void setName(const QString& name);
+	/// Returns the current item position
+	const QPointF& pos() const { return mPos; }
+	/// Set the item position
+	void setPos(const QPointF& pos);
+	/// Add an arc to this node.
+	void addInputArc(AbstractArc* arc);
+	/// Add an arc from this node.
+	void addOutputArc(AbstractArc* arc);
+	/// Remove an input arc.
+	void removeInputArc(AbstractArc* arc);
+	/// Remove an output arc.
+	void removeOutputArc(AbstractArc* arc);
+
+	int numInputArcs() const { return mInput.count(); }
+	int numOutputArcs() const { return mOutput.count(); }
+
+	const ArcCollection& inputArcs() { return mInput; }
+	const ArcCollection& outputArcs() { return mOutput; }
+
+	void save(QXmlStreamWriter& out);
+	static void load(Node* node, QDomElement elem);
+
+protected:
+	void beforeAdd() { }
+	QLinkedList<Item*> beforeDelete();
+
+private:
+	QString mName;
+	QPointF mPos;
+	ArcCollection mInput;
+	ArcCollection mOutput;
+};
+
+#endif

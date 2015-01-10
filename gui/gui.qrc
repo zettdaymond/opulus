@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/" >
+        <file alias="opulus" >pics/opulus.png</file>
+        <file alias="application-exit" >pics/application-exit.png</file>
+        <file alias="arc" >pics/arc.png</file>
+        <file alias="inhibitorarc" >pics/inhibitorarc.png</file>
+        <file alias="dialog-error" >pics/dialog-error.png</file>
+        <file alias="dialog-information" >pics/dialog-information.png</file>
+        <file alias="dialog-warning" >pics/dialog-warning.png</file>
+        <file>pics/document-new.png</file>
+        <file>pics/document-open.png</file>
+        <file>pics/document-save.png</file>
+        <file alias="redo" >pics/edit-redo.png</file>
+        <file alias="undo" >pics/edit-undo.png</file>
+        <file>pics/file-export.png</file>
+        <file>pics/help-contents.png</file>
+        <file>pics/help-whatsthis.png</file>
+        <file alias="place" >pics/place.png</file>
+        <file alias="select" >pics/select.png</file>
+        <file alias="simulate" >pics/simulate.png</file>
+        <file alias="tokens" >pics/tokens.png</file>
+        <file alias="transition" >pics/transition.png</file>
+		<file alias="random" >pics/random.png</file>
+		<file alias="zoom-in" >pics/zoom-in.png</file>
+		<file alias="zoom-out" >pics/zoom-out.png</file>
+    </qresource>
+    <qresource prefix="/anim" >
+        <file alias="wait1">pics/wait1.png</file>
+        <file alias="wait2">pics/wait2.png</file>
+        <file alias="wait3">pics/wait3.png</file>
+        <file alias="wait4">pics/wait4.png</file>
+        <file alias="wait5">pics/wait5.png</file>
+        <file alias="wait6">pics/wait6.png</file>
+        <file alias="wait7">pics/wait7.png</file>
+        <file alias="wait8">pics/wait8.png</file>
+        <file alias="wait9">pics/wait9.png</file>
+        <file alias="wait10">pics/wait10.png</file>
+    </qresource>
+</RCC>

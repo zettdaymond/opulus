@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Opulus
+GenericName=Opulus
+Comment=Petri net editor
+Comment[pt]=Editor de redes de petri
+Comment[pt_BR]=Editor de redes de petri
+Exec=opulus
+Icon=opulus
+Terminal=false
+Type=Application
+Categories=Qt;Science

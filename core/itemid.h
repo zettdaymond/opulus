@@ -1,0 +1,55 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Hugo Parente Lima <hugo.pl@gmail.com>           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
+ ***************************************************************************/
+
+#ifndef ITEMID_H
+#define ITEMID_H
+
+#include <QString>
+#include <QHash>
+
+class ItemId {
+public:
+	ItemId() {}
+	
+	ItemId(const QString& value) : mValue(value) {}
+	const QString& toString() const {
+		return mValue;
+	}
+
+	bool isValid() const {
+		return !mValue.isNull();
+	}
+
+	ItemId& operator=(const QString& value)  {
+		mValue = value;
+		return *this;
+	}
+	
+	bool operator==(const ItemId& other) const {
+		return mValue == other.mValue;
+	}
+	
+	friend uint qHash(const ItemId& id) {
+		return qHash(id.mValue);
+	}
+private:
+	QString mValue;
+};
+
+#endif

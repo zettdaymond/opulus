@@ -1,0 +1,44 @@
+/***************************************************************************
+ *   Copyright (C) 2007 by Hugo Parente Lima <hugo.pl@gmail.com>           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
+ ***************************************************************************/
+
+#include "cmdremoveitem.h"
+#include "petrinet.h"
+#include "item.h"
+
+CmdRemoveItem::CmdRemoveItem(Item* item) : mId(item->id()), mPetriNet(item->petriNet()) {
+	setText(tr("Remove item"));
+}
+
+CmdRemoveItem::~CmdRemoveItem() {
+	qDeleteAll(mItems);
+}
+
+void CmdRemoveItem::undo() {
+	while (mItems.count()) {
+		Item* i = mItems.takeLast();
+		i->petriNet()->addItem(i);
+	}
+	mItems.clear();
+}
+
+void CmdRemoveItem::redo() {
+	mItems = mPetriNet->removeItem(mId);
+}
+
+
