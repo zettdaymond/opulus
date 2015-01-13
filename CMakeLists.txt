@@ -17,7 +17,8 @@ find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
 #include(opulus.cmake)
 
 #TODO
-SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+#SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 #include_directories(${Qt5Widgets_INCLUDE_DIRS})
 #include_directories(${Qt5Core_INCLUDE_DIRS})
@@ -30,6 +31,8 @@ SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # translations
 set(I18N pt_BR es)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "Build type not especified, building as release.")
