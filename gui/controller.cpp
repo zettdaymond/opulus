@@ -221,7 +221,7 @@ void Controller::fireRandomTransition() {
 void Controller::fireNRandomTransitions() {
 	try {
 		if (mSimulation){
-            int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
+	    int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
 			mSimulation->fireNRandomTransitions(n);
 		}
 	} catch (Exception& e) {
@@ -254,7 +254,7 @@ void Controller::renameNode(Node* node, const QString& newName) {
 QString Controller::showExportFileDialog(const QString& filter, const QString& defaultSuffix) {
 	QFileDialog dlg(static_cast<QWidget*>(parent()), tr("Export"));
 	dlg.setAcceptMode(QFileDialog::AcceptSave);
-//TODO	dlg.setFilter(filter);
+	dlg.setNameFilter(filter);
 	dlg.setDefaultSuffix(defaultSuffix);
 	if (dlg.exec() == QDialog::Rejected)
 		return QString::null;
@@ -264,7 +264,7 @@ QString Controller::showExportFileDialog(const QString& filter, const QString& d
 void Controller::paintScene(QPaintDevice* device) {
 	QPainter painter(device);
 	painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
- 	mScene->render(&painter, QRectF(), mScene->itemsBoundingRect().toRect());
+	mScene->render(&painter, QRectF(), mScene->itemsBoundingRect().toRect());
 }
 
 void Controller::exportToPNG() {
@@ -280,11 +280,11 @@ void Controller::exportToPNG() {
 }
 
 void Controller::exportToPS() {
-	QString fileName = showExportFileDialog(tr("Post Script (*.ps)"), "ps");
+	QString fileName = showExportFileDialog(tr("PDF (*.pdf)"), "pdf");
 	if (fileName.isNull())
 		return;
 	QPrinter printer(QPrinter::HighResolution);
-//TODO	printer.setOutputFormat(QPrinter::OutputFormat);
+	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setOutputFileName(fileName);
 	paintScene(&printer);
 }
