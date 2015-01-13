@@ -443,6 +443,6 @@ QString NetProperty::bToStr(bool b)
 }
 
 
-#include "netproperty.moc"
+//#include "netproperty.moc"
 
-Q_EXPORT_PLUGIN2(Opulus_NetProperty, NetProperty)
+//Q_EXPORT_PLUGIN2(Opulus_NetProperty, NetProperty)

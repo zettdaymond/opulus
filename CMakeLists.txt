@@ -6,14 +6,8 @@ set(CMAKE_AUTOMOC ON)
 set(QT_MIN_VERSION    "5.0")
 find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
 
-#find_package(Qt5Gui)
-#find_package(Qt5Core)
-#find_package(Qt5Widgets)
-#find_package(Qt5Xml)
-#find_package(Qt5PrintSupport)
-#find_package(Qt5Svg)
-#find_package(Qt5Test)
-
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #include(opulus.cmake)
 
 #TODO
@@ -32,7 +26,7 @@ find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
 # translations
 set(I18N pt_BR es)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "Build type not especified, building as release.")
@@ -43,10 +37,17 @@ endif(NOT CMAKE_BUILD_TYPE)
 # adtional compiler options for release and debug modes
 add_definitions(-Wall)
 if (${CMAKE_BUILD_TYPE} STREQUAL release)
-	add_definitions(-DQT_NO_DEBUG -O2)
+        add_definitions(-DQT_NO_DEBUG -O2)
 else (${CMAKE_BUILD_TYPE} STREQUAL release)
-	add_definitions(-ggdb)
+        add_definitions(-ggdb)
 endif (${CMAKE_BUILD_TYPE} STREQUAL release)
+
+   set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+#add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+#SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}" )
+
+#SET(GCC_COVERAGE_COMPILE_FLAGS "")
+#SET(GCC_COVERAGE_LINK_FLAGS    "-static")
 
 add_subdirectory(core)
 add_subdirectory(gui)

@@ -205,6 +205,6 @@ void CoverageGraph::zoomOut() {
 	ui.view->scale(0.9, 0.9);
 }
 
-#include "coveragegraph.moc"
+//#include "coveragegraph.moc"
 
-Q_EXPORT_PLUGIN2(Opulus_CoverageGraph, CoverageGraph)
+//Q_EXPORT_PLUGIN2(Opulus_CoverageGraph, CoverageGraph)

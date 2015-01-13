@@ -2,7 +2,7 @@
 #define NETPROPERTY_H
 
 
-//#include <QObject>
+#include <QObject>
 
 #include "analyser.h"
 #include "ui_netproperty.h"
@@ -17,6 +17,7 @@ class Marking;
 class NetProperty : public QObject, public Analyser
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "opulus.sourceforge.net.Analyser")
     Q_INTERFACES(Analyser)
 public:
     QString internalName() const;

@@ -1,2 +1,3 @@
-#add_subdirectory(coveragegraph)
-#add_subdirectory(netproperty)
+add_subdirectory(coveragegraph)
+add_subdirectory(netproperty)
+

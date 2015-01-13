@@ -33,6 +33,7 @@ class Marking;
 */
 class CoverageGraph : public QObject, public Analyser {
 Q_OBJECT
+Q_PLUGIN_METADATA(IID "opulus.sourceforge.net.Analyser")
 Q_INTERFACES(Analyser)
 public:
 	QString internalName() const;

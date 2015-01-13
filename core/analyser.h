@@ -55,6 +55,6 @@ public:
 	virtual void finish(QWidget* parentWidget) = 0;
 };
 
-Q_DECLARE_INTERFACE(Analyser, "opulus.sourceforge.net.Analyser/1.0")
+Q_DECLARE_INTERFACE(Analyser, "opulus.sourceforge.net.Analyser")
 
 #endif
