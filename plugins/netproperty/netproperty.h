@@ -30,13 +30,18 @@ private:
 
     bool _isSafety;
     bool _isRestricted;
-
+    bool _isLive;
     void buidTree();
-    QSet <Transition *> GetDeadSubTree(PetriNet *  pn, const Marking &initialMarking);
+    QSet <Transition *> GetDeadSubTree(PetriNet *  pn, const Marking &inM);
+    QSet <Transition *> GetPotentialLiveSubTree(PetriNet *  pn, const Marking &inM);
+    QSet <Transition *> GetStableTransitions();
     QString bToStr(bool b);
     QSet <Transition *> _deadTransitions;
     QSet <Transition *> _potentialDeadTransitions;
     QSet <Transition *> _potentialLiveTransitions;
+    QSet <Transition *> _liveTransitions;
+    QSet <Transition *> _stableTransitions;
+
 };
 
 #endif
