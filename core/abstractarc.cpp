@@ -101,4 +101,3 @@ void AbstractArc::load(AbstractArc* arc, QDomElement elem) {
 		arc->mIntermediatePoints << point;
 	}
 }
-

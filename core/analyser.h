@@ -21,9 +21,11 @@
 #define ANALYSER_H
 
 #include <QString>
-
+//TODO
+//#include <QWidget>
 class PetriNet;
 class AnalysisReporter;
+class QWidget;
 
 /**
 * Interface for analyser plugins.

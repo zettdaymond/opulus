@@ -34,4 +34,5 @@ void AnalysisReporter::fatalError(const QString& error) {
 	emit fatalErrorOccurred(error);
 }
 
-#include "analysisreporter.moc"
+//TODO
+//#include "analysisreporter.moc"

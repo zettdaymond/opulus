@@ -137,7 +137,9 @@ void PetriNetScene::emitItemSelected() {
 
 void PetriNetScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (mCurrentRequest != CR_NONE) {
-		QGraphicsItem* item = itemAt(event->scenePos());
+         QTransform  deviceTransform;
+        //TODO //QGraphicsItem* item = itemAt(event->scenePos());
+        QGraphicsItem* item = itemAt(event->scenePos(),deviceTransform);
 		mCurrentMouseButton = event->button();
 		if (mCurrentRequest == CR_POINT) {
 			if (item) {

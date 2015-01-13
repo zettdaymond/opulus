@@ -43,12 +43,15 @@ void PropertyEditorModel::setModelSource(Item* item) {
 	if (!item) {
 		delete mPropHandler;
 		mPropHandler = 0;
-		reset();
+        //reset();
+        //TODO
+        //reset();
 	} else {
 		delete mPropHandler;
 		mPropHandler = 0;
 		mPropHandler = PropertyHandler::create(mController, item);
-		reset();
+        //TODO
+        //reset();
 	}
 }
 
@@ -160,7 +163,8 @@ Qt::ItemFlags PropertyEditorModel::flags(const QModelIndex &index) const {
 void PropertyEditorModel::itemModified(Item* item) {
 	if (mPropHandler && mPropHandler->item() == item) {
 		mPropHandler->updateProperties();
-		reset();
+        //TODO
+        //reset();
 	}
 }
 

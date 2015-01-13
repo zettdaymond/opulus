@@ -1,7 +1,32 @@
-cmake_minimum_required(VERSION 2.4.6)
-set(QT_MIN_VERSION    "4.3.2")
-find_package(Qt4 REQUIRED)
-include(opulus.cmake)
+cmake_minimum_required(VERSION 2.8.12)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+
+set(QT_MIN_VERSION    "5.0")
+find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
+
+#find_package(Qt5Gui)
+#find_package(Qt5Core)
+#find_package(Qt5Widgets)
+#find_package(Qt5Xml)
+#find_package(Qt5PrintSupport)
+#find_package(Qt5Svg)
+#find_package(Qt5Test)
+
+#include(opulus.cmake)
+
+#TODO
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+#include_directories(${Qt5Widgets_INCLUDE_DIRS})
+#include_directories(${Qt5Core_INCLUDE_DIRS})
+#include_directories(${Qt5Gui_INCLUDE_DIRS})
+#include_directories(${Qt5Xml_INCLUDE_DIRS})
+#include_directories(${Qt5Svg_INCLUDE_DIRS})
+#include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
+#include_directories(${Qt5Test_INCLUDE_DIRS})
+
 
 # translations
 set(I18N pt_BR es)
@@ -28,7 +53,7 @@ add_subdirectory(tests)
 add_subdirectory(windowsinstaller)
 
 # i18n stuff
-qt4_add_translations(opulus core gui)
+#qt5_add_translations(opulus core gui)
 install(FILES ${opulus_QMS} DESTINATION share/opulus/i18n)
 
 

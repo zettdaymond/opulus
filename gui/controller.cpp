@@ -221,7 +221,7 @@ void Controller::fireRandomTransition() {
 void Controller::fireNRandomTransitions() {
 	try {
 		if (mSimulation){
-			int n = QInputDialog::getInteger(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
+            int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
 			mSimulation->fireNRandomTransitions(n);
 		}
 	} catch (Exception& e) {
@@ -254,7 +254,7 @@ void Controller::renameNode(Node* node, const QString& newName) {
 QString Controller::showExportFileDialog(const QString& filter, const QString& defaultSuffix) {
 	QFileDialog dlg(static_cast<QWidget*>(parent()), tr("Export"));
 	dlg.setAcceptMode(QFileDialog::AcceptSave);
-	dlg.setFilter(filter);
+//TODO	dlg.setFilter(filter);
 	dlg.setDefaultSuffix(defaultSuffix);
 	if (dlg.exec() == QDialog::Rejected)
 		return QString::null;
@@ -284,7 +284,7 @@ void Controller::exportToPS() {
 	if (fileName.isNull())
 		return;
 	QPrinter printer(QPrinter::HighResolution);
-	printer.setOutputFormat(QPrinter::PostScriptFormat);
+//TODO	printer.setOutputFormat(QPrinter::OutputFormat);
 	printer.setOutputFileName(fileName);
 	paintScene(&printer);
 }

@@ -41,12 +41,21 @@ set(opulusgui_rcs
 	gui.qrc
 )
 
-qt4_add_resources(opulusgui_rc_srcs ${opulusgui_rcs})
-qt4_automoc(opulusgui ${opulusgui_srcs})
-qt4_wrap_ui(opulusgui_ui_srcs ${opulusgui_uis})
+qt5_add_resources(opulusgui_rc_srcs ${opulusgui_rcs})
+#qt5_generate_moc(opulusgui ${opulusgui_srcs})
+qt5_wrap_ui(opulusgui_ui_srcs ${opulusgui_uis})
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../core)
 add_library(opulusgui SHARED ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
-target_link_libraries(opulusgui ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} opuluscore)
+#target_link_libraries(opulusgui ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} opuluscore)
+target_link_libraries(opulusgui opuluscore)
+target_link_libraries(
+    opulusgui
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Svg
+    Qt5::Xml
+    Qt5::PrintSupport
+)
 
 install(TARGETS opulusgui DESTINATION lib)

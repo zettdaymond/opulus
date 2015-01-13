@@ -2,7 +2,8 @@
 #define NETPROPERTY_H
 
 
-#include <QObject>
+//#include <QObject>
+
 #include "analyser.h"
 #include "ui_netproperty.h"
 

@@ -20,7 +20,7 @@
 
 
 ## Search for lrelease
-find_program(QT_LRELEASE_EXECUTABLE NAMES lrelease-qt4 lrelease
+find_program(QT_LRELEASE_EXECUTABLE NAMES lrelease-qt5 lrelease
   PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH
 )
 if (NOT QT_LRELEASE_EXECUTABLE)
@@ -31,7 +31,7 @@ endif(NOT QT_LRELEASE_EXECUTABLE)
 
 
 ## Search for lupdate
-find_program(QT_LUPDATE_EXECUTABLE NAMES lupdate-qt4 lupdate
+find_program(QT_LUPDATE_EXECUTABLE NAMES lupdate-qt5 lupdate
   PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH
 )
 if (NOT QT_LUPDATE_EXECUTABLE)
@@ -53,7 +53,7 @@ endif(MINGW)
 
 
 ## Wraps the supplied .ts files in lrelease commands
-macro(QT4_ADD_TRANSLATIONS name)
+macro(QT5_ADD_TRANSLATIONS name)
 	set(var_TSS ${name}_TSS)
 	set(var_QMS ${name}_QMS)
 	set(var_lupdate_target_name ${name}_lupdate)
@@ -86,7 +86,7 @@ macro(QT4_ADD_TRANSLATIONS name)
 	)
 
 	add_custom_target(${name}_i18n ALL DEPENDS ${${var_QMS}})
-endmacro(QT4_ADD_TRANSLATIONS)
+endmacro(QT5_ADD_TRANSLATIONS)
 
 
 if (MINGW)

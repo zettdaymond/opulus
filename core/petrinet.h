@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QSet>
 #include <QPointF>
+#include <QIODevice>
 #include "item.h"
 #include "marking.h"
 
