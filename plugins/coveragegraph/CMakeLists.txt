@@ -10,7 +10,7 @@ set(coverageGraph_UIS
 #qt5_add_translations(coverageGraph .)
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../core ${CMAKE_CURRENT_BINARY_DIR})
-qt5_wrap_ui(coverageGraph_ui_srcs ${coverageGraph_UIS})
+qt5_wrap_ui(coverageGraph_ui_srcs ${coverageGraph_UIS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
 
 
 #add_definitions(${QT_DEFINITIONS})
