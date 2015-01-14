@@ -7,7 +7,8 @@
 #include "analysisreporter.h"
 #include "simulation.h"
 #include "transition.h"
-
+#include "abstractarc.h"
+//#include "node.h"
 class MarkingNode {
 public:
 
@@ -51,6 +52,8 @@ void NetProperty::analyse(PetriNet *pn, AnalysisReporter *reporter)
     _isRestricted = true;
     _isSafety = true;
 
+    _isParallel = false;
+    _isConflict = false;
 
     mPetriNet = pn;
 
@@ -127,7 +130,8 @@ void NetProperty::finish(QWidget *parentWidget)
     out += "\tBounded : " + bToStr(_isRestricted) + "\n";
     out += "\tLive :" + bToStr(_isLive)+ "\n";
     out += "\tStable :" + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
-
+    out += "\tParralel :" + bToStr(_isParallel)+ "\n";
+    out += "\tConflicted :" + bToStr(_isConflict)+ "\n";
     ui.textEdit->setPlainText(out);
     dlg.exec();
 }
@@ -237,7 +241,7 @@ void NetProperty::buidTree()
 
     mPetriNet->setCurrentMarking(root->marking());
     _stableTransitions = GetStableTransitions();
-
+    isParallelize();
 
 }
 
@@ -440,6 +444,81 @@ QString NetProperty::bToStr(bool b)
         return "true";
     else
         return "false";
+}
+
+void NetProperty::isParallelize()
+{
+
+    MarkingNode* root = new MarkingNode(0, mPetriNet->currentMarking());
+    root->marking().normalize(mPetriNet);
+    QLinkedList<MarkingNode*> newNodes;
+    QLinkedList<MarkingNode*> allNodes;
+    newNodes.append(root);
+    Simulation sim(mPetriNet);
+
+    QSet<Marking> markings;
+    markings << root->marking();
+
+    while (newNodes.count()) {
+        MarkingNode* node = newNodes.takeLast();
+        allNodes.append(node);
+        mPetriNet->setCurrentMarking(node->marking());
+        const QSet<Transition*> activeTransitions = sim.activeTransitions();
+
+        if (activeTransitions.count()) {
+
+
+            Marking initialMarking = mPetriNet->currentMarking();
+            foreach(Transition* t, activeTransitions) {
+                mPetriNet->setCurrentMarking(initialMarking);
+                sim.fireTransition(t);
+
+                MarkingNode* child = new MarkingNode(node, mPetriNet->currentMarking());
+                //----
+                QSet<Transition*> tmp = activeTransitions;
+                tmp.remove(t); //все остальные
+
+                QSet <Node *> t_inputNodes = getNodeFromTransition(t);
+                foreach(Transition * tj, tmp) {
+                    QSet <Node *> tj_inputNodes = getNodeFromTransition(tj);
+
+                    //если два активных перехода имеют одинаковую входную ноду
+                    if (tj_inputNodes.intersect(t_inputNodes).count() > 0) {
+                        _isConflict = true;
+                    }
+                    else {
+                        _isParallel = true;
+                    }
+                }
+
+                //----
+
+
+                if (!markings.contains(child->marking())) {
+                    newNodes.prepend(child);
+                    markings << child->marking();
+                } else
+                    delete child;
+
+
+            }
+        } else {
+
+        }
+
+    }
+    qDeleteAll(allNodes);
+    mPetriNet->setCurrentMarking(root->marking());
+}
+
+QSet<Node *> NetProperty::getNodeFromTransition(Transition *t)
+{
+    QSet <Node *> output;
+    const ArcCollection arcs = t->inputArcs();
+    foreach (const AbstractArc * arc, arcs.values()) {
+        output.insert(arc->from());
+    }
+    return output;
 }
 
 

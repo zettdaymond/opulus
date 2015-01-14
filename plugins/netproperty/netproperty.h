@@ -9,7 +9,7 @@
 
 class Transition;
 class Marking;
-
+class Node;
 /**
 * This plugin analyzes Petri Net properties .
 * @ingroup plugins
@@ -43,6 +43,12 @@ private:
     QSet <Transition *> _potentialLiveTransitions;
     QSet <Transition *> _liveTransitions;
     QSet <Transition *> _stableTransitions;
+    bool _isParallel;
+    bool _isConflict;
+    void isParallelize();
+
+    QSet<Node *> getNodeFromTransition(Transition *t);
+
 
 };
 
