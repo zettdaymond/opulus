@@ -67,7 +67,7 @@ void NetProperty::analyse(PetriNet *pn, AnalysisReporter *reporter)
         return;
     }
 
-    buidTree();
+    BasePropertyAnalyse();
 
     _stableTransitions = GetStableTransitions();
     isParallelizeOrConflict();

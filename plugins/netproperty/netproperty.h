@@ -35,7 +35,7 @@ private:
     bool _isSafety;
     bool _isRestricted;
     bool _isLive;
-    void buidTree();
+    void BasePropertyAnalyse();
     QSet<Transition *>  GetDeadTransitionSubTree(const Marking &startMarking);
     QSet<Transition *> GetPtnLiveTransitionsSubTree(const Marking &startMarking);
     QSet <Transition *> GetStableTransitions();
