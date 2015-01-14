@@ -42,7 +42,7 @@ else (${CMAKE_BUILD_TYPE} STREQUAL release)
         add_definitions(-ggdb)
 endif (${CMAKE_BUILD_TYPE} STREQUAL release)
 
-   set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+#   set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 #add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 #SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}" )
 
