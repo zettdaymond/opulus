@@ -30,11 +30,13 @@ set(opulusgui_srcs
 	commands/cmdcreateinhibitorarc.cpp
 	commands/cmdremoveitem.cpp
 	commands/cmdmovenode.cpp
+	matrixwidget.cpp
 )
 
 set(opulusgui_uis
 	mainwindow.ui
 	analyserstatus.ui
+	matrixwidget.ui
 )
 
 set(opulusgui_rcs
