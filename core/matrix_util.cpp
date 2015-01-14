@@ -7,7 +7,7 @@
 
 using namespace Eigen;
 
-MatrixXi d_minus_matrix(PetriNet *petrinet)
+MatrixXi d_minus_matrix(const PetriNet *petrinet)
 {
 	const QSet<Transition*> transitions = petrinet->transitions();
 	const QSet<Place*> places = petrinet->places();
@@ -44,7 +44,7 @@ MatrixXi d_minus_matrix(PetriNet *petrinet)
 }
 
 
-MatrixXi d_plus_matrix(PetriNet *petrinet)
+MatrixXi d_plus_matrix(const PetriNet *petrinet)
 {
 	const QSet<Transition*> transitions = petrinet->transitions();
 	const QSet<Place*> places = petrinet->places();
@@ -80,7 +80,7 @@ MatrixXi d_plus_matrix(PetriNet *petrinet)
 	return d_plus;
 }
 
-MatrixXi d_matrix(PetriNet *petrinet)
+MatrixXi d_matrix(const PetriNet *petrinet)
 {
 	return d_plus_matrix(petrinet) - d_minus_matrix(petrinet);
 }

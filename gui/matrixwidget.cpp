@@ -1,5 +1,6 @@
 #include "matrixwidget.h"
 #include "ui_matrixwidget.h"
+#include "matrix_util.h"
 #include <QDebug>
 
 MatrixWidget::MatrixWidget(QWidget *_parent) :
@@ -34,7 +35,47 @@ void MatrixWidget::on_d_matrices_cellChanged(int row, int column)
 {
 	Q_UNUSED(row);
 	Q_UNUSED(column);
-	qDebug() << "cell changed";
+	//qDebug() << "cell changed";
 	// TODO: update petri net
+
+}
+
+void MatrixWidget::updateMatrices(const PetriNet *petri_net)
+{
+	Eigen::MatrixXi d_min = d_minus_matrix(petri_net);
+	Eigen::MatrixXi d_plu = d_plus_matrix(petri_net);
+
+	ui->width_spinbox->setValue(d_min.cols());
+	ui->height_spinbox->setValue(d_min.rows());
+
+	for(int i = 0; i < d_min.rows(); ++i) {
+		if(!ui->d_minus_matrix->verticalHeaderItem(i))
+			ui->d_minus_matrix->setVerticalHeaderItem(i, new QTableWidgetItem(QString("T")+QString::number(i)));
+
+		for(int j = 0; j < d_min.cols(); ++j) {
+
+			if(ui->d_minus_matrix->item(i,j))
+				ui->d_minus_matrix->item(i,j)->setText(QString::number(d_min(i,j)));
+			else ui->d_minus_matrix->setItem(i,j, new QTableWidgetItem(QString::number(d_min(i,j))));
+		}
+	}
+	for(int i = 0; i < d_plu.rows(); ++i) {
+		if(!ui->d_plus_matrix->verticalHeaderItem(i))
+			ui->d_plus_matrix->setVerticalHeaderItem(i, new QTableWidgetItem(QString("T")+QString::number(i)));
+
+		for(int j = 0; j < d_plu.cols(); ++j) {
+			if(ui->d_plus_matrix->item(i,j))
+				ui->d_plus_matrix->item(i,j)->setText(QString::number(d_plu(i,j)));
+			else ui->d_plus_matrix->setItem(i,j, new QTableWidgetItem(QString::number(d_plu(i,j))));
+		}
+	}
+
+	for(int i = 0; i < d_min.cols(); ++i) {
+		if(!ui->d_minus_matrix->horizontalHeaderItem(i))
+			ui->d_minus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
+
+		if(!ui->d_plus_matrix->horizontalHeaderItem(i))
+			ui->d_plus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
+	}
 
 }

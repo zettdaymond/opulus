@@ -7,6 +7,8 @@ namespace Ui {
 class MatrixWidget;
 }
 
+class PetriNet;
+
 class MatrixWidget : public QWidget
 {
 	Q_OBJECT
@@ -22,6 +24,8 @@ private slots:
 	void on_width_spinbox_valueChanged(int arg1);
 
 	void on_d_matrices_cellChanged(int row, int column);
+
+	void updateMatrices(const PetriNet* petri_net);
 
 private:
 	Ui::MatrixWidget *ui;

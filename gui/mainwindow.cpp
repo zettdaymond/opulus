@@ -60,6 +60,7 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	loadPlugins();
 
 	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
+	connect(mController, SIGNAL(netChanged(const PetriNet*)), ui.matrixWidget, SLOT(updateMatrices(const PetriNet*)));
 	searchAvailableLanguages();
 	show();
 }
@@ -85,7 +86,7 @@ void MainWindow::loadI18n(const QString& language) {
 
 	QDir dir = i18nDir();
 	dir.setNameFilters(QStringList() << "?*"+language+".qm");
-	
+
 	foreach (QString langFile, dir.entryList()) {
 		QTranslator* tr = new QTranslator;
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
@@ -117,7 +118,7 @@ void MainWindow::setupActions() {
 	connect(ui.actionAddArc, SIGNAL(triggered(bool)), mController, SLOT(useArcTool()));
 	connect(ui.actionAddInhibitorArc, SIGNAL(triggered(bool)), mController, SLOT(useInhibitorArcTool()));
 	connect(ui.actionAddRemoveTokens, SIGNAL(triggered(bool)), mController, SLOT(useTokenTool()));
-	
+
 	connect(ui.actionWhatsThis, SIGNAL(triggered(bool)), this, SLOT(enterWhatIsThisMode()));
 	connect(ui.actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
 	connect(ui.actionExportToPNG, SIGNAL(triggered(bool)), mController, SLOT(exportToPNG()));
@@ -345,9 +346,9 @@ void MainWindow::cleanStateChanged(bool value) {
 void MainWindow::searchAvailableLanguages() {
 	QDir dir = i18nDir();
 	dir.setNameFilters(QStringList() << "opulus_*.qm");
-	
-	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();	
-	
+
+	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();
+
 	QActionGroup* languages = new QActionGroup(this);
 	QAction* action = ui.menuChangeLanguage->addAction("English/United States");
 	action->setData("en_US");
@@ -375,7 +376,7 @@ void MainWindow::changeLanguage() {
 	QString lang = action->data().toString();
 	loadI18n(lang);
 	ui.retranslateUi(this);
-	
+
 	// update analyser menu
 	QHash<QAction*, Analyser*>::iterator it = mAnalysers.begin();
 	for (; it != mAnalysers.end(); ++it) {
