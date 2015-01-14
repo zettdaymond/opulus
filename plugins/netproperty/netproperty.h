@@ -10,6 +10,7 @@
 class Transition;
 class Marking;
 class Node;
+class MarkingNode;
 /**
 * This plugin analyzes Petri Net properties .
 * @ingroup plugins
@@ -25,6 +26,7 @@ public:
     void analyse(PetriNet *pn, AnalysisReporter *reporter);
     bool setup(QWidget *parentWidget);
     void finish(QWidget *parentWidget);
+   // void checkTreeNodeForBounded(MarkingNode* node);
 private:
     PetriNet* mPetriNet;
     Ui::Dialog ui;
@@ -34,8 +36,8 @@ private:
     bool _isRestricted;
     bool _isLive;
     void buidTree();
-    QSet <Transition *> GetDeadSubTree(PetriNet *  pn, const Marking &inM);
-    QSet <Transition *> GetPotentialLiveSubTree(PetriNet *  pn, const Marking &inM);
+    QSet<Transition *>  GetDeadTransitionSubTree(const Marking &startMarking);
+    QSet<Transition *> GetPtnLiveTransitionsSubTree(const Marking &startMarking);
     QSet <Transition *> GetStableTransitions();
     QString bToStr(bool b);
     QSet <Transition *> _deadTransitions;
@@ -45,11 +47,14 @@ private:
     QSet <Transition *> _stableTransitions;
     bool _isParallel;
     bool _isConflict;
-    void isParallelize();
+    void isParallelizeOrConflict();
 
     QSet<Node *> getNodeFromTransition(Transition *t);
+    void prepareForAnalysis();
 
 
+    bool IsTreeNodeBounded(MarkingNode *node);
+    bool IsTreeNodeSafe(MarkingNode *node);
 };
 
 #endif
