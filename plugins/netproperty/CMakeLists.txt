@@ -12,12 +12,12 @@ set(netProperty_UIS
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../core ${CMAKE_CURRENT_BINARY_DIR})
 
-qt5_wrap_ui(netProperty_ui_srcs ${netProperty_UIS} ${netProperty_ui_srcs} ${netProperty_moc_srcs})
+qt5_wrap_ui(netProperty_ui_srcs ${netProperty_UIS})
 
 
 add_definitions(${QT_DEFINITIONS})
 
-add_library(netProperty SHARED ${netProperty_SRCS})
+add_library(netProperty SHARED ${netProperty_SRCS} ${netProperty_ui_srcs} ${netProperty_moc_srcs})
 target_link_libraries(netProperty opuluscore)
 
 target_link_libraries(
