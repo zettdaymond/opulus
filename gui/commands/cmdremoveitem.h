@@ -36,9 +36,13 @@ public:
 	void undo();
 	void redo();
 private:
+	int  fixPlaceTransitionNumeration(Item* to_delete, PetriNet* from);
+	void fixPlaceTransitionNumeration(int restore_num, Item* restored, PetriNet* net);
+
 	ItemId mId;
 	PetriNet* mPetriNet;
 	QLinkedList<Item*> mItems;
+	int mItemNumber;
 };
 
 #endif

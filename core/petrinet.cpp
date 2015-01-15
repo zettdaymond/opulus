@@ -84,12 +84,16 @@ void PetriNet::addItem(Item* item) {
 		throw DuplicatedIdException(item->id());
 	mItems.insert(item->id(), item);
 	item->beforeAdd();
-	if (item->isA<Place>())
+	if (item->isA<Place>()) {
+		mPlaces.insert(static_cast<Place*>(item));
 		emit placeCreated(static_cast<Place*>(item));
+	}
 	else if (item->isA<Arc>())
 		emit arcCreated(static_cast<Arc*>(item));
-	else if (item->isA<Transition>())
+	else if (item->isA<Transition>()) {
+		mTransitions.insert(static_cast<Transition*>(item));
 		emit transitionCreated(static_cast<Transition*>(item));
+	}
 	else if (item->isA<InhibitorArc>()) {
 		emit inhibitorArcCreated(static_cast<InhibitorArc*>(item));
 	}
