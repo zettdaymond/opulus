@@ -45,6 +45,7 @@ private:
     QSet <Transition *> _potentialLiveTransitions;
     QSet <Transition *> _liveTransitions;
     QSet <Transition *> _stableTransitions;
+    QHash <Transition *, uint> _transitionLevels;
     bool _isParallel;
     bool _isConflict;
     void isParallelizeOrConflict();
@@ -55,6 +56,14 @@ private:
 
     bool IsTreeNodeBounded(MarkingNode *node);
     bool IsTreeNodeSafe(MarkingNode *node);
+
+    QSet <Transition *> zeroActivityTransitions();
+    QSet <Transition *> firstActivityTransitions();
+    QSet <Transition *> secondActivityLevelTransitions();
+    QSet <Transition *> thirdActivityLevelTransitions();
+    QSet <Transition *> fourthActivityLevelTransitions();
+
+
 };
 
 #endif

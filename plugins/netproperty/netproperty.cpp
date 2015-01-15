@@ -161,6 +161,21 @@ bool NetProperty::IsTreeNodeSafe(MarkingNode* node) {
     return true;
 }
 
+QSet<Transition *> NetProperty::zeroActivityTransitions()
+{
+    return _deadTransitions;
+}
+
+QSet<Transition *> NetProperty::firstActivityTransitions()
+{
+    return _potentialLiveTransitions;
+}
+
+QSet<Transition *> NetProperty::fourthActivityLevelTransitions()
+{
+    return _liveTransitions;
+}
+
 void NetProperty::BasePropertyAnalyse()
 {
 
@@ -203,13 +218,14 @@ void NetProperty::BasePropertyAnalyse()
 
                 //Переход будет потенциально мертв, если начиная с некоторой ноды
                 //он будет мертв на всем под-дереве вывода (которое начинается с этой ноды).
-                QSet<Transition *> dt = GetDeadTransitionSubTree(child->marking());
+                //QSet<Transition *> dt = GetDeadTransitionSubTree(child->marking());
+                QSet<Transition *> dt = GetDeadTransitionSubTree(initialMarking);
                 _potentialDeadTransitions.unite(dt);
 
                 //Переход будет жив, если начиная с некоторой ноды он будет потенциально жив
                 //на всем под-дереве вывода (которое начинается с этой ноды).
                 //QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(child->marking());
-                QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(child->marking());
+                QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(initialMarking);
                 _liveTransitions.intersect(lt);
 
                 if (!markings.contains(child->marking())) {
@@ -394,7 +410,6 @@ QSet<Transition *> NetProperty::GetStableTransitions()
                 } else
                     delete child;
             }
-
             //---
             _stable.unite(currMarkingStable);
             _stable.subtract(currMarkNotStable);
@@ -495,4 +510,9 @@ void NetProperty::prepareForAnalysis()
 
     _deadTransitions = mPetriNet->transitions();
     _liveTransitions = mPetriNet->transitions();
+
+
+    foreach(Transition *t, mPetriNet->transitions()) {
+        _transitionLevels.insert(t,0);
+    }
 }
