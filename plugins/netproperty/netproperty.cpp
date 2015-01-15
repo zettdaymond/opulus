@@ -218,14 +218,17 @@ void NetProperty::BasePropertyAnalyse()
 
                 //Переход будет потенциально мертв, если начиная с некоторой ноды
                 //он будет мертв на всем под-дереве вывода (которое начинается с этой ноды).
-                //QSet<Transition *> dt = GetDeadTransitionSubTree(child->marking());
-                QSet<Transition *> dt = GetDeadTransitionSubTree(initialMarking);
+                QSet<Transition *> dt = GetDeadTransitionSubTree(child->marking());
+               // QSet<Transition *> dt = GetDeadTransitionSubTree(initialMarking);
+                //FIXME: Алгоритм должен работать с начала дерева (initialMarking), но он раюотает только с child.matking()
                 _potentialDeadTransitions.unite(dt);
 
                 //Переход будет жив, если начиная с некоторой ноды он будет потенциально жив
                 //на всем под-дереве вывода (которое начинается с этой ноды).
-                //QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(child->marking());
-                QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(initialMarking);
+                QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(child->marking());
+                //QSet<Transition *> lt = GetPtnLiveTransitionsSubTree(initialMarking);
+                //FIXME: Алгоритм должен работать с начала дерева (initialMarking), но он раюотает только с child.matking()
+                //
                 _liveTransitions.intersect(lt);
 
                 if (!markings.contains(child->marking())) {
@@ -236,11 +239,13 @@ void NetProperty::BasePropertyAnalyse()
             }
         }
     }
+    qDeleteAll(allNodes);
+    mPetriNet->setCurrentMarking(root->marking());
 }
 
 QSet<Transition *> NetProperty::GetDeadTransitionSubTree(const Marking &startMarking)
 {
-    Simulation sim(mPetriNet);
+
     mPetriNet->setCurrentMarking(startMarking);
 
     //return empty set, if we cant start
@@ -252,6 +257,7 @@ QSet<Transition *> NetProperty::GetDeadTransitionSubTree(const Marking &startMar
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
     newNodes.append(root);
+    Simulation sim(mPetriNet);
 
     QSet<Marking> markings;
     markings << root->marking();
@@ -289,12 +295,13 @@ QSet<Transition *> NetProperty::GetDeadTransitionSubTree(const Marking &startMar
         }
     }
     qDeleteAll(allNodes);
+    mPetriNet->setCurrentMarking(root->marking());
     return deadTransitions;
 }
 
 QSet<Transition *> NetProperty::GetPtnLiveTransitionsSubTree(const Marking &startMarking)
 {
-    Simulation sim(mPetriNet);
+
     mPetriNet->setCurrentMarking(startMarking);
 
     MarkingNode* root = new MarkingNode(0, mPetriNet->currentMarking());
@@ -304,11 +311,12 @@ QSet<Transition *> NetProperty::GetPtnLiveTransitionsSubTree(const Marking &star
     if (!mPetriNet->activeTransitionsCount())
         return ptnLiveTransition;
 
+
     root->marking().normalize(mPetriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
     newNodes.append(root);
-
+    Simulation sim(mPetriNet);
     QSet<Marking> markings;
     markings << root->marking();
 
@@ -340,6 +348,7 @@ QSet<Transition *> NetProperty::GetPtnLiveTransitionsSubTree(const Marking &star
         //если нет больше активных то значит ищем дальше
     }
     qDeleteAll(allNodes);
+    mPetriNet->setCurrentMarking(root->marking());
     return ptnLiveTransition;
 }
 
@@ -432,13 +441,14 @@ QString NetProperty::bToStr(bool b)
 
 void NetProperty::isParallelizeOrConflict()
 {
-    Simulation sim(mPetriNet);
+
 
     MarkingNode* root = new MarkingNode(0, mPetriNet->currentMarking());
     root->marking().normalize(mPetriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
     newNodes.append(root);
+    Simulation sim(mPetriNet);
 
     QSet<Marking> markings;
     markings << root->marking();
@@ -487,6 +497,7 @@ void NetProperty::isParallelizeOrConflict()
         }
     }
     qDeleteAll(allNodes);
+    mPetriNet->setCurrentMarking(root->marking());
 }
 
 QSet<Node *> NetProperty::getNodeFromTransition(Transition *t)
