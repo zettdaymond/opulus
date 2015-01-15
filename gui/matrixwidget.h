@@ -18,8 +18,7 @@ public:
 	~MatrixWidget();
 
 signals:
-	void d_minus_matrix_value_changed(int row, int col, int val);
-	void d_plus_matrix_value_changed(int row, int col, int val);
+	void matrix_value_changed(char which, int row, int col, int val);
 	void matrices_size_changed(int rows, int cols);
 
 public slots:

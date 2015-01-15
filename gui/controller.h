@@ -117,6 +117,9 @@ public slots:
 	void useTokenTool();
 	void useFireTransitionTool();
 
+	void matrixResized(int rows, int cols);
+	void matrixUpdate(char matrix, int row, int col, int val);
+
 	void zoomIn();
 	void zoomOut();
 

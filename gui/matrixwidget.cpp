@@ -42,12 +42,11 @@ void MatrixWidget::d_minus_table_value_changed(int row, int col)
 	if(!ui->d_minus_matrix->item(row,col))
 		return;
 
-	qDebug() << "dmin changed at" << row << col << "to" << ui->d_minus_matrix->item(row,col)->text();
 	bool ok;
 	int val = ui->d_minus_matrix->item(row,col)->text().toInt(&ok);
 
 	if(ok && val >= 0)
-		emit d_minus_matrix_value_changed(row,col,val);
+		emit matrix_value_changed('-',row,col,val);
 }
 
 void MatrixWidget::d_plus_table_value_changed(int row, int col)
@@ -55,12 +54,11 @@ void MatrixWidget::d_plus_table_value_changed(int row, int col)
 	if(!ui->d_plus_matrix->item(row,col))
 		return;
 
-	qDebug() << "dplus changed at" << row << col << "to" << ui->d_plus_matrix->item(row,col)->text();
 	bool ok;
 	int val = ui->d_plus_matrix->item(row,col)->text().toInt(&ok);
 
 	if(ok && val >= 0)
-		emit d_plus_matrix_value_changed(row, col, val);
+		emit matrix_value_changed('+',row, col, val);
 }
 
 void MatrixWidget::updateMatrices(const PetriNet *petri_net)
@@ -71,11 +69,18 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 	Eigen::MatrixXi d_min = d_minus_matrix(petri_net);
 	Eigen::MatrixXi d_plu = d_plus_matrix(petri_net);
 
+	bool dminstate = ui->d_minus_matrix->blockSignals(true);
+	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
+	bool wspinstate = ui->width_spinbox->blockSignals(true);
+	bool hspinstate = ui->height_spinbox->blockSignals(true);
+
 	ui->width_spinbox->setValue(d_min.cols());
 	ui->height_spinbox->setValue(d_min.rows());
 
-	bool dminstate = ui->d_minus_matrix->blockSignals(true);
-	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
+	ui->d_minus_matrix->setRowCount(d_min.rows());
+	ui->d_plus_matrix->setRowCount(d_plu.rows());
+	ui->d_minus_matrix->setColumnCount(d_min.cols());
+	ui->d_plus_matrix->setColumnCount(d_plu.cols());
 
 	for(int i = 0; i < d_min.rows(); ++i) {
 		if(!ui->d_minus_matrix->verticalHeaderItem(i))
@@ -109,5 +114,7 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 
 	ui->d_minus_matrix->blockSignals(dminstate);
 	ui->d_plus_matrix->blockSignals(dplusstate);
+	ui->width_spinbox->blockSignals(wspinstate);
+	ui->height_spinbox->blockSignals(hspinstate);
 
 }

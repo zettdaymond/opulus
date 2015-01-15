@@ -25,6 +25,7 @@
 #include "propertyeditordelegate.h"
 #include "analyser.h"
 #include "version.h"
+#include "petrinetscene.h"
 
 #include <QMenuBar>
 #include <QMenu>
@@ -61,6 +62,8 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 
 	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
 	connect(mController, SIGNAL(netChanged(const PetriNet*)), ui.matrixWidget, SLOT(updateMatrices(const PetriNet*)));
+	connect(ui.matrixWidget, SIGNAL(matrices_size_changed(int,int)), mController, SLOT(matrixResized(int,int)));
+	connect(ui.matrixWidget, SIGNAL(matrix_value_changed(char,int,int,int)), mController, SLOT(matrixUpdate(char,int,int,int)));
 	searchAvailableLanguages();
 	show();
 }

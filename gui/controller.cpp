@@ -29,7 +29,10 @@
 #include <QUndoStack>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QGraphicsView>
+#include <cstdlib>
 #include <memory>
+#include <stdexcept>
 
 #include "controller.h"
 #include "petrinet.h"
@@ -84,6 +87,7 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 			mPropEditorModel, SLOT(setModelSource(Item*)));
 
 	connect(mUndoStack, SIGNAL(cleanChanged(bool)), this, SIGNAL(cleanChanged(bool)));
+	qsrand(0);
 }
 
 Controller::~Controller() {
@@ -155,6 +159,113 @@ void Controller::useTokenTool() {
 
 void Controller::useFireTransitionTool() {
 	mScene->useFireTransitionTool();
+}
+
+void Controller::matrixResized(int rows, int cols)
+{
+	const int transitions_size = mPetriNet->transitions().size();
+	if(rows < transitions_size) {
+		showWarningMessage(tr("Please select and delete transition manually."), MessageWidget::Forever);
+		emit netChanged(mPetriNet);
+		return;
+	}
+
+	if(cols < mPetriNet->placeCount()) {
+		showWarningMessage(tr("Please select and delete place manually."), MessageWidget::Forever);
+		emit netChanged(mPetriNet);
+		return;
+	}
+	if(rows > transitions_size) {
+		for(int i = transitions_size; i < rows; ++i) {
+			int x = qrand() % 200 - 100;
+			int y = qrand() % 200 - 100;
+			QGraphicsView *v = scene()->views().takeFirst();
+			QPointF center = v->mapToScene(v->viewport()->rect().center());
+			addTransition(center+QPointF(x,y));
+		}
+	}
+
+	if(cols > mPetriNet->placeCount()) {
+		for(int i = mPetriNet->placeCount(); i < cols; ++i) {
+			int x = qrand() % 200 - 100;
+			int y = qrand() % 200 - 100;
+			QGraphicsView *v = scene()->views().takeFirst();
+			QPointF center = v->mapToScene(v->viewport()->rect().center());
+			addPlace(center+QPointF(x,y));
+
+		}
+
+	}
+}
+
+void Controller::matrixUpdate(char matrix, int row, int col, int val)
+{
+	if(row > mPetriNet->transitions().size())
+		throw std::runtime_error("row > transition count");
+	if(col > mPetriNet->placeCount())
+		throw std::runtime_error("col > place count");
+	if(row < 0 || col < 0)
+		throw std::invalid_argument("row or col < 0");
+	if(!(matrix == '-' || matrix == '+'))
+		throw std::invalid_argument("incorrect matrix: must be - or +");
+
+	Transition* tr = NULL;
+	Place *pl = NULL;
+	foreach (Transition* t, mPetriNet->transitions()) {
+		QString tmp = t->name();
+		if(tmp.startsWith('T')) {
+			int num; bool ok;
+			if(((num = tmp.remove(0,1).toInt(&ok)) == row) && ok) {
+				tr = t;
+				break;
+			}
+		}
+	}
+	foreach (Place* p, mPetriNet->places()) {
+		QString tmp = p->name();
+		if(tmp.startsWith('P')) {
+			int num; bool ok;
+			if(((num = tmp.remove(0,1).toInt(&ok)) == col) && ok) {
+				pl = p;
+				break;
+			}
+		}
+	}
+
+	if(tr && pl) {
+		//qDebug() << "found" << from->name() << to->name();
+		ArcCollection arcs;
+		if(matrix == '-') {
+			foreach (AbstractArc* arc, pl->outputArcs()) {
+				if(arc->to() == static_cast<Node*>(tr)) {
+					//qDebug() << "found arc" << arc->from()->name() << arc->to()->name();
+					arcs.insert(arc);
+				}
+			}
+
+			for(int i = arcs.size(); i < val; ++i){
+				addArc(pl, tr);
+			}
+
+		} else if (matrix == '+') {
+			foreach (AbstractArc* arc, tr->outputArcs()) {
+				if(arc->to() == static_cast<Node*>(pl)) {
+					arcs.insert(arc);
+				}
+			}
+
+			for(int i = arcs.size(); i < val; ++i) {
+				addArc(tr,pl);
+			}
+		}
+
+		if(arcs.size() > val) {
+			ArcCollection::iterator it = arcs.begin();
+			for(int i = val; i < arcs.size(); ++i) {
+				removeItem(*it++);
+			}
+		}
+	}
 }
 
 void Controller::addPlace(const QPointF& position) {
