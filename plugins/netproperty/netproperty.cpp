@@ -90,46 +90,52 @@ void NetProperty::finish(QWidget *parentWidget)
     ui.setupUi(&dlg);
     QString out = "";
 
-    out += "Transitions:\n";
-
-    out +=       "\tDead :";
+    out +=  tr("<h1>Analysis Results</h1>") +
+            tr("<hr />") +
+            tr("<h2>Transitions:</h2>");
+    out +=  tr("<ul>");
+    out +=  tr("<li> Dead :");
     foreach (Transition * t, _deadTransitions) {
         out += t->name() + ", ";
     }
-    out += "\n";
+    out += "</li>";
 
-    out +=       "\tPotential Dead :";
+    out +=   tr("<li> Potential Dead :");
     foreach (Transition * t, _potentialDeadTransitions) {
         out += t->name() + ", ";
     }
-    out += "\n";
+    out += "</li>";
 
-    out +=       "\tPotential Live :";
+    out +=  tr("<li>Potential Live :");
     foreach (Transition * t, _potentialLiveTransitions) {
         out += t->name() + ", ";
     }
-    out += "\n";
+    out += "</li>";
 
-    out +=       "\tLive :";
+    out +=  tr("<li>Live :");
     foreach (Transition * t, _liveTransitions) {
         out += t->name() + ", ";
     }
-    out += "\n";
+    out += "</li>";
 
-    out +=       "\tStable :";
+    out +=  tr("<li>Stable :");
     foreach (Transition * t, _stableTransitions) {
         out += t->name() + ", ";
     }
-    out += "\n";
+    out += "</li>";
 
-    out += "Petri Net :\n";
-    out += "\tSafe : " + bToStr(_isSafety) + "\n";
-    out += "\tBounded : " + bToStr(_isRestricted) + "\n";
-    out += "\tLive :" + bToStr(_isLive)+ "\n";
-    out += "\tStable :" + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
-    out += "\tParralel :" + bToStr(_isParallel)+ "\n";
-    out += "\tConflicted :" + bToStr(_isConflict)+ "\n";
-    ui.textEdit->setPlainText(out);
+    out += "</ul>";
+
+    out += tr("<h2>Petri Net:</h2>");
+    out += "<ul>";
+    out += tr("<li>Safe: ") + bToStr(_isSafety) + "</li>";
+    out += tr("<li>Bounded: ") + bToStr(_isRestricted) + "</li>";
+    out += tr("<li>Live: ") + bToStr(_isLive)+ "</li>";
+    out += tr("<li>Stable: ") + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
+    out += tr("<li>Parralel: ") + bToStr(_isParallel)+ "</li>";
+    out += tr("<li>Conflicted: ") + bToStr(_isConflict)+ "</li>";
+    out += "</ul>";
+    ui.textEdit->setHtml(out);
     dlg.exec();
 }
 
