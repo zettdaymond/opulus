@@ -8,8 +8,10 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 	ui(new Ui::MatrixWidget)
 {
 	ui->setupUi(this);
-	connect(ui->d_minus_matrix, SIGNAL(cellChanged(int,int)), this, SLOT(on_d_matrices_cellChanged(int,int)));
-	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)), this, SLOT(on_d_matrices_cellChanged(int,int)));
+	connect(ui->d_minus_matrix, SIGNAL(cellChanged(int,int)),
+		this, SLOT(d_minus_table_value_changed(int,int)));
+	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)),
+		this, SLOT(d_plus_table_value_changed(int,int)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -19,34 +21,61 @@ MatrixWidget::~MatrixWidget()
 
 void MatrixWidget::on_height_spinbox_valueChanged(int arg1)
 {
-	// TODO: update petri net
+	if(arg1 < 0)
+		return;
 	ui->d_minus_matrix->setRowCount(arg1);
 	ui->d_plus_matrix->setRowCount(arg1);
+	emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
 }
 
 void MatrixWidget::on_width_spinbox_valueChanged(int arg1)
 {
-	// TODO: update petri net
+	if(arg1 < 0)
+		return;
 	ui->d_minus_matrix->setColumnCount(arg1);
 	ui->d_plus_matrix->setColumnCount(arg1);
+	emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
 }
 
-void MatrixWidget::on_d_matrices_cellChanged(int row, int column)
+void MatrixWidget::d_minus_table_value_changed(int row, int col)
 {
-	Q_UNUSED(row);
-	Q_UNUSED(column);
-	//qDebug() << "cell changed";
-	// TODO: update petri net
+	if(!ui->d_minus_matrix->item(row,col))
+		return;
 
+	qDebug() << "dmin changed at" << row << col << "to" << ui->d_minus_matrix->item(row,col)->text();
+	bool ok;
+	int val = ui->d_minus_matrix->item(row,col)->text().toInt(&ok);
+
+	if(ok && val >= 0)
+		emit d_minus_matrix_value_changed(row,col,val);
+}
+
+void MatrixWidget::d_plus_table_value_changed(int row, int col)
+{
+	if(!ui->d_plus_matrix->item(row,col))
+		return;
+
+	qDebug() << "dplus changed at" << row << col << "to" << ui->d_plus_matrix->item(row,col)->text();
+	bool ok;
+	int val = ui->d_plus_matrix->item(row,col)->text().toInt(&ok);
+
+	if(ok && val >= 0)
+		emit d_plus_matrix_value_changed(row, col, val);
 }
 
 void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 {
+	if(!petri_net)
+		return;
+
 	Eigen::MatrixXi d_min = d_minus_matrix(petri_net);
 	Eigen::MatrixXi d_plu = d_plus_matrix(petri_net);
 
 	ui->width_spinbox->setValue(d_min.cols());
 	ui->height_spinbox->setValue(d_min.rows());
+
+	bool dminstate = ui->d_minus_matrix->blockSignals(true);
+	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
 
 	for(int i = 0; i < d_min.rows(); ++i) {
 		if(!ui->d_minus_matrix->verticalHeaderItem(i))
@@ -77,5 +106,8 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 		if(!ui->d_plus_matrix->horizontalHeaderItem(i))
 			ui->d_plus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
 	}
+
+	ui->d_minus_matrix->blockSignals(dminstate);
+	ui->d_plus_matrix->blockSignals(dplusstate);
 
 }

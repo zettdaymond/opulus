@@ -9,9 +9,12 @@ using namespace Eigen;
 
 MatrixXi d_minus_matrix(const PetriNet *petrinet)
 {
+	if(!petrinet) return MatrixXi::Zero(0, 0);
+
 	const QSet<Transition*> transitions = petrinet->transitions();
 	const QSet<Place*> places = petrinet->places();
-	const int trans_cnt = transitions.size(), places_cnt = places.size();
+	const int trans_cnt = transitions.size();
+	const int places_cnt = places.size();
 
 	MatrixXi d_minus = MatrixXi::Zero(trans_cnt, places_cnt);
 
@@ -46,6 +49,8 @@ MatrixXi d_minus_matrix(const PetriNet *petrinet)
 
 MatrixXi d_plus_matrix(const PetriNet *petrinet)
 {
+	if(!petrinet) return MatrixXi::Zero(0,0);
+
 	const QSet<Transition*> transitions = petrinet->transitions();
 	const QSet<Place*> places = petrinet->places();
 	const int trans_cnt = transitions.size(), places_cnt = places.size();
