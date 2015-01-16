@@ -48,7 +48,11 @@ private:
     QHash <Transition *, uint> _transitionLevels;
     bool _isParallel;
     bool _isConflict;
+    bool _isPreserving;
+    bool _isStrictlyPreserving;
+    static const float eqSolverE = 0.000001;
     void isParallelizeOrConflict();
+    void isPreserving();
 
     QSet<Node *> getNodeFromTransition(Transition *t);
     void prepareForAnalysis();

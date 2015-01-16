@@ -8,6 +8,7 @@
 #include "simulation.h"
 #include "transition.h"
 #include "abstractarc.h"
+#include "matrix_util.h"
 //#include "node.h"
 class MarkingNode {
 public:
@@ -71,7 +72,7 @@ void NetProperty::analyse(PetriNet *pn, AnalysisReporter *reporter)
 
     _stableTransitions = GetStableTransitions();
     isParallelizeOrConflict();
-
+    isPreserving();
     _isLive = true;
     foreach(Transition * t, mPetriNet->transitions()) {
         if (!_liveTransitions.contains(t)) {
@@ -131,6 +132,8 @@ void NetProperty::finish(QWidget *parentWidget)
     out += tr("<li>Safe: ") + bToStr(_isSafety) + "</li>";
     out += tr("<li>Bounded: ") + bToStr(_isRestricted) + "</li>";
     out += tr("<li>Live: ") + bToStr(_isLive)+ "</li>";
+    out += tr("<li>Preserve: ") + bToStr(_isPreserving)+ "</li>";
+    out += tr("<li>Stritly preserving: ") + bToStr(_isStrictlyPreserving)+ "</li>";
     out += tr("<li>Stable: ") + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
     out += tr("<li>Parralel: ") + bToStr(_isParallel)+ "</li>";
     out += tr("<li>Conflicted: ") + bToStr(_isConflict)+ "</li>";
@@ -500,6 +503,62 @@ void NetProperty::isParallelizeOrConflict()
     mPetriNet->setCurrentMarking(root->marking());
 }
 
+void NetProperty::isPreserving()
+{
+    Eigen::MatrixXi d_mtx = d_matrix(mPetriNet);
+
+    Eigen::VectorXi xW( d_mtx.cols() );
+    for (int j = 0; j < d_mtx.cols(); j++) {
+        xW(j) = 0;
+    }
+
+    int dim = 0;
+    int max_dim = d_mtx.cols();
+    int max_num = 30;
+    while(true) {
+        if (xW(dim) == max_num) {
+            dim++;
+            if (dim == max_dim)
+                break;
+            for (int i =0; i < dim; i++) {
+                xW(i) = 0;
+            }
+        } else {
+            xW(dim) += 1;
+            //Threat
+            bool flag = true;
+            Eigen::VectorXi tmpResult = d_mtx * xW;
+            for (int i = 0; i < tmpResult.rows(); i++) {
+                if (tmpResult(i) != 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            dim = 0;
+            if (flag == true) {
+                _isPreserving = true;
+                break;
+            }
+        }
+    }
+    //проверим на строгое сохранение
+    Eigen::VectorXi W( d_mtx.cols() );
+    Eigen::VectorXi zeroMtx(d_mtx.cols());
+
+    for (int i = 0; i < d_mtx.cols(); i++) {
+        W(i) = 1;
+    }
+    Eigen::MatrixXi result = d_mtx * W;
+    for (int i = 0; i < result.rows(); i++) {
+        if (result(i) != 0) {
+            _isStrictlyPreserving = false;
+            return;
+        }
+    }
+    _isStrictlyPreserving = true;
+    return;
+}
+
 QSet<Node *> NetProperty::getNodeFromTransition(Transition *t)
 {
     QSet <Node *> output;
@@ -518,6 +577,8 @@ void NetProperty::prepareForAnalysis()
     _isSafety = true;
     _isParallel = false;
     _isConflict = false;
+    _isStrictlyPreserving =false;
+    _isPreserving = false;
 
     _deadTransitions = mPetriNet->transitions();
     _liveTransitions = mPetriNet->transitions();
