@@ -108,13 +108,15 @@ bool Controller::hasPetriNet() const {
 
 QAction* Controller::createRedoAction() {
 	QAction* action = mUndoStack->createRedoAction(this);
+    connect(action, SIGNAL(triggered()),this,SLOT(undoRedoReaction()));
 	action->setIcon(QIcon(":/redo"));
 	action->setShortcut(QKeySequence::Redo);
 	return action;
 }
 
 QAction* Controller::createUndoAction() {
-	QAction* action = mUndoStack->createUndoAction(this);
+    QAction* action = mUndoStack->createUndoAction(this);
+    connect(action, SIGNAL(triggered()),this,SLOT(undoRedoReaction()));
 	action->setIcon(QIcon(":/undo"));
 	action->setShortcut(QKeySequence::Undo);
 	return action;
@@ -454,7 +456,12 @@ void Controller::analysisFinished() {
 void Controller::analysisFatalError(const QString& msg) {
 	mAnalyserStatusDlg->hide();
 	QMessageBox::critical(mParentWidget,
-						mAnalysisRunner->analyser()->name(), msg);
+                          mAnalysisRunner->analyser()->name(), msg);
+}
+
+void Controller::undoRedoReaction()
+{
+    emit netChanged(mPetriNet);
 }
 
 void Controller::zoomIn() {

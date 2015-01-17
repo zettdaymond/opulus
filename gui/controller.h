@@ -143,6 +143,7 @@ public:
 private slots:
 	void analysisFinished();
 	void analysisFatalError(const QString& msg);
+    void undoRedoReaction();
 
 private:
 	QString mFileName;
