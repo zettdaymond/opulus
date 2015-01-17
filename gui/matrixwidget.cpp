@@ -1,13 +1,19 @@
 #include "matrixwidget.h"
 #include "ui_matrixwidget.h"
-#include "matrix_util.h"
+#include "../core/matrix_util.h"
 #include <QDebug>
+#include <QFont>
 
 MatrixWidget::MatrixWidget(QWidget *_parent) :
 	QWidget(_parent),
 	ui(new Ui::MatrixWidget)
 {
 	ui->setupUi(this);
+	QFont f("unexistent");
+	f.setPixelSize(14);
+	f.setStyleHint(QFont::Monospace);
+	ui->i_textedit->setFont(f);
+	ui->o_textedit->setFont(f);
 	connect(ui->d_minus_matrix, SIGNAL(cellChanged(int,int)),
 		this, SLOT(d_minus_table_value_changed(int,int)));
 	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)),
@@ -112,9 +118,46 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 			ui->d_plus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
 	}
 
+	updateIOFunctions();
 	ui->d_minus_matrix->blockSignals(dminstate);
 	ui->d_plus_matrix->blockSignals(dplusstate);
 	ui->width_spinbox->blockSignals(wspinstate);
 	ui->height_spinbox->blockSignals(hspinstate);
 
+}
+
+void MatrixWidget::updateIOFunctions()
+{
+	QString text;
+	for(int i =0; i < ui->d_minus_matrix->rowCount(); ++i) {
+		text.push_back('T');
+		text.push_back(QString::number(i));
+		text.push_back(" = ");
+		for(int j = 0; j < ui->d_minus_matrix->columnCount(); ++j) {
+			for(int k = 0; k < ui->d_minus_matrix->item(i,j)->text().toInt(); ++k) {
+				text.push_back('P');
+				text.push_back(QString::number(j));
+				text.push_back(' ');
+			}
+		}
+		text.push_back('\n');
+	}
+	QString plus_text;
+	for(int i =0; i < ui->d_plus_matrix->rowCount(); ++i) {
+		plus_text.push_back('T');
+		plus_text.push_back(QString::number(i));
+		plus_text.push_back(" = ");
+
+		for(int j = 0; j < ui->d_plus_matrix->columnCount(); ++j) {
+			for(int k = 0; k < ui->d_plus_matrix->item(i,j)->text().toInt(); ++k) {
+				plus_text.push_back('P');
+				plus_text.push_back(QString::number(j));
+				plus_text.push_back(' ');
+			}
+		}
+		plus_text.push_back('\n');
+	}
+
+	ui->i_textedit->setText(text);
+	ui->o_textedit->setText(plus_text);
 }

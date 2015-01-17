@@ -29,6 +29,7 @@ private slots:
 	void on_width_spinbox_valueChanged(int arg1);
 	void d_minus_table_value_changed(int row, int col);
 	void d_plus_table_value_changed(int row, int col);
+	void updateIOFunctions();
 
 private:
 	Ui::MatrixWidget *ui;
