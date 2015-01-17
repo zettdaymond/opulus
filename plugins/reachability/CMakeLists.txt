@@ -2,9 +2,11 @@ project(reachability)
 
 set(reachability_SRCS
     reachability.cpp
+    delegate.cpp
 )
 set(reachability_UIS
         reachability.ui
+        results.ui
 )
 
 #qt5_add_translations(reachability .)
