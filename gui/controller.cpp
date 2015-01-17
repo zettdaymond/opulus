@@ -342,6 +342,7 @@ void Controller::fireNRandomTransitions() {
 
 void Controller::removeItem(Item* item) {
 	mUndoStack->push(new CmdRemoveItem(item));
+    emit netChanged(mPetriNet);
 }
 
 void Controller::startSimulation() {
