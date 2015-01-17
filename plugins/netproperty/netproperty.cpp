@@ -140,6 +140,7 @@ void NetProperty::finish(QWidget *parentWidget)
     out += "</ul>";
     ui.textEdit->setHtml(out);
     dlg.exec();
+    resetAnalyser();
 }
 
 bool NetProperty::IsTreeNodeBounded(MarkingNode* node)
@@ -557,6 +558,25 @@ void NetProperty::isPreserving()
     }
     _isStrictlyPreserving = true;
     return;
+}
+
+void NetProperty::resetAnalyser()
+{
+    mAnalysisOk = false;
+
+    _isSafety = false;
+    _isRestricted = false;
+    _isLive = false;
+    _deadTransitions.clear();
+    _potentialDeadTransitions.clear();
+    _potentialLiveTransitions.clear();
+    _liveTransitions.clear();
+    _stableTransitions.clear();
+    _transitionLevels.clear();
+    _isParallel = false;
+    _isConflict = false;
+    _isPreserving = false;
+    _isStrictlyPreserving = false;
 }
 
 QSet<Node *> NetProperty::getNodeFromTransition(Transition *t)

@@ -53,6 +53,7 @@ private:
     static const float eqSolverE = 0.000001;
     void isParallelizeOrConflict();
     void isPreserving();
+    void resetAnalyser();
 
     QSet<Node *> getNodeFromTransition(Transition *t);
     void prepareForAnalysis();
