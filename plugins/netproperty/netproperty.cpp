@@ -87,59 +87,61 @@ void NetProperty::analyse(PetriNet *pn, AnalysisReporter *reporter)
 
 void NetProperty::finish(QWidget *parentWidget)
 {
-    QDialog dlg(parentWidget);
-    ui.setupUi(&dlg);
-    QString out = "";
+    if (mAnalysisOk == true) {
+        QDialog dlg(parentWidget);
+        ui.setupUi(&dlg);
+        QString out = "";
 
-    out +=  tr("<h1>Analysis Results</h1>") +
-            tr("<hr />") +
-            tr("<h2>Transitions:</h2>");
-    out +=  tr("<ul>");
-    out +=  tr("<li> Dead :");
-    foreach (Transition * t, _deadTransitions) {
-        out += t->name() + ", ";
+        out +=  tr("<h1>Analysis Results</h1>") +
+                tr("<hr />") +
+                tr("<h2>Transitions:</h2>");
+        out +=  tr("<ul>");
+        out +=  tr("<li> Dead :");
+        foreach (Transition * t, _deadTransitions) {
+            out += t->name() + ", ";
+        }
+        out += "</li>";
+
+        out +=   tr("<li> Potential Dead :");
+        foreach (Transition * t, _potentialDeadTransitions) {
+            out += t->name() + ", ";
+        }
+        out += "</li>";
+
+        out +=  tr("<li>Potential Live :");
+        foreach (Transition * t, _potentialLiveTransitions) {
+            out += t->name() + ", ";
+        }
+        out += "</li>";
+
+        out +=  tr("<li>Live :");
+        foreach (Transition * t, _liveTransitions) {
+            out += t->name() + ", ";
+        }
+        out += "</li>";
+
+        out +=  tr("<li>Stable :");
+        foreach (Transition * t, _stableTransitions) {
+            out += t->name() + ", ";
+        }
+        out += "</li>";
+
+        out += "</ul>";
+
+        out += tr("<h2>Petri Net:</h2>");
+        out += "<ul>";
+        out += tr("<li>Safe: ") + bToStr(_isSafety) + "</li>";
+        out += tr("<li>Bounded: ") + bToStr(_isRestricted) + "</li>";
+        out += tr("<li>Live: ") + bToStr(_isLive)+ "</li>";
+        out += tr("<li>Preserve: ") + bToStr(_isPreserving)+ "</li>";
+        out += tr("<li>Stritly preserving: ") + bToStr(_isStrictlyPreserving)+ "</li>";
+        out += tr("<li>Stable: ") + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
+        out += tr("<li>Parralel: ") + bToStr(_isParallel)+ "</li>";
+        out += tr("<li>Conflicted: ") + bToStr(_isConflict)+ "</li>";
+        out += "</ul>";
+        ui.textEdit->setHtml(out);
+        dlg.exec();
     }
-    out += "</li>";
-
-    out +=   tr("<li> Potential Dead :");
-    foreach (Transition * t, _potentialDeadTransitions) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  tr("<li>Potential Live :");
-    foreach (Transition * t, _potentialLiveTransitions) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  tr("<li>Live :");
-    foreach (Transition * t, _liveTransitions) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  tr("<li>Stable :");
-    foreach (Transition * t, _stableTransitions) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out += "</ul>";
-
-    out += tr("<h2>Petri Net:</h2>");
-    out += "<ul>";
-    out += tr("<li>Safe: ") + bToStr(_isSafety) + "</li>";
-    out += tr("<li>Bounded: ") + bToStr(_isRestricted) + "</li>";
-    out += tr("<li>Live: ") + bToStr(_isLive)+ "</li>";
-    out += tr("<li>Preserve: ") + bToStr(_isPreserving)+ "</li>";
-    out += tr("<li>Stritly preserving: ") + bToStr(_isStrictlyPreserving)+ "</li>";
-    out += tr("<li>Stable: ") + bToStr(_stableTransitions.contains(mPetriNet->transitions()))+ "\n";
-    out += tr("<li>Parralel: ") + bToStr(_isParallel)+ "</li>";
-    out += tr("<li>Conflicted: ") + bToStr(_isConflict)+ "</li>";
-    out += "</ul>";
-    ui.textEdit->setHtml(out);
-    dlg.exec();
     resetAnalyser();
 }
 
@@ -223,7 +225,7 @@ void NetProperty::BasePropertyAnalyse()
                 //Переход будет потенциально мертв, если начиная с некоторой ноды
                 //он будет мертв на всем под-дереве вывода (которое начинается с этой ноды).
                 QSet<Transition *> dt = GetDeadTransitionSubTree(child->marking());
-               // QSet<Transition *> dt = GetDeadTransitionSubTree(initialMarking);
+                // QSet<Transition *> dt = GetDeadTransitionSubTree(initialMarking);
                 //FIXME: Алгоритм должен работать с начала дерева (initialMarking), но он раюотает только с child.matking()
                 _potentialDeadTransitions.unite(dt);
 
