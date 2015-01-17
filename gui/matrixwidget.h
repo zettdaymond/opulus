@@ -2,6 +2,7 @@
 #define MATRIXWIDGET_H
 
 #include <QWidget>
+#include <QMap>
 
 namespace Ui {
 class MatrixWidget;
@@ -29,9 +30,12 @@ private slots:
 	void on_width_spinbox_valueChanged(int arg1);
 	void d_minus_table_value_changed(int row, int col);
 	void d_plus_table_value_changed(int row, int col);
+	void i_textedit_changed();
+	void o_textedit_changed();
 	void updateIOFunctions();
 
 private:
+	QMap<int, QMap<int,int> > parseIOText(const QString& text);
 	Ui::MatrixWidget *ui;
 };
 

@@ -3,6 +3,7 @@
 #include "../core/matrix_util.h"
 #include <QDebug>
 #include <QFont>
+#include <algorithm>
 
 MatrixWidget::MatrixWidget(QWidget *_parent) :
 	QWidget(_parent),
@@ -18,6 +19,9 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 		this, SLOT(d_minus_table_value_changed(int,int)));
 	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)),
 		this, SLOT(d_plus_table_value_changed(int,int)));
+
+	connect(ui->i_textedit, SIGNAL(textChanged()), this, SLOT(i_textedit_changed()));
+	connect(ui->o_textedit, SIGNAL(textChanged()), this, SLOT(o_textedit_changed()));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -65,6 +69,54 @@ void MatrixWidget::d_plus_table_value_changed(int row, int col)
 
 	if(ok && val >= 0)
 		emit matrix_value_changed('+',row, col, val);
+}
+
+void MatrixWidget::i_textedit_changed()
+{
+	QMap<int, QMap<int,int> > m = parseIOText(ui->i_textedit->toPlainText());
+	//qDebug() << m.size();
+}
+
+void MatrixWidget::o_textedit_changed()
+{
+	QMap<int, QMap<int,int> > m = parseIOText(ui->o_textedit->toPlainText());
+	QMap<int, QMap<int,int> >::iterator it = m.begin();
+	bool dminstate = ui->d_minus_matrix->blockSignals(true);
+	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
+	bool wspinstate = ui->width_spinbox->blockSignals(true);
+	bool hspinstate = ui->height_spinbox->blockSignals(true);
+
+	for(; it != m.end(); ++it) {
+		qDebug() << "for transition T" << it.key() << "got" << it.value().size() << "places:";
+
+		if(ui->d_minus_matrix->rowCount() <= it.key()) {
+			ui->height_spinbox->setValue(it.key()+1);
+			ui->d_minus_matrix->setRowCount(it.key()+1);
+			ui->d_plus_matrix->setRowCount(it.key()+1);
+		}
+
+		QMap<int,int>::iterator place = it.value().begin();
+		for(;place != it.value().end(); ++place) {
+			 qDebug() << "P"+QString::number(place.key()) << "(" << place.value() << "times)";
+			 if(ui->d_plus_matrix->columnCount() <= place.key()) {
+				 ui->width_spinbox->setValue(place.key() + 1);
+				 ui->d_minus_matrix->setColumnCount(place.key()+1);
+				 ui->d_plus_matrix->setColumnCount(place.key()+1);
+			 }
+			 // TODO: figure out how to update petri net
+			// emit matrix_value_changed('+',it.key(),place.key(), place.value());
+
+		}
+		//emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
+
+	}
+
+	ui->d_minus_matrix->blockSignals(dminstate);
+	ui->d_plus_matrix->blockSignals(dplusstate);
+	ui->width_spinbox->blockSignals(wspinstate);
+	ui->height_spinbox->blockSignals(hspinstate);
+
+
 }
 
 void MatrixWidget::updateMatrices(const PetriNet *petri_net)
@@ -158,6 +210,81 @@ void MatrixWidget::updateIOFunctions()
 		plus_text.push_back('\n');
 	}
 
+	bool iprev = ui->i_textedit->blockSignals(true);
+	bool oprev = ui->o_textedit->blockSignals(true);
 	ui->i_textedit->setText(text);
 	ui->o_textedit->setText(plus_text);
+	ui->i_textedit->blockSignals(iprev);
+	ui->o_textedit->blockSignals(oprev);
+}
+
+QMap<int, QMap<int, int> > MatrixWidget::parseIOText(const QString &text)
+{
+	QStringList list = text.split('\n');
+	QMap<int, QMap<int,int> > res;
+
+	foreach (const QString& line, list) {
+	//	qDebug() << "parsing" << line;
+		int pos = 0; // skip space
+		for(int i = 0; i < line.size(); ++i) {
+			if(line[i].isSpace())
+				++pos;
+			else break;
+		}
+		// must start with 't'
+		if(line.size() <= pos) continue;
+		if(line[pos].toLower() != 't') continue;
+	//	qDebug() << "skipped" << pos << "whitespace";
+
+		bool found_eq = false;
+		QString transition_num, place_num;
+		int transition = -1, place = -1;
+		for(int i = pos+1; i < line.size(); ++i) {
+			//qDebug() << "@@" << line[i];
+
+			if(!line[i].isDigit() && line[i].toLower() != 'p' && line[i] != '=' && line[i] != ' ')
+				break;
+
+
+			if(line[i].isDigit() && !found_eq) {
+				transition_num.push_back(line[i]);
+				continue;
+			}
+			if(line[i] == '=') {
+				//qDebug() << "found =";
+				if(found_eq) break; // '=' must appear only once
+				if(transition_num.isEmpty()) break; // not found transition number
+				std::reverse(transition_num.begin(), transition_num.end());
+				transition = transition_num.toInt();
+				//qDebug() << "found transition" << transition;
+				transition_num.clear();
+				if(res.find(transition) != res.end())
+					break; // transition must appear only once
+				else res.insert(transition, QMap<int,int>());
+				found_eq = true;
+				continue;
+			}
+
+			if(found_eq && transition >= 0) {
+				if(line[i].isDigit()) {
+					place_num.push_back(line[i]);
+					//qDebug() << "place num" << line[i];
+				}
+				if(line[i].toLower() =='p' || i == line.size()-1) {
+					// have previous place number
+					//qDebug() << "found p";
+					if(!place_num.isEmpty()) {
+						std::reverse(place_num.begin(), place_num.end());
+						place = place_num.toInt();
+						place_num.clear();
+						//qDebug() << "found place" << place;
+						if(res[transition].find(place) != res[transition].end()) {
+							//qDebug() <<++res[transition][place] << "times";
+						} else res[transition].insert(place,1);
+					}
+				}
+			}
+		}
+	}
+	return res;
 }
