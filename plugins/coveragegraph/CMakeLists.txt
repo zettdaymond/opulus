@@ -2,6 +2,12 @@ project(coverageGraph)
 
 set(coverageGraph_SRCS
     coveragegraph.cpp
+    #extended
+    extended/analysis_utils.cpp
+    extended/preservingmatrixanalyser.cpp
+    extended/propertyanalyser.cpp
+    extended/transitionanaliser.cpp
+
 )
 set(coverageGraph_UIS
 	coveragegraph.ui
