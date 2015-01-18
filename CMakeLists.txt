@@ -14,15 +14,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 #SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-#include_directories(${Qt5Widgets_INCLUDE_DIRS})
-#include_directories(${Qt5Core_INCLUDE_DIRS})
-#include_directories(${Qt5Gui_INCLUDE_DIRS})
-#include_directories(${Qt5Xml_INCLUDE_DIRS})
-#include_directories(${Qt5Svg_INCLUDE_DIRS})
-#include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
-#include_directories(${Qt5Test_INCLUDE_DIRS})
-
-
 # translations
 set(I18N pt_BR es)
 
@@ -42,12 +33,15 @@ else (${CMAKE_BUILD_TYPE} STREQUAL release)
         add_definitions(-ggdb)
 endif (${CMAKE_BUILD_TYPE} STREQUAL release)
 
-#   set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
-#add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
-#SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}" )
+#compiller flags
+set(GCC_COVERAGE_COMPILE_FLAGS "")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "")
-#SET(GCC_COVERAGE_LINK_FLAGS    "-static")
+#linker flags
+#set(GCC_COVERAGE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Xlinker --allow-multiple-definition ")
+set(GCC_COVERAGE_LINKER_FLAGS "")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
 
 add_subdirectory(core)
 add_subdirectory(gui)
@@ -59,8 +53,6 @@ add_subdirectory(windowsinstaller)
 # i18n stuff
 #qt5_add_translations(opulus core gui)
 install(FILES ${opulus_QMS} DESTINATION share/opulus/i18n)
-
-
 
 # .desktop file
 install(FILES opulus.desktop DESTINATION share/applications)
