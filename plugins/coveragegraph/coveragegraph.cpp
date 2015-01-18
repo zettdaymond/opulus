@@ -39,6 +39,7 @@
 #include <QSvgRenderer>
 #include <QSet>
 #include <QDebug>
+#include <QDir>
 
 class MarkingNode {
 public:
@@ -144,9 +145,11 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
 	qDeleteAll(allNodes);
 
 	QProcess dot;
+	QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
 	QStringList args;
 	args << "-Tsvg" << tempFile.fileName();
-	dot.start("dot", args);
+	qDebug() << exec;
+	dot.start(exec, args);
 
 	// wait...
 	dot.waitForFinished(-1);
@@ -167,7 +170,8 @@ void CoverageGraph::writeNode(QTextStream& out, const Marking& from, const Marki
 
 bool CoverageGraph::setup(QWidget* parentWidget) {
 	QProcess dot;
-	dot.start("dot", QStringList() << "--version");
+	QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
+	dot.start(exec, QStringList() << "--version");
 	if (!dot.waitForFinished()) {
 		QMessageBox::critical(parentWidget, tr("Coverage graph plugin"), tr("<html>You need graphviz installed on your computer in order to use this plugin. If graphiviz is already installed, make sure that it is in your system path.\nYou can get graphviz at: <a href=\"http://www.graphviz.org\">http://www.graphviz.org</a></html>"));
 		return false;
