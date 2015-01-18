@@ -80,7 +80,6 @@ QString CoverageGraph::name() const {
 }
 
 void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
-<<<<<<< 4022c2513e34d5349eebd96c658eb5a18aff93d1
     mAnalysisOk = false;
     mPetriNet = pn;
 
@@ -149,12 +148,24 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
 
     qDeleteAll(allNodes);
 
+    reporter->setStatusMessage(tr("Analyzing Petri Net properties."));
+    _analyseResult = analyseProperty();
+    reporter->setPercenage(60);
+
     QProcess dot;
+#ifndef Q_OS_WIN
     QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
+#else
+    QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
+#endif
     QStringList args;
     args << "-Tsvg" << tempFile.fileName();
     qDebug() << exec;
-    dot.start(exec, args);
+    if (mDotInPath == true)
+        dot.start("dot", args);
+    else {
+        dot.start(exec,args);
+    }
 
     // wait...
     dot.waitForFinished(-1);
@@ -192,12 +203,22 @@ QString CoverageGraph::analyseProperty()
 
 bool CoverageGraph::setup(QWidget* parentWidget) {
 	QProcess dot;
-    QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
-    dot.start(exec, QStringList() << "--version");
+#ifndef Q_OS_WIN
+    QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
+#else
+    QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
+#endif
+    dot.start("dot", QStringList() << "--version");
     if (!dot.waitForFinished()) {
-        QMessageBox::critical(parentWidget, tr("Coverage graph plugin"), tr("<html>You need graphviz installed on your computer in order to use this plugin. If graphiviz is already installed, make sure that it is in your system path.\nYou can get graphviz at: <a href=\"http://www.graphviz.org\">http://www.graphviz.org</a></html>"));
-        return false;
+        dot.start(exec_path, QStringList() << "--version");
+        if (!dot.waitForFinished()) {
+            QMessageBox::critical(parentWidget, tr("Coverage graph plugin"), tr("<html>You need graphviz installed on your computer in order to use this plugin. If graphiviz is already installed, make sure that it is in your system path.\nYou can get graphviz at: <a href=\"http://www.graphviz.org\">http://www.graphviz.org</a></html>"));
+            return false;
+        }
+        mDotInPath = false;
+        return true;
     }
+    mDotInPath =true;
     return true;
 }
 

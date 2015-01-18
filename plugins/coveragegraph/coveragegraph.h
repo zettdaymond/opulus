@@ -55,6 +55,8 @@ private:
 
     QString _analyseResult;
 
+    bool mDotInPath;
+
 	void writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName);
 
     QString analyseProperty();
