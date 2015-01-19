@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_matrix">
         <attribute name="title">
@@ -78,10 +78,10 @@
               <enum>Qt::ElideLeft</enum>
              </property>
              <property name="rowCount">
-              <number>2</number>
+              <number>0</number>
              </property>
              <property name="columnCount">
-              <number>3</number>
+              <number>0</number>
              </property>
              <attribute name="horizontalHeaderDefaultSectionSize">
               <number>30</number>
@@ -92,11 +92,6 @@
              <attribute name="verticalHeaderDefaultSectionSize">
               <number>28</number>
              </attribute>
-             <row/>
-             <row/>
-             <column/>
-             <column/>
-             <column/>
             </widget>
            </item>
            <item>
@@ -112,10 +107,10 @@
               <bool>true</bool>
              </property>
              <property name="rowCount">
-              <number>2</number>
+              <number>0</number>
              </property>
              <property name="columnCount">
-              <number>2</number>
+              <number>0</number>
              </property>
              <attribute name="horizontalHeaderDefaultSectionSize">
               <number>30</number>
@@ -123,10 +118,6 @@
              <attribute name="verticalHeaderDefaultSectionSize">
               <number>28</number>
              </attribute>
-             <row/>
-             <row/>
-             <column/>
-             <column/>
             </widget>
            </item>
           </layout>
