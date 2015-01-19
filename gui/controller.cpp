@@ -421,7 +421,8 @@ void Controller::loadPetriNet(const QString& fileName) {
 	} catch (Exception& e) {
 		showErrorMessage(e.message());
 	}
-	QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
+    emit netChanged(mPetriNet);
 }
 
 void Controller::savePetriNet(const QString& fileName) {
