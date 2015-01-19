@@ -41,8 +41,15 @@ bool TransitionAnalyser::isNetStable()
 
 bool TransitionAnalyser::isNetLive()
 {
-    if (_petriNet != 0)
-        return _petriNet->transitions().contains(_liveTransitions);
+    if (_petriNet != 0) {
+        foreach(Transition * t, _petriNet->transitions()) {
+            if (!_liveTransitions.contains(t)) {
+                return false;
+                break;
+            }
+        }
+        return true;
+    }
     else {
         return false;
     }
