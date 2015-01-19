@@ -50,6 +50,7 @@ bool TransitionAnalyser::isNetLive()
 
 QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &startMarking)
 {
+    Marking saveMrk = _petriNet->currentMarking();
     _petriNet->setCurrentMarking(startMarking);
 
     //return empty set, if we cant start
@@ -99,13 +100,13 @@ QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &st
         }
     }
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
+    _petriNet->setCurrentMarking(saveMrk);
     return deadTransitions;
 }
 
 QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking &startMarking)
 {
-
+    Marking saveMrk = _petriNet->currentMarking();
     _petriNet->setCurrentMarking(startMarking);
     MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
     QSet <Transition *> ptnLiveTransition;
@@ -149,7 +150,7 @@ QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking
         //если нет больше активных то значит ищем дальше
     }
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
+    _petriNet->setCurrentMarking(saveMrk);
     return ptnLiveTransition;
 }
 

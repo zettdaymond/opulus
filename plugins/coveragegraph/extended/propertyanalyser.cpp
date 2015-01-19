@@ -37,7 +37,7 @@ bool PropertyAnalyser::analyse()
         _isRestricted = false;
         _isParallel = false;
         _isConflict = false;
-        return 0;
+        return false;
     }
     _isSafety = true;
     _isRestricted = true;

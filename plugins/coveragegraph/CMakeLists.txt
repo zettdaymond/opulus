@@ -7,6 +7,7 @@ set(coverageGraph_SRCS
     extended/preservingmatrixanalyser.cpp
     extended/propertyanalyser.cpp
     extended/transitionanaliser.cpp
+    extended/markingnode.cpp
 
 )
 set(coverageGraph_UIS

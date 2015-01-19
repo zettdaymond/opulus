@@ -149,11 +149,12 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     qDeleteAll(allNodes);
 
     reporter->setStatusMessage(tr("Analyzing Petri Net properties."));
+    mPetriNet->setCurrentMarking(root->marking());
     _analyseResult = analyseProperty();
     reporter->setPercenage(60);
 
     QProcess dot;
-#ifndef Q_OS_WIN
+#ifdef Q_OS_WIN
     QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
 #else
     QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
@@ -175,7 +176,6 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     mSvgData = dot.readAllStandardOutput();
     reporter->setPercenage(100);
     mAnalysisOk = true;
-
 }
 
 void CoverageGraph::writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName) {
@@ -203,7 +203,7 @@ QString CoverageGraph::analyseProperty()
 
 bool CoverageGraph::setup(QWidget* parentWidget) {
 	QProcess dot;
-#ifndef Q_OS_WIN
+#ifdef Q_OS_WIN
     QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
 #else
     QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
