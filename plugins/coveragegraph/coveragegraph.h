@@ -46,14 +46,20 @@ private slots:
 	void zoomIn();
 	void zoomOut();
 private:
-	PetriNet* mPetriNet;
+    PetriNet* mPetriNet;
 	Ui::CovarageGraph ui;
 	QByteArray mSvgData;
 
 	bool mAnalysisOk;
 	QString mMarkingOrder;
 
+    QString _analyseResult;
+
+    bool mDotInPath;
+
 	void writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName);
+
+    QString analyseProperty();
 };
 
 #endif

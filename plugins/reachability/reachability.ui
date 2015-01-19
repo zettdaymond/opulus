@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>Reachability</class>
+ <widget class="QDialog" name="Reachability">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>622</width>
-    <height>153</height>
+    <width>633</width>
+    <height>161</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,24 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Reachability</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Start Marking</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1">
-    <widget class="QTableWidget" name="tableWidget_3">
+    <widget class="QTableWidget" name="tableWidget_EndMrk">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -44,20 +31,20 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>30</height>
+       <height>40</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>50</height>
+       <height>70</height>
       </size>
      </property>
      <property name="rowCount">
       <number>1</number>
      </property>
      <property name="columnCount">
-      <number>2</number>
+      <number>0</number>
      </property>
      <attribute name="horizontalHeaderCascadingSectionResizes">
       <bool>false</bool>
@@ -78,12 +65,49 @@
       <number>20</number>
      </attribute>
      <row/>
-     <column/>
-     <column/>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="0" column="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Max L:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBoxMaxLaunch">
+         <property name="maximum">
+          <number>5000</number>
+         </property>
+         <property name="value">
+          <number>15</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_PNumber">
+         <property name="text">
+          <string>P:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBoxPNumber"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_EndMrk">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -96,55 +120,6 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QTableWidget" name="tableWidget_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="rowCount">
-      <number>1</number>
-     </property>
-     <property name="columnCount">
-      <number>2</number>
-     </property>
-     <attribute name="horizontalHeaderCascadingSectionResizes">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>30</number>
-     </attribute>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>20</number>
-     </attribute>
-     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderStretchLastSection">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
-     <row/>
-     <column/>
-     <column/>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -161,7 +136,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>Reachability</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -177,7 +152,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>Reachability</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

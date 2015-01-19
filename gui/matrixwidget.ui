@@ -167,6 +167,11 @@
     </layout>
    </item>
   </layout>
+  <zorder>layoutWidget</zorder>
+  <zorder>label</zorder>
+  <zorder>width_spinbox</zorder>
+  <zorder>label_2</zorder>
+  <zorder>height_spinbox</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>

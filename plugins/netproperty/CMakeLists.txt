@@ -3,6 +3,7 @@ project(netProperty)
 
 set(netProperty_SRCS
     netproperty.cpp
+    propertyanalyser.cpp
 )
 set(netProperty_UIS
         netproperty.ui

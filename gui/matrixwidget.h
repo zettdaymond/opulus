@@ -8,8 +8,6 @@ namespace Ui {
 class MatrixWidget;
 }
 
-class PetriNet;
-
 class MatrixWidget : public QWidget
 {
 	Q_OBJECT
@@ -32,7 +30,7 @@ private slots:
 	void d_plus_table_value_changed(int row, int col);
 	void i_textedit_changed();
 	void o_textedit_changed();
-	void updateIOFunctions();
+    void updateIOFunctions();
 
 private:
 	QMap<int, QMap<int,int> > parseIOText(const QString& text);

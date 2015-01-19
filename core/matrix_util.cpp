@@ -7,7 +7,7 @@
 
 using namespace Eigen;
 
-MatrixXi d_minus_matrix(const PetriNet *petrinet)
+MatrixXi d_minus_matrix(PetriNet *petrinet)
 {
 	if(!petrinet) return MatrixXi::Zero(0, 0);
 
@@ -47,7 +47,7 @@ MatrixXi d_minus_matrix(const PetriNet *petrinet)
 }
 
 
-MatrixXi d_plus_matrix(const PetriNet *petrinet)
+MatrixXi d_plus_matrix(PetriNet *petrinet)
 {
 	if(!petrinet) return MatrixXi::Zero(0,0);
 
@@ -85,7 +85,7 @@ MatrixXi d_plus_matrix(const PetriNet *petrinet)
 	return d_plus;
 }
 
-MatrixXi d_matrix(const PetriNet *petrinet)
+MatrixXi d_matrix(PetriNet *petrinet)
 {
 	return d_plus_matrix(petrinet) - d_minus_matrix(petrinet);
 }
