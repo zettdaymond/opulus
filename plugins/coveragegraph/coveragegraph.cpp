@@ -45,31 +45,7 @@
 #include "extended/transitionanaliser.h"
 #include "extended/preservingmatrixanalyser.h"
 #include "extended/analysis_utils.h"
-class MarkingNode {
-public:
-
-    MarkingNode(MarkingNode* parent, const Marking& m) : mParent(parent), mMarking(m) {
-        applyOmega();
-    }
-
-    Marking& marking() { return mMarking; }
-
-private:
-    MarkingNode* mParent;
-    Marking mMarking;
-
-    void applyOmega() {
-        // apply omega if necessary
-        MarkingNode* node = this;
-        while(node->mParent) {
-            node = node->mParent;
-            if (mMarking > node->mMarking) {
-                mMarking.applyOmega(node->mMarking);
-                break;
-            }
-        }
-    }
-};
+#include "extended/markingnode.h"
 
 QString CoverageGraph::internalName() const {
     return QLatin1String("coverageGraph");
