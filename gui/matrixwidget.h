@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMap>
 
+class PetriNet;
 namespace Ui {
 class MatrixWidget;
 }

@@ -127,6 +127,7 @@ public slots:
 	void savePetriNet(const QString& fileName);
 signals:
 	void cleanChanged(bool);
+    void netChanged (PetriNet* pn);
 public:
 	// TODO: will be possile create such thing in a command when we implement the
 	// command pattern o do the undo/redo?
