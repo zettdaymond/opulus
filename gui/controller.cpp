@@ -482,6 +482,7 @@ void Controller::pushCommandNoCatch(QUndoCommand* cmd) {
 bool Controller::pushCommand(QUndoCommand* cmd) {
 	try {
 		pushCommandNoCatch(cmd);
+        emit netChanged(mPetriNet);
 		return true;
 	} catch (Exception& e) {
 		showErrorMessage(e.message(), 10000);
