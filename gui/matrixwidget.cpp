@@ -20,8 +20,7 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)),
 		this, SLOT(d_plus_table_value_changed(int,int)));
 
-	connect(ui->i_textedit, SIGNAL(textChanged()), this, SLOT(i_textedit_changed()));
-	connect(ui->o_textedit, SIGNAL(textChanged()), this, SLOT(o_textedit_changed()));
+	connect(ui->io_update_net_btn, SIGNAL(pressed()), this, SLOT(io_update_button_pressed()));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -71,15 +70,10 @@ void MatrixWidget::d_plus_table_value_changed(int row, int col)
 		emit matrix_value_changed('+',row, col, val);
 }
 
-void MatrixWidget::i_textedit_changed()
-{
-	QMap<int, QMap<int,int> > m = parseIOText(ui->i_textedit->toPlainText());
-	//qDebug() << m.size();
-}
-
-void MatrixWidget::o_textedit_changed()
+void MatrixWidget::io_update_button_pressed()
 {
 	QMap<int, QMap<int,int> > m = parseIOText(ui->o_textedit->toPlainText());
+	QMap<int, QMap<int,int> > mi = parseIOText(ui->i_textedit->toPlainText());
 	QMap<int, QMap<int,int> >::iterator it = m.begin();
 	bool dminstate = ui->d_minus_matrix->blockSignals(true);
 	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
@@ -267,7 +261,7 @@ QMap<int, QMap<int, int> > MatrixWidget::parseIOText(const QString &text)
 						place_num.clear();
 						//qDebug() << "found place" << place;
 						if(res[transition].find(place) != res[transition].end()) {
-							//qDebug() <<++res[transition][place] << "times";
+							++res[transition][place];
 						} else res[transition].insert(place,1);
 					}
 				}
