@@ -202,10 +202,11 @@ void Controller::matrixResized(int rows, int cols)
 
 void Controller::matrixUpdate(char matrix, int row, int col, int val)
 {
-	if(row > mPetriNet->transitions().size())
-		throw std::runtime_error("row > transition count");
-	if(col > mPetriNet->placeCount())
-		throw std::runtime_error("col > place count");
+	if(row >= mPetriNet->transitions().size() || col >= mPetriNet->placeCount()) {
+		bool st = this->blockSignals(true);
+		matrixResized(row+1,col+1);
+		this->blockSignals(st);
+	}
 	if(row < 0 || col < 0)
 		throw std::invalid_argument("row or col < 0");
 	if(!(matrix == '-' || matrix == '+'))

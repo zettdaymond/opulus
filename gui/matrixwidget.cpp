@@ -87,36 +87,24 @@ void MatrixWidget::o_textedit_changed()
 	bool hspinstate = ui->height_spinbox->blockSignals(true);
 
 	for(; it != m.end(); ++it) {
-		qDebug() << "for transition T" << it.key() << "got" << it.value().size() << "places:";
-
-		if(ui->d_minus_matrix->rowCount() <= it.key()) {
-			ui->height_spinbox->setValue(it.key()+1);
-			ui->d_minus_matrix->setRowCount(it.key()+1);
-			ui->d_plus_matrix->setRowCount(it.key()+1);
-		}
-
 		QMap<int,int>::iterator place = it.value().begin();
 		for(;place != it.value().end(); ++place) {
-			 qDebug() << "P"+QString::number(place.key()) << "(" << place.value() << "times)";
-			 if(ui->d_plus_matrix->columnCount() <= place.key()) {
-				 ui->width_spinbox->setValue(place.key() + 1);
-				 ui->d_minus_matrix->setColumnCount(place.key()+1);
-				 ui->d_plus_matrix->setColumnCount(place.key()+1);
-			 }
-			 // TODO: figure out how to update petri net
-			// emit matrix_value_changed('+',it.key(),place.key(), place.value());
+			emit matrix_value_changed('+', it.key(), place.key(), place.value());
 
 		}
-		//emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
+	}
 
+	for(it = mi.begin(); it != mi.end(); ++it) {
+		QMap<int,int>::iterator place = it.value().begin();
+		for( ;place != it.value().end(); ++place) {
+			emit matrix_value_changed('-', it.key(), place.key(), place.value());
+		}
 	}
 
 	ui->d_minus_matrix->blockSignals(dminstate);
 	ui->d_plus_matrix->blockSignals(dplusstate);
 	ui->width_spinbox->blockSignals(wspinstate);
 	ui->height_spinbox->blockSignals(hspinstate);
-
-
 }
 
 void MatrixWidget::updateMatrices(const PetriNet *petri_net)

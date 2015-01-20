@@ -29,9 +29,8 @@ private slots:
 	void on_width_spinbox_valueChanged(int arg1);
 	void d_minus_table_value_changed(int row, int col);
 	void d_plus_table_value_changed(int row, int col);
-	void i_textedit_changed();
-	void o_textedit_changed();
-    void updateIOFunctions();
+	void io_update_button_pressed();
+	void updateIOFunctions();
 
 private:
 	QMap<int, QMap<int,int> > parseIOText(const QString& text);
