@@ -39,7 +39,7 @@ MatrixXi d_minus_matrix(const  PetriNet *petrinet)
 			}
 			if(!ok) throw std::runtime_error("Invalid place name");
 
-			++d_minus(t_index, p_index);
+			d_minus(t_index, p_index) += arc->weight();
 
 		}
 	}
@@ -78,7 +78,7 @@ MatrixXi d_plus_matrix(const PetriNet * petrinet)
 			}
 			if(!ok) throw std::runtime_error("Invalid place name");
 
-			++d_plus(t_index, p_index);
+			d_plus(t_index, p_index) += arc->weight();
 
 		}
 	}

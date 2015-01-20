@@ -237,36 +237,36 @@ void Controller::matrixUpdate(char matrix, int row, int col, int val)
 
 	if(tr && pl) {
 		//qDebug() << "found" << from->name() << to->name();
-		ArcCollection arcs;
 		if(matrix == '-') {
+			bool found = false;
 			foreach (AbstractArc* arc, pl->outputArcs()) {
 				if(arc->to() == static_cast<Node*>(tr)) {
-					//qDebug() << "found arc" << arc->from()->name() << arc->to()->name();
-					arcs.insert(arc);
+					found = true;
+					if(val == 0) {
+						removeItem(arc);
+						break;
+					}
+					arc->setWeight(val);
 				}
 			}
-
-			for(int i = arcs.size(); i < val; ++i){
-				addArc(pl, tr);
-			}
+			if(!found)
+				addArc(pl,tr);
 
 		} else if (matrix == '+') {
+			bool found = false;
 			foreach (AbstractArc* arc, tr->outputArcs()) {
 				if(arc->to() == static_cast<Node*>(pl)) {
-					arcs.insert(arc);
+					found = true;
+					if(val == 0) {
+						removeItem(arc);
+						break;
+					}
+					arc->setWeight(val);
 				}
 			}
-
-			for(int i = arcs.size(); i < val; ++i) {
+			if(!found)
 				addArc(tr,pl);
-			}
-		}
 
-		if(arcs.size() > val) {
-			ArcCollection::iterator it = arcs.begin();
-			for(int i = val; i < arcs.size(); ++i) {
-				removeItem(*it++);
-			}
 		}
 	}
 }

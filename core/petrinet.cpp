@@ -62,12 +62,33 @@ Transition* PetriNet::createTransition(const QPointF& pos, const ItemId& id) {
 }
 
 Arc* PetriNet::createArc(Place* place, Transition* transition, const ItemId& id) {
+	AbstractArc* orig = NULL;
+	foreach (AbstractArc* a, place->outputArcs()) {
+		if(a->to()->isA<Transition>() && static_cast<Transition*>(a->to()) == transition) {
+			a->setWeight(a->weight()+1);
+			orig = a;
+		}
+	}
+	if(orig)
+		return static_cast<Arc*>(orig);
+
 	Arc* arc = new Arc(this, place, transition, id.isValid() ? id : nextId());
 	addItem(arc);
 	return arc;
 }
 
 Arc* PetriNet::createArc(Transition* transition, Place* place, const ItemId& id) {
+	AbstractArc* orig = NULL;
+	foreach (AbstractArc* a, transition->outputArcs()) {
+		if(a->to()->isA<Place>() && static_cast<Place*>(a->to()) == place) {
+			a->setWeight(a->weight()+1);
+			orig = a;
+		}
+	}
+	if(orig)
+		return static_cast<Arc*>(orig);
+
+
 	Arc* arc = new Arc(this, transition, place, id.isValid() ? id : nextId());
 	addItem(arc);
 	return arc;
