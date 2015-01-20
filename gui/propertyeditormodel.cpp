@@ -41,17 +41,16 @@ PropertyEditorModel::~PropertyEditorModel() {
 
 void PropertyEditorModel::setModelSource(Item* item) {
 	if (!item) {
+        beginResetModel();
 		delete mPropHandler;
-		mPropHandler = 0;
-        //reset();
-        //TODO
-        //reset();
+        mPropHandler = 0;
+        endResetModel();
 	} else {
+        beginResetModel();
 		delete mPropHandler;
 		mPropHandler = 0;
-		mPropHandler = PropertyHandler::create(mController, item);
-        //TODO
-        //reset();
+        mPropHandler = PropertyHandler::create(mController, item);
+        endResetModel();
 	}
 }
 
@@ -162,9 +161,9 @@ Qt::ItemFlags PropertyEditorModel::flags(const QModelIndex &index) const {
 
 void PropertyEditorModel::itemModified(Item* item) {
 	if (mPropHandler && mPropHandler->item() == item) {
+        beginResetModel();
 		mPropHandler->updateProperties();
-        //TODO
-        //reset();
+        endResetModel();
 	}
 }
 
