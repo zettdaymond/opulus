@@ -14,7 +14,7 @@ bool PreservingMatrixAnalyser::analyse()
     _isStrictlyPreserving = false;
 
     checkPreserving();
-
+    return true;
 }
 bool PreservingMatrixAnalyser::isPreserving() const
 {
