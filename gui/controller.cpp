@@ -88,6 +88,9 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 
 	connect(mUndoStack, SIGNAL(cleanChanged(bool)), this, SIGNAL(cleanChanged(bool)));
 	qsrand(0);
+
+    connect(mPropEditorModel, SIGNAL(modelReset()),this,SLOT(undoRedoReaction()));
+    //FIXME: change name to slot undoRedoReation();
 }
 
 Controller::~Controller() {
