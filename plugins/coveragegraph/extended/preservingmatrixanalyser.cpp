@@ -1,6 +1,6 @@
 #include "preservingmatrixanalyser.h"
 #include "matrix_util.h"
-
+using namespace Eigen;
 PreservingMatrixAnalyser::PreservingMatrixAnalyser(PetriNet * pn) {
     _petriNet =  pn;
 }
@@ -31,6 +31,12 @@ void PreservingMatrixAnalyser::checkPreserving()
     Eigen::MatrixXi d_mtx = d_matrix(_petriNet);
 
 
+    if (d_mtx.determinant() != 0) {
+        _isPreserving = false;
+        _isStrictlyPreserving = false;
+        return;
+    }
+
     //проверим на строгое сохранение
     Eigen::VectorXi W( d_mtx.cols() );
 
@@ -52,42 +58,35 @@ void PreservingMatrixAnalyser::checkPreserving()
         return;
     }
 
-    //TODO: rewrite matrix multiply to solving linear system
-    Eigen::VectorXi xW( d_mtx.cols() );
-    for (int j = 0; j < d_mtx.cols(); j++) {
-        xW(j) = 0;
-    }
+    //DW = 0 -> W = kernel(D) ->
+    // solution vector = kernel * x, where x
+    //is vector of free variables
 
-    int dim = 0;
-    int max_dim = d_mtx.cols();
-    int max_num = 30;
-    while(true) {
-        if (xW(dim) == max_num) {
-            dim++;
-            if (dim == max_dim)
+    //WARNING: method cast() might bring some problems
+    //WARNING: check this, if solution isn't real;
+    FullPivLU<MatrixXf> lu(d_mtx.cast<float>());
+    MatrixXf kernel = lu.kernel();
+
+    _isPreserving = true;
+    for (int inequality = 0; inequality < kernel.rows(); inequality++) {
+        bool thereIsPositive = false;
+        for (int coeff = 0; coeff < kernel.cols(); coeff++) {
+            if ( kernel(inequality,coeff) > 0 ){
+                //if there is at least one positive cofficient
+                //in inequation, we can anyway choose such values of the arguments,
+                //that make inequality is solvable.
+                thereIsPositive = true;
                 break;
-            for (int i =0; i < dim; i++) {
-                xW(i) = 0;
             }
-        } else {
-            xW(dim) += 1;
-            //Threat
-            bool flag = true;
-            Eigen::VectorXi tmpResult = d_mtx * xW;
-            for (int i = 0; i < tmpResult.rows(); i++) {
-                if (tmpResult(i) != 0) {
-                    flag = false;
-                    break;
-                }
-            }
-            dim = 0;
-            if (flag == true) {
-                _isPreserving = true;
-                break;
+            else if (kernel(inequality,coeff) == 0) {
+                continue;
             }
         }
+        if (thereIsPositive == false) {
+            _isPreserving = false;
+            return;
+        }
     }
-
     return;
 }
 
