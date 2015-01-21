@@ -63,7 +63,7 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
         reporter->fatalError(tr("There are no places in this petri net."));
         return;
     }
-
+    Marking startMarking = mPetriNet->currentMarking();
     reporter->setStatusMessage(tr("Creating graph..."));
 
     QTemporaryFile tempFile;
@@ -122,10 +122,11 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     }
     mMarkingOrder.remove(mMarkingOrder.length()-2, 2);
 
+
     qDeleteAll(allNodes);
 
     reporter->setStatusMessage(tr("Analyzing Petri Net properties."));
-    mPetriNet->setCurrentMarking(root->marking());
+    mPetriNet->setCurrentMarking(startMarking); //FIXME: somefing wrong here
     _analyseResult = analyseProperty();
     reporter->setPercenage(60);
 
