@@ -31,12 +31,6 @@ void PreservingMatrixAnalyser::checkPreserving()
     Eigen::MatrixXi d_mtx = d_matrix(_petriNet);
 
 
-    if (d_mtx.determinant() != 0) {
-        _isPreserving = false;
-        _isStrictlyPreserving = false;
-        return;
-    }
-
     //проверим на строгое сохранение
     Eigen::VectorXi W( d_mtx.cols() );
 
