@@ -2,11 +2,11 @@
 #include "transitionanaliser.h"
 
 #include "propertyanalyser.h"
-
+#include "invertibilityanalyser.h"
 #include "preservingmatrixanalyser.h"
 #include "transition.h"
 QString formingAnalyseResultPage(TransitionAnalyser & ta, PropertyAnalyser & pa,
-                                 PreservingMatrixAnalyser & pma)
+                                 PreservingMatrixAnalyser & pma, InvertibilityAnalyser & ia)
 {
     QString out = "";
 
@@ -56,6 +56,7 @@ QString formingAnalyseResultPage(TransitionAnalyser & ta, PropertyAnalyser & pa,
     out += QObject::tr("<li>Stable: ") + bToStr(ta.isNetStable())+ "\n";
     out += QObject::tr("<li>Parralel: ") + bToStr(pa.isParallel())+ "</li>";
     out += QObject::tr("<li>Conflicted: ") + bToStr(pa.isConflict())+ "</li>";
+    out += QObject::tr("<li>Invertable: ") + bToStr(ia.isInvertibility())+ "</li>";
     out += "</ul>";
 
     return out;

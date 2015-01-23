@@ -44,6 +44,7 @@
 #include "extended/propertyanalyser.h"
 #include "extended/transitionanaliser.h"
 #include "extended/preservingmatrixanalyser.h"
+#include "extended/invertibilityanalyser.h"
 #include "extended/analysis_utils.h"
 #include "extended/markingnode.h"
 
@@ -167,10 +168,10 @@ QString CoverageGraph::analyseProperty()
     PropertyAnalyser pa(mPetriNet);
     TransitionAnalyser ta(mPetriNet);
     PreservingMatrixAnalyser pma(mPetriNet);
-
+    InvertibilityAnalyser ia (mPetriNet);
     QString out = "";
-    if ( pa.analyse() && ta.analyse() && pma.analyse() == true) {
-        out += formingAnalyseResultPage(ta,pa,pma);
+    if ( pa.analyse() && ta.analyse() && pma.analyse() && ia.analyse() == true) {
+        out += formingAnalyseResultPage(ta,pa,pma,ia);
     }
     else {
         out += "Error";

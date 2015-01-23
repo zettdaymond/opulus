@@ -8,7 +8,7 @@ set(coverageGraph_SRCS
     extended/propertyanalyser.cpp
     extended/transitionanaliser.cpp
     extended/markingnode.cpp
-
+    extended/invertibilityanalyser.cpp
 )
 set(coverageGraph_UIS
 	coveragegraph.ui

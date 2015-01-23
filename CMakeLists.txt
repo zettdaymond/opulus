@@ -21,7 +21,7 @@ set(I18N pt_BR es)
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "Build type not especified, building as release.")
-	message(STATUS "Use -DCMAKE_BUILD_TYPE=debug|release to set the build type.")
+        message(STATUS "Use     |release to set the build type.")
 	set(CMAKE_BUILD_TYPE release)
 endif(NOT CMAKE_BUILD_TYPE)
 
