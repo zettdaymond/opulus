@@ -26,7 +26,7 @@
 #include <QObject>
 
 PlacePropertyHandler::PlacePropertyHandler(Controller* controller, Place* place) : PropertyHandler(place, controller), mPlace(place) {
-	mProperties << new StringProperty(QObject::tr("Name"), place->name());
+    mProperties << new StringProperty(QObject::tr("Name"), place->name());
 
 	int capacity = place->capacity() == Place::INFINITY ? 0 : place->capacity();
 	IntProperty* prop = new IntProperty(QObject::tr("Capacity"), capacity);
@@ -46,7 +46,7 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 	try {
 		switch (propertyIdx) {
 			case 0:
-				mController->renameNode(mPlace, value.toString());
+                //mController->renameNode(mPlace, value.toString());
 				break;
 			case 1: {
 				int ivalue = value.toUInt();
