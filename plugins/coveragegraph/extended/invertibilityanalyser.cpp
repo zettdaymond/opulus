@@ -34,6 +34,8 @@ bool InvertibilityAnalyser::analyse()
                 MarkingNode* child = new MarkingNode(node, _petriNet->currentMarking());
 
                 if (isStartReachableFromMarking(_petriNet->currentMarking()) == false) {
+                    qDeleteAll(allNodes);
+                    _petriNet->setCurrentMarking(saveMrk);
                     _isInvertibility = false;
                     return true; //analysis complete successful
                 }
@@ -54,7 +56,7 @@ bool InvertibilityAnalyser::analyse()
 
 bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
 {
-    if (_petriNet->currentMarking() == startMarking) {\
+    if (_petriNet->currentMarking() == startMarking) {
         return true;
     }
     Marking saveMrk = _petriNet->currentMarking();
@@ -103,7 +105,8 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
 
 InvertibilityAnalyser::InvertibilityAnalyser(PetriNet *pn) {
     _petriNet = pn;
-    startMarking = _petriNet->currentMarking();
+    if (_petriNet != 0)
+        startMarking = _petriNet->currentMarking();
 }
 bool InvertibilityAnalyser::isInvertibility() const
 {
