@@ -60,10 +60,12 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	updateRecentFileActions();
 	loadPlugins();
 
-    connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
+	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
 	connect(mController, SIGNAL(netChanged(const PetriNet*)), ui.matrixWidget, SLOT(updateMatrices(const PetriNet*)));
 	connect(ui.matrixWidget, SIGNAL(matrices_size_changed(int,int)), mController, SLOT(matrixResized(int,int)));
-	connect(ui.matrixWidget, SIGNAL(matrix_value_changed(char,int,int,int)), mController, SLOT(matrixUpdate(char,int,int,int)));
+	connect(ui.matrixWidget,SIGNAL(matrix_value_changed(PetriMatrix::MatrixType,int,int,int)),
+		mController, SLOT(matrixUpdate(PetriMatrix::MatrixType,int,int,int)));
+
 	searchAvailableLanguages();
 	show();
 }

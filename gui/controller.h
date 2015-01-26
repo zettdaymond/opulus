@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include "exceptions.h"
+#include "matrixwidget.h"
 
 class QWidget;
 class QGraphicsView;
@@ -118,7 +119,7 @@ public slots:
 	void useFireTransitionTool();
 
 	void matrixResized(int rows, int cols);
-	void matrixUpdate(char matrix, int row, int col, int val);
+	void matrixUpdate(PetriMatrix::MatrixType which, int row, int col, int val);
 
 	void zoomIn();
 	void zoomOut();
@@ -127,7 +128,7 @@ public slots:
 	void savePetriNet(const QString& fileName);
 signals:
 	void cleanChanged(bool);
-    void netChanged(const PetriNet* petri_net);
+	void netChanged(const PetriNet* petri_net);
 public:
 	// TODO: will be possile create such thing in a command when we implement the
 	// command pattern o do the undo/redo?

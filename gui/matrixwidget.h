@@ -9,6 +9,12 @@ namespace Ui {
 class MatrixWidget;
 }
 
+namespace PetriMatrix {
+	enum MatrixType {
+		dMinusMatrix = 0x1, dPlusMatrix = 0x2
+	};
+}
+
 class MatrixWidget : public QWidget
 {
 	Q_OBJECT
@@ -18,7 +24,7 @@ public:
 	~MatrixWidget();
 
 signals:
-	void matrix_value_changed(char which, int row, int col, int val);
+	void matrix_value_changed(PetriMatrix::MatrixType which, int row, int col, int val);
 	void matrices_size_changed(int rows, int cols);
 
 public slots:

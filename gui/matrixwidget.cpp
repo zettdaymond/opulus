@@ -55,7 +55,7 @@ void MatrixWidget::d_minus_table_value_changed(int row, int col)
 	int val = ui->d_minus_matrix->item(row,col)->text().toInt(&ok);
 
 	if(ok && val >= 0)
-		emit matrix_value_changed('-',row,col,val);
+		emit matrix_value_changed(PetriMatrix::dMinusMatrix,row,col,val);
 }
 
 void MatrixWidget::d_plus_table_value_changed(int row, int col)
@@ -67,7 +67,7 @@ void MatrixWidget::d_plus_table_value_changed(int row, int col)
 	int val = ui->d_plus_matrix->item(row,col)->text().toInt(&ok);
 
 	if(ok && val >= 0)
-		emit matrix_value_changed('+',row, col, val);
+		emit matrix_value_changed(PetriMatrix::dPlusMatrix,row, col, val);
 }
 
 void MatrixWidget::io_update_button_pressed()
@@ -75,23 +75,30 @@ void MatrixWidget::io_update_button_pressed()
 	QMap<int, QMap<int,int> > m = parseIOText(ui->o_textedit->toPlainText());
 	QMap<int, QMap<int,int> > mi = parseIOText(ui->i_textedit->toPlainText());
 	QMap<int, QMap<int,int> >::iterator it = m.begin();
-	bool dminstate = ui->d_minus_matrix->blockSignals(true);
-	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
+
 	bool wspinstate = ui->width_spinbox->blockSignals(true);
 	bool hspinstate = ui->height_spinbox->blockSignals(true);
+
+	for(int i = 0; i < ui->d_minus_matrix->rowCount(); ++i) {
+		for(int j = 0; j < ui->d_minus_matrix->columnCount(); ++j) {
+			ui->d_minus_matrix->item(i,j)->setText("0");
+			ui->d_plus_matrix->item(i,j)->setText("0");
+		}
+	}
+
+	bool dminstate = ui->d_minus_matrix->blockSignals(true);
+	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
 
 	for(; it != m.end(); ++it) {
 		QMap<int,int>::iterator place = it.value().begin();
 		for(;place != it.value().end(); ++place) {
-			emit matrix_value_changed('+', it.key(), place.key(), place.value());
-
+			emit matrix_value_changed(PetriMatrix::dPlusMatrix, it.key(), place.key(), place.value());
 		}
 	}
-
 	for(it = mi.begin(); it != mi.end(); ++it) {
 		QMap<int,int>::iterator place = it.value().begin();
 		for( ;place != it.value().end(); ++place) {
-			emit matrix_value_changed('-', it.key(), place.key(), place.value());
+			emit matrix_value_changed(PetriMatrix::dMinusMatrix, it.key(), place.key(), place.value());
 		}
 	}
 

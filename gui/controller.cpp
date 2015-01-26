@@ -203,17 +203,17 @@ void Controller::matrixResized(int rows, int cols)
 	}
 }
 
-void Controller::matrixUpdate(char matrix, int row, int col, int val)
+void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, int val)
 {
 	if(row >= mPetriNet->transitions().size() || col >= mPetriNet->placeCount()) {
 		bool st = this->blockSignals(true);
-		matrixResized(row+1,col+1);
+		matrixResized(
+			std::max(row+1, mPetriNet->transitions().size()),
+			std::max(col+1, mPetriNet->placeCount()));
 		this->blockSignals(st);
 	}
-	if(row < 0 || col < 0)
-		throw std::invalid_argument("row or col < 0");
-	if(!(matrix == '-' || matrix == '+'))
-		throw std::invalid_argument("incorrect matrix: must be - or +");
+	Q_ASSERT(row >= 0 && col >= 0 && val >= 0);
+
 
 	Transition* tr = NULL;
 	Place *pl = NULL;
@@ -239,8 +239,7 @@ void Controller::matrixUpdate(char matrix, int row, int col, int val)
 	}
 
 	if(tr && pl) {
-		//qDebug() << "found" << from->name() << to->name();
-		if(matrix == '-') {
+		if(which == PetriMatrix::dMinusMatrix) {
 			bool found = false;
 			foreach (AbstractArc* arc, pl->outputArcs()) {
 				if(arc->to() == static_cast<Node*>(tr)) {
@@ -252,10 +251,17 @@ void Controller::matrixUpdate(char matrix, int row, int col, int val)
 					arc->setWeight(val);
 				}
 			}
-			if(!found)
+			if(!found && val) {
 				addArc(pl,tr);
+				foreach (AbstractArc* arc, pl->outputArcs()) {
+					if(arc->to() == static_cast<Node*>(tr)) {
+						arc->setWeight(val);
+						break;
+					}
+				}
+			}
 
-		} else if (matrix == '+') {
+		} else if (which == PetriMatrix::dPlusMatrix) {
 			bool found = false;
 			foreach (AbstractArc* arc, tr->outputArcs()) {
 				if(arc->to() == static_cast<Node*>(pl)) {
@@ -267,9 +273,15 @@ void Controller::matrixUpdate(char matrix, int row, int col, int val)
 					arc->setWeight(val);
 				}
 			}
-			if(!found)
+			if(!found && val) {
 				addArc(tr,pl);
-
+				foreach (AbstractArc* arc, tr->outputArcs()) {
+					if(arc->to() == static_cast<Node*>(pl)) {
+						arc->setWeight(val);
+						break;
+					}
+				}
+			}
 		}
 	}
 }
