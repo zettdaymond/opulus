@@ -46,7 +46,9 @@ bool TransitionPropertyHandler::setPropertyValue(int propertyIdx, const QVariant
 
 	try {
 		if (propertyIdx == 0)
-			mController->renameNode(mTransition, value.toString());
+            //FIXME: Turn on renaming feature, when normal matrix formong algorithm will be implemented
+            //mController->renameNode(mTransition, value.toString());
+            ;
 		else if (propertyIdx == 1) {
 			StringFromListProperty* prop = static_cast<StringFromListProperty*>(mProperties[propertyIdx]);
 			double rotation = ROTATIONS[prop->indexOf(value.toString())];

@@ -46,6 +46,7 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 	try {
 		switch (propertyIdx) {
 			case 0:
+                //FIXME: Turn on renaming feature, when normal matrix formong algorithm will be implemented
                 //mController->renameNode(mPlace, value.toString());
 				break;
 			case 1: {
