@@ -224,4 +224,4 @@ void PetriNet::fireRandomTransition() {
 	mActiveTransitions.values().at(selectedTransition)->fire();
 }
 
-#include "petrinet.moc"
+//#include "petrinet.moc"

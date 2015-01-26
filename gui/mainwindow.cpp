@@ -390,4 +390,4 @@ void MainWindow::changeLanguage() {
 	QSettings().setValue("language", lang);
 }
 
-#include "mainwindow.moc"
+//#include "mainwindow.moc"

@@ -119,4 +119,4 @@ void PropertyEditorDelegate::setModelData(QWidget *editor,
 	}
 }
 
-#include "propertyeditordelegate.moc"
+//#include "propertyeditordelegate.moc"
