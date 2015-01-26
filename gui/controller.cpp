@@ -239,6 +239,7 @@ void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, i
 	}
 
 	if(tr && pl) {
+		bool s = this->blockSignals(true);
 		if(which == PetriMatrix::dMinusMatrix) {
 			bool found = false;
 			foreach (AbstractArc* arc, pl->outputArcs()) {
@@ -283,6 +284,8 @@ void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, i
 				}
 			}
 		}
+		this->blockSignals(s);
+		emit netChanged(mPetriNet);
 	}
 }
 
@@ -473,7 +476,7 @@ void Controller::analysisFinished() {
 void Controller::analysisFatalError(const QString& msg) {
 	mAnalyserStatusDlg->hide();
 	QMessageBox::critical(mParentWidget,
-                          mAnalysisRunner->analyser()->name(), msg);
+			  mAnalysisRunner->analyser()->name(), msg);
 }
 
 void Controller::undoRedoReaction()
@@ -498,7 +501,7 @@ void Controller::pushCommandNoCatch(QUndoCommand* cmd) {
 bool Controller::pushCommand(QUndoCommand* cmd) {
 	try {
 		pushCommandNoCatch(cmd);
-        emit netChanged(mPetriNet);
+		emit netChanged(mPetriNet);
 		return true;
 	} catch (Exception& e) {
 		showErrorMessage(e.message(), 10000);
