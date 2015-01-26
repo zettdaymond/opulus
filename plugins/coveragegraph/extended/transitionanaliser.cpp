@@ -34,7 +34,7 @@ QSet<Transition *> TransitionAnalyser::stableTransitions() const
 bool TransitionAnalyser::isNetStable()
 {
     if (_petriNet != 0)
-        return _petriNet->transitions().contains(_stableTransitions);
+        return _stableTransitions.contains(_petriNet->transitions());
     else
         return false;
 }
@@ -256,7 +256,7 @@ void TransitionAnalyser::stabilityAnalyse()
 
                 QSet<Transition*> tmp = activeTransitions;
                 tmp.remove(t);
-                bool isStable = false;
+                bool isStable = true;
 
                 //Запуск любого активного перехода не лишает возможности запуска
                 //перехода t
