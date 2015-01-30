@@ -46,10 +46,9 @@ public:
 	T* isA() {
 		return dynamic_cast<T*>(this);
 	}
-	/// Return the item id
+	/// Returns the item id.
 	ItemId id() const { return mId; }
 
-	/// Save this item in a XML stream
 	virtual void save(QXmlStreamWriter& out) = 0;
 
 protected:

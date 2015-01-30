@@ -38,30 +38,30 @@ public:
 
 	enum { INFINITY = UINT_MAX };
 
-	/// Return the number of tokens in this place.
+	/// Returns the number of tokens in this place.
 	uint numTokens() const;
 
-	/// Add a number \p num of tokens to this place.
+	/// Adds a number \p num of tokens to this place.
 	void addTokens(uint num);
 
-	/// Add a token to this place.
+	/// Adds a token to this place.
 	void addToken() { addTokens(1); }
 
-	/// Set the number of tokens for this place.
+	/// Sets the number of tokens for this place.
 	void setNumTokens(uint num);
 
-	/// Set the place capacity
+	/// Sets the place capacity.
 	void setCapacity(uint capacity);
 
-	/// Returns the place capacity
+	/// Returns the place capacity.
 	uint capacity() const { return mCapacity; }
 
 	bool hasCapacity() const { return mCapacity != INFINITY; }
 
-	/// Remove a token from this place.
+	/// Removes a token from this place.
 	void removeToken() { removeTokens(1); }
 
-	/// Remove \p num tokens from this place
+	/// Removes \p num tokens from this place.
 	void removeTokens(uint num);
 
 	void save(QXmlStreamWriter& xml);
