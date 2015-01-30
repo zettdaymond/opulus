@@ -64,6 +64,10 @@ public:
 
 	int numInputArcs() const { return mInput.count(); }
 	int numOutputArcs() const { return mOutput.count(); }
+	/// Returns arc from this node to node \p to, NULL if not found.
+	AbstractArc* findArcTo(Node* to);
+	/// Returns arc to this node from node\p from, NULL if not found.
+	AbstractArc* findArcFrom(Node* from);
 
 	const ArcCollection& inputArcs() { return mInput; }
 	const ArcCollection& outputArcs() { return mOutput; }
