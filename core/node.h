@@ -36,12 +36,20 @@ typedef QSet<AbstractArc*> ArcCollection;
 class Node : public Item {
 public:
 	/// Constructs a new Item at the position \p pos.
-	Node(PetriNet* pn, const QPointF& pos, ItemId id) : Item(pn, id), mPos(pos) {}
-	/// Return the node name
+	Node(PetriNet* pn, const QPointF& pos, ItemId id) : Item(pn, id), mPos(pos), mNumber(-1) {}
+	/// Returns the node name.
 	const QString& name() const { return mName; }
 	/// Set the node name
 	void setName(const QString& name);
-	/// Returns the current item position
+	/// Returns node number.
+	int number() const { return mNumber; }
+	/// Sets node number.
+	void setNumber(int number);
+	/// Increments node number.
+	int incrementNumber();
+	/// Decrements node number, result must be nonnegative.
+	int decrementNumber();
+	/// Returns the current item position.
 	const QPointF& pos() const { return mPos; }
 	/// Set the item position
 	void setPos(const QPointF& pos);
@@ -68,10 +76,12 @@ protected:
 	QLinkedList<Item*> beforeDelete();
 
 private:
+	bool updateDefaultName();
 	QString mName;
 	QPointF mPos;
 	ArcCollection mInput;
 	ArcCollection mOutput;
+	int mNumber;
 };
 
 #endif

@@ -25,7 +25,38 @@
 
 void Node::setName(const QString& name) {
 	mName = name;
+	updateDefaultName();
 	notifyModification();
+}
+
+bool Node::updateDefaultName() {
+	if(mName.startsWith('P') || mName.startsWith('T')) {
+		mName = mName[0] + QString::number(mNumber);
+		return true;
+	}
+	return false;
+}
+
+void Node::setNumber(int number) {
+	Q_ASSERT(number >= 0);
+	mNumber = number;
+	updateDefaultName();
+	notifyModification();
+}
+
+int Node::incrementNumber() {
+	++mNumber;
+	updateDefaultName();
+	notifyModification();
+	return mNumber;
+}
+
+int Node::decrementNumber() {
+	Q_ASSERT(mNumber > 0);
+	--mNumber;
+	updateDefaultName();
+	notifyModification();
+	return mNumber;
 }
 
 void Node::setPos(const QPointF& pos) {
@@ -47,6 +78,22 @@ void Node::removeInputArc(AbstractArc* arc) {
 
 void Node::removeOutputArc(AbstractArc* arc) {
 	mOutput.remove(arc);
+}
+
+AbstractArc *Node::findArcTo(Node *to) {
+	foreach (AbstractArc* arc, mOutput) {
+		if(arc->to() == to)
+			return arc;
+	}
+	return NULL;
+}
+
+AbstractArc *Node::findArcFrom(Node *from) {
+	foreach (AbstractArc* arc, mInput) {
+		if(arc->from() == from)
+			return arc;
+	}
+	return NULL;
 }
 
 QLinkedList<Item*> Node::beforeDelete() {
