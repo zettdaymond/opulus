@@ -19,28 +19,10 @@ MatrixXi d_minus_matrix(const  PetriNet *petrinet)
 	MatrixXi d_minus = MatrixXi::Zero(trans_cnt, places_cnt);
 
 	foreach (Transition* t, transitions) {
-		bool ok = false;
-		int t_index = -1;
-		if(t->name().startsWith('T')) {
-			QString name = t->name();
-			t_index = name.remove(0,1).toInt(&ok);
-			//qDebug() << "found t index" << t_index;
-		}
-		if(!ok) throw std::runtime_error("Invalid transition name");
-
+		Q_ASSERT(t->number() >= 0);
 		foreach (AbstractArc* arc, t->inputArcs()) {
-			bool ok = false;
-			int p_index;
-			if(arc->from()->name().startsWith('P')) {
-
-				QString name = arc->from()->name();
-				p_index = name.remove(0,1).toInt(&ok);
-				//qDebug() << "found p index" << p_index;
-			}
-			if(!ok) throw std::runtime_error("Invalid place name");
-
-			d_minus(t_index, p_index) += arc->weight();
-
+			Q_ASSERT(arc->from()->number() >= 0);
+			d_minus(t->number(), arc->from()->number()) += arc->weight();
 		}
 	}
 	return d_minus;
@@ -58,28 +40,10 @@ MatrixXi d_plus_matrix(const PetriNet * petrinet)
 	MatrixXi d_plus = MatrixXi::Zero(trans_cnt, places_cnt);
 
 	foreach (Transition* t, transitions) {
-		bool ok = false;
-		int t_index = -1;
-		if(t->name().startsWith('T')) {
-			QString name = t->name();
-			t_index = name.remove(0,1).toInt(&ok);
-			//qDebug() << "found t index" << t_index;
-		}
-		if(!ok) throw std::runtime_error("Invalid transition name");
-
+		Q_ASSERT(t->number() >= 0);
 		foreach (AbstractArc* arc, t->outputArcs()) {
-			bool ok = false;
-			int p_index;
-			if(arc->to()->name().startsWith('P')) {
-
-				QString name = arc->to()->name();
-				p_index = name.remove(0,1).toInt(&ok);
-				//qDebug() << "found p index" << p_index;
-			}
-			if(!ok) throw std::runtime_error("Invalid place name");
-
-			d_plus(t_index, p_index) += arc->weight();
-
+			Q_ASSERT(arc->to()->number() >= 0);
+			d_plus(t->number(), arc->to()->number()) += arc->weight();
 		}
 	}
 	return d_plus;
@@ -88,9 +52,4 @@ MatrixXi d_plus_matrix(const PetriNet * petrinet)
 MatrixXi d_matrix(const PetriNet *petrinet)
 {
 	return d_plus_matrix(petrinet) - d_minus_matrix(petrinet);
-}
-
-MatrixXi d_matrix( PetriNet *petrinet)
-{
-    return d_plus_matrix(petrinet) - d_minus_matrix(petrinet);
 }
