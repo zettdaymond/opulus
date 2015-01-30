@@ -27,7 +27,7 @@
 #include <QXmlStreamWriter>
 #include <QDomElement>
 
-Place::Place(PetriNet* pn, const QPointF& pos, const ItemId& id) : Node(pn, pos, id), mCapacity(INFINITY) {
+Place::Place(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString &name) : Node(pn, pos, id, name), mCapacity(INFINITY) {
 }
 
 uint Place::numTokens() const {

@@ -48,7 +48,7 @@ public:
 	static void load(PetriNet* pn, const QDomElement& elem);
 
 private:
-	Transition(PetriNet* pn, const QPointF& pos, const ItemId& id);
+	Transition(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString& name);
 
 	double mRotation;
 	bool mCanFire;

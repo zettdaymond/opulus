@@ -69,7 +69,7 @@ public:
 
 private:
 	friend class PetriNet;
-	Place(PetriNet* pn, const QPointF& pos, const ItemId& id);
+	Place(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString& name);
 
 	uint mCapacity;
 

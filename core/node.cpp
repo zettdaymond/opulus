@@ -25,16 +25,14 @@
 
 void Node::setName(const QString& name) {
 	mName = name;
-	updateDefaultName();
+	mHasCustomName = true;
 	notifyModification();
 }
 
-bool Node::updateDefaultName() {
-	if(mName.startsWith('P') || mName.startsWith('T')) {
+void Node::updateDefaultName() {
+	if(!mHasCustomName && mName.size() > 0) {
 		mName = mName[0] + QString::number(mNumber);
-		return true;
 	}
-	return false;
 }
 
 void Node::setNumber(int number) {
