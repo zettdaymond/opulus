@@ -80,6 +80,7 @@ public:
 	void notifyAboutItemModification(Item* item);
 	/// Returns all petri net transitions.
 	const QSet<Transition*>& transitions() const { return mTransitions; }
+	int transitionCount() const { return mTransitions.count(); }
 
 	const QSet<Place*>& places() const { return mPlaces; }
 	int placeCount() const { return mPlaces.count(); }
