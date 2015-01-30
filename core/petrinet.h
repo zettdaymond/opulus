@@ -68,6 +68,7 @@ public:
 	InhibitorArc* createInhibitorArc(Place* place, Transition* transition, const ItemId& = ItemId());
 	/**
 	* Remove an item and all it's dependences from the petri net.
+	* Places or transitions will have their numbers corrected, if necessary.
 	* @return A list of all items removed. \p item will be the last item in the list.
 	*/
 	QLinkedList<Item*> removeItem(Item* item);
@@ -119,7 +120,7 @@ public:
 	/// Fire a random transition.
 	void fireRandomTransition();
 
-	/// Add an item to the petri net
+	/// Add an item to the petri net. Places or transitions will have their numbers corrected, if necessary.
 	void addItem(Item* item);
 	/// Returns the number of items in this petri net.
 	int itemCount() const { return mItems.count(); }

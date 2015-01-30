@@ -47,17 +47,19 @@ void PetriNet::notifyAboutItemModification(Item* item) {
 
 Place* PetriNet::createPlace(const QPointF& pos, const ItemId& id) {
 	Place* place = new Place(this, pos, id.isValid() ? id : nextId());
-	place->setName('P'+QString::number(mPlaces.count()));
-	addItem(place);
+	place->setNumber(mPlaces.count());
+	place->setName("P");
+	addItem(place); // order of these two calls matters, no idea why :D
 	mPlaces.insert(place);
 	return place;
 }
 
 Transition* PetriNet::createTransition(const QPointF& pos, const ItemId& id) {
 	Transition* t = new Transition(this, pos, id.isValid() ? id : nextId());
-	t->setName('T'+QString::number(mTransitions.count()));
+	t->setNumber(mTransitions.count());
+	t->setName("T");
+	addItem(t);  // order of these two calls matters, no idea why :D
 	mTransitions.insert(t);
-	addItem(t);
 	return t;
 }
 
@@ -110,12 +112,26 @@ void PetriNet::addItem(Item* item) {
 	mItems.insert(item->id(), item);
 	item->beforeAdd();
 	if (item->isA<Place>()) {
-		mPlaces.insert(static_cast<Place*>(item));
-		emit placeCreated(static_cast<Place*>(item));
+		Place* placeitem = static_cast<Place*>(item);
+		// correct other places' numbers
+		foreach (Place* p, mPlaces) {
+			if(p->number() >= placeitem->number()) {
+				p->incrementNumber();
+			}
+		}
+		mPlaces.insert(placeitem);
+		emit placeCreated(placeitem);
 	}
 	else if (item->isA<Arc>())
 		emit arcCreated(static_cast<Arc*>(item));
 	else if (item->isA<Transition>()) {
+		Transition* transitem = static_cast<Transition*>(item);
+		// correct other transitions' numbers
+		foreach (Transition* tr, mTransitions) {
+			if(tr->number() >= transitem->number()) {
+				tr->incrementNumber();
+			}
+		}
 		mTransitions.insert(static_cast<Transition*>(item));
 		emit transitionCreated(static_cast<Transition*>(item));
 	}
@@ -136,11 +152,29 @@ QLinkedList<Item*> PetriNet::removeItem(Item* item) {
 	if (!mItems.remove(item->id()))
 		return QLinkedList<Item*>(); // FIXME: Throw an exception?
 	if (item->isA<Transition>()) {
-		Transition* t = static_cast<Transition*>(item);
-		mTransitions.remove(t);
-		removeActiveTransition(t);
-	} else if (item->isA<Place>())
-		mPlaces.remove(static_cast<Place*>(item));
+		Transition* transitem = static_cast<Transition*>(item);
+		mTransitions.remove(transitem);
+		removeActiveTransition(transitem);
+		// correct other transitions' numbers
+		foreach (Transition* t, mTransitions) {
+			if(t->number() == transitem->number())
+				throw DuplicatedNumberException(t->number(), tr("transition"));
+			if(t->number() > transitem->number()) {
+				t->decrementNumber();
+			}
+		}
+	} else if (item->isA<Place>()) {
+		Place* placeitem = static_cast<Place*>(item);
+		mPlaces.remove(placeitem);
+		// correct other places' numbers
+		foreach (Place*p, mPlaces) {
+			if(p->number() == placeitem->number())
+				throw DuplicatedNumberException(p->number(), tr("place"));
+			if(p->number() > placeitem->number()) {
+				p->decrementNumber();
+			}
+		}
+	}
 	QLinkedList<Item*> res = item->beforeDelete();
 	emit itemRemoved(item);
 	return res;
