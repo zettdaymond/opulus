@@ -34,7 +34,7 @@ else (${CMAKE_BUILD_TYPE} STREQUAL release)
 endif (${CMAKE_BUILD_TYPE} STREQUAL release)
 
 #compiller flags
-set(GCC_COVERAGE_COMPILE_FLAGS "")
+set(GCC_COVERAGE_COMPILE_FLAGS "-std=c++1y")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 #linker flags

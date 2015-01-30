@@ -50,7 +50,7 @@ private:
     bool _isConflict;
     bool _isPreserving;
     bool _isStrictlyPreserving;
-    static const float eqSolverE = 0.000001;
+    static constexpr float eqSolverE = 0.000001;
     void isParallelizeOrConflict();
     void isPreserving();
     void resetAnalyser();

@@ -36,7 +36,7 @@ class Place : public Node {
 	Q_DECLARE_TR_FUNCTIONS(Place);
 public:
 
-	enum { INFINITY = UINT_MAX };
+    static const uint Infinity = UINT_MAX;
 
 	/// Return the number of tokens in this place.
 	uint numTokens() const;
@@ -56,7 +56,7 @@ public:
 	/// Returns the place capacity
 	uint capacity() const { return mCapacity; }
 
-	bool hasCapacity() const { return mCapacity != INFINITY; }
+    bool hasCapacity() const { return mCapacity != Infinity; }
 
 	/// Remove a token from this place.
 	void removeToken() { removeTokens(1); }

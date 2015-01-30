@@ -28,7 +28,7 @@
 PlacePropertyHandler::PlacePropertyHandler(Controller* controller, Place* place) : PropertyHandler(place, controller), mPlace(place) {
     mProperties << new StringProperty(QObject::tr("Name"), place->name());
 
-	int capacity = place->capacity() == Place::INFINITY ? 0 : place->capacity();
+	int capacity = place->capacity() == Place::Infinity ? 0 : place->capacity();
 	IntProperty* prop = new IntProperty(QObject::tr("Capacity"), capacity);
 	prop->setRange(0, INT_MAX);
 	prop->setSpecialValueText(QString::fromUtf8("\u221E"));
@@ -51,7 +51,7 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 				break;
 			case 1: {
 				int ivalue = value.toUInt();
-				uint realValue = !ivalue ? Place::INFINITY : ivalue;
+				uint realValue = !ivalue ? Place::Infinity : ivalue;
 				mController->setItemAttribute(mPlace, &Place::setCapacity, realValue);
 				break;
 			}
@@ -70,7 +70,7 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 
 void PlacePropertyHandler::updateProperties() {
 	mProperties[0]->setValue(mPlace->name());
-	int capacity = mPlace->capacity() == Place::INFINITY ? 0 : mPlace->capacity();
+	int capacity = mPlace->capacity() == Place::Infinity ? 0 : mPlace->capacity();
 	mProperties[1]->setValue(capacity);
 	mProperties[2]->setValue(mPlace->numTokens());
 }
