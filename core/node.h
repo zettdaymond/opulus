@@ -39,7 +39,7 @@ public:
 	Node(PetriNet* pn, const QPointF& pos, ItemId id) : Item(pn, id), mPos(pos), mNumber(-1) {}
 	/// Returns the node name.
 	const QString& name() const { return mName; }
-	/// Set the node name
+	/// Sets the node name.
 	void setName(const QString& name);
 	/// Returns node number.
 	int number() const { return mNumber; }
@@ -51,25 +51,28 @@ public:
 	int decrementNumber();
 	/// Returns the current item position.
 	const QPointF& pos() const { return mPos; }
-	/// Set the item position
+	/// Sets the item position.
 	void setPos(const QPointF& pos);
-	/// Add an arc to this node.
+	/// Adds an arc to this node.
 	void addInputArc(AbstractArc* arc);
-	/// Add an arc from this node.
+	/// Adds an arc from this node.
 	void addOutputArc(AbstractArc* arc);
-	/// Remove an input arc.
+	/// Removes an input arc.
 	void removeInputArc(AbstractArc* arc);
-	/// Remove an output arc.
+	/// Removes an output arc.
 	void removeOutputArc(AbstractArc* arc);
-
+	/// Returns number of arcs to this node.
 	int numInputArcs() const { return mInput.count(); }
+	/// Returns number of arcs from this node.
 	int numOutputArcs() const { return mOutput.count(); }
 	/// Returns arc from this node to node \p to, NULL if not found.
 	AbstractArc* findArcTo(Node* to);
 	/// Returns arc to this node from node\p from, NULL if not found.
 	AbstractArc* findArcFrom(Node* from);
 
+	/// Returns all arcs to this node.
 	const ArcCollection& inputArcs() { return mInput; }
+	/// Returns all arcs from this node.
 	const ArcCollection& outputArcs() { return mOutput; }
 
 	void save(QXmlStreamWriter& out);
