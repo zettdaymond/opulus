@@ -106,6 +106,31 @@ InhibitorArc* PetriNet::createInhibitorArc(Place* place, Transition* transition,
 	return arc;
 }
 
+Transition* PetriNet::findTransitionWithNumber(int number) {
+	if(number < 0)
+		return NULL;
+
+	foreach (Transition* t, mTransitions) {
+		if(t->number() == number)
+			return t;
+	}
+
+	return NULL;
+}
+
+Place* PetriNet::findPlaceWithNumber(int number) {
+	if(number < 0)
+		return NULL;
+
+	foreach (Place* p, mPlaces) {
+		if(p->number() == number)
+			return p;
+	}
+
+	return NULL;
+}
+
+
 void PetriNet::addItem(Item* item) {
 	if (mItems.contains(item->id()))
 		throw DuplicatedIdException(item->id());

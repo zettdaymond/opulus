@@ -83,11 +83,15 @@ public:
 	const QSet<Transition*>& transitions() const { return mTransitions; }
 	/// Returns the number of petri net transitions.
 	int transitionCount() const { return mTransitions.count(); }
+	/// Returns transition with number \p number, or nullptr if not found.
+	Transition* findTransitionWithNumber(int number);
 
 	/// Returns all petri net places.
 	const QSet<Place*>& places() const { return mPlaces; }
 	/// Returns the number of petri net places.
 	int placeCount() const { return mPlaces.count(); }
+	/// Returns place with number \p number, or nullptr if not found.
+	Place* findPlaceWithNumber(int number);
 
 	/// Set the current PetriNet marking.
 	void setCurrentMarking(const Marking& marking);
