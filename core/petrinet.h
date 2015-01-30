@@ -80,9 +80,12 @@ public:
 	void notifyAboutItemModification(Item* item);
 	/// Returns all petri net transitions.
 	const QSet<Transition*>& transitions() const { return mTransitions; }
+	/// Returns the number of petri net transitions.
 	int transitionCount() const { return mTransitions.count(); }
 
+	/// Returns all petri net places.
 	const QSet<Place*>& places() const { return mPlaces; }
+	/// Returns the number of petri net places.
 	int placeCount() const { return mPlaces.count(); }
 
 	/// Set the current PetriNet marking.

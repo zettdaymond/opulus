@@ -62,6 +62,8 @@ Transition* PetriNet::createTransition(const QPointF& pos, const ItemId& id) {
 }
 
 Arc* PetriNet::createArc(Place* place, Transition* transition, const ItemId& id) {
+	// NOTE: is this logic correct?
+	// If arc between items already exists, increase the weight only.
 	AbstractArc* orig = NULL;
 	foreach (AbstractArc* a, place->outputArcs()) {
 		if(a->to()->isA<Transition>() && static_cast<Transition*>(a->to()) == transition) {
@@ -78,6 +80,8 @@ Arc* PetriNet::createArc(Place* place, Transition* transition, const ItemId& id)
 }
 
 Arc* PetriNet::createArc(Transition* transition, Place* place, const ItemId& id) {
+	// NOTE: is this logic correct?
+	// If arc between items already exists, increase the weight only.
 	AbstractArc* orig = NULL;
 	foreach (AbstractArc* a, transition->outputArcs()) {
 		if(a->to()->isA<Place>() && static_cast<Place*>(a->to()) == place) {
