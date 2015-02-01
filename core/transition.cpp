@@ -94,8 +94,9 @@ void Transition::updateStatus() {
 }
 
 void Transition::load(PetriNet* pn, const QDomElement& elem) {
-	Transition* transition = pn->createTransition(QPointF(), elem.attribute("id"));
+	Transition* transition = new Transition(pn, QPointF(), elem.attribute("id"), QString());
 	Node::load(transition, elem);
 	transition->setRotation(elem.attribute("rotation").toDouble());
+	pn->addItem(transition);
 }
 

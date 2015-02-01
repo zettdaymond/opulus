@@ -107,6 +107,7 @@ QLinkedList<Item*> Node::beforeDelete() {
 void Node::save(QXmlStreamWriter& out) {
 	out.writeAttribute("id", id().toString());
 	out.writeAttribute("name", name());
+	out.writeAttribute("number",QString::number(mNumber));
 	out.writeAttribute("x", QString::number(pos().x()));
 	out.writeAttribute("y", QString::number(pos().y()));
 }
@@ -116,6 +117,6 @@ void Node::load(Node* node, QDomElement elem) {
 	position.setX(elem.attribute("x").toDouble());
 	position.setY(elem.attribute("y").toDouble());
 	node->setPos(position);
-	// load name
-	node->setName(elem.attribute("name"));
+	node->mName = elem.attribute("name");
+	node->setNumber(elem.attribute("number").toInt());
 }

@@ -46,18 +46,18 @@ void PetriNet::notifyAboutItemModification(Item* item) {
 }
 
 Place* PetriNet::createPlace(const QPointF& pos, const ItemId& id) {
-	Place* place = new Place(this, pos, id.isValid() ? id : nextId());
+	Place* place = new Place(this, pos, id.isValid() ? id : nextId(), "P");
 	place->setNumber(mPlaces.count());
-	place->setName("P");
+
 	addItem(place); // order of these two calls matters, no idea why :D
 	mPlaces.insert(place);
 	return place;
 }
 
 Transition* PetriNet::createTransition(const QPointF& pos, const ItemId& id) {
-	Transition* t = new Transition(this, pos, id.isValid() ? id : nextId());
-	t->setNumber(mTransitions.count());
-	t->setName("T");
+	Transition* t = new Transition(this, pos, id.isValid() ? id : nextId(), "T");
+	t->setNumber(mTransitions.size());
+
 	addItem(t);  // order of these two calls matters, no idea why :D
 	mTransitions.insert(t);
 	return t;
@@ -139,9 +139,17 @@ void PetriNet::addItem(Item* item) {
 	if (item->isA<Place>()) {
 		Place* placeitem = static_cast<Place*>(item);
 		// correct other places' numbers
+		bool need_to_correct = false;
 		foreach (Place* p, mPlaces) {
-			if(p->number() >= placeitem->number()) {
-				p->incrementNumber();
+			if(p->number() == placeitem->number()) {
+				need_to_correct = true;
+				break;
+			}
+		}
+		if(need_to_correct) {
+			foreach (Place* p, mPlaces) {
+				if(p->number() >= placeitem->number())
+					p->incrementNumber();
 			}
 		}
 		mPlaces.insert(placeitem);
@@ -152,9 +160,18 @@ void PetriNet::addItem(Item* item) {
 	else if (item->isA<Transition>()) {
 		Transition* transitem = static_cast<Transition*>(item);
 		// correct other transitions' numbers
+		bool need_to_correct = false;
 		foreach (Transition* tr, mTransitions) {
-			if(tr->number() >= transitem->number()) {
-				tr->incrementNumber();
+			if(tr->number() == transitem->number()) {
+				need_to_correct = true;
+				break;
+			}
+		}
+		if(need_to_correct) {
+			foreach (Transition* tr, mTransitions) {
+				if(tr->number() >= transitem->number()) {
+					tr->incrementNumber();
+				}
 			}
 		}
 		mTransitions.insert(static_cast<Transition*>(item));
