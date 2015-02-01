@@ -224,6 +224,9 @@
     <property name="rootIsDecorated">
      <bool>false</bool>
     </property>
+    <attribute name="headerDefaultSectionSize">
+     <number>75</number>
+    </attribute>
    </widget>
   </widget>
   <widget class="QToolBar" name="simulationToolBar">
