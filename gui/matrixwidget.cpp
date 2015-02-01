@@ -21,6 +21,7 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 		this, SLOT(d_plus_table_value_changed(int,int)));
 
 	connect(ui->io_update_net_btn, SIGNAL(pressed()), this, SLOT(io_update_button_pressed()));
+	connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateIOFunctions()));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -159,7 +160,9 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 			ui->d_plus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
 	}
 
-	updateIOFunctions();
+	if(ui->tabWidget->currentWidget() == ui->tab_io) {
+		updateIOFunctions();
+	}
 	ui->d_minus_matrix->blockSignals(dminstate);
 	ui->d_plus_matrix->blockSignals(dplusstate);
 	ui->width_spinbox->blockSignals(wspinstate);
