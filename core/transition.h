@@ -36,19 +36,19 @@ public:
 	* @throw CantFireTransitionException
 	*/
 	bool canFire();
-	/// Trigger this transition.
+	/// Triggers this transition.
 	void fire();
 	/// Sets the transition rotation in degrees. This info is used by the GUI to draw the transition.
 	void setRotation(double rotation);
 	/// Returns the transition rotation in degrees.
 	double rotation() const { return mRotation; }
-	/// Update the transition status (can/can't fire).
+	/// Updates the transition status (can/can't fire).
 	void updateStatus();
 	void save(QXmlStreamWriter& out);
 	static void load(PetriNet* pn, const QDomElement& elem);
 
 private:
-	Transition(PetriNet* pn, const QPointF& pos, const ItemId& id);
+	Transition(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString& name);
 
 	double mRotation;
 	bool mCanFire;

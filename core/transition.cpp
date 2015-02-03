@@ -28,7 +28,7 @@
 #include <QXmlStreamWriter>
 #include <QDebug>
 
-Transition::Transition(PetriNet* pn, const QPointF& pos, const ItemId& id) : Node(pn, pos, id), mRotation(0.0), mCanFire(true) {
+Transition::Transition(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString &name) : Node(pn, pos, id, name), mRotation(0.0), mCanFire(true) {
 	petriNet()->addActiveTransition(this);
 }
 
@@ -94,8 +94,9 @@ void Transition::updateStatus() {
 }
 
 void Transition::load(PetriNet* pn, const QDomElement& elem) {
-	Transition* transition = pn->createTransition(QPointF(), elem.attribute("id"));
+	Transition* transition = new Transition(pn, QPointF(), elem.attribute("id"), QString());
 	Node::load(transition, elem);
 	transition->setRotation(elem.attribute("rotation").toDouble());
+	pn->addItem(transition);
 }
 

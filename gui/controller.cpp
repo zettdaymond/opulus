@@ -32,7 +32,6 @@
 #include <QGraphicsView>
 #include <cstdlib>
 #include <memory>
-#include <stdexcept>
 
 #include "controller.h"
 #include "petrinet.h"
@@ -214,74 +213,33 @@ void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, i
 	}
 	Q_ASSERT(row >= 0 && col >= 0 && val >= 0);
 
-
-	Transition* tr = NULL;
-	Place *pl = NULL;
-	foreach (Transition* t, mPetriNet->transitions()) {
-		QString tmp = t->name();
-		if(tmp.startsWith('T')) {
-			int num; bool ok;
-			if(((num = tmp.remove(0,1).toInt(&ok)) == row) && ok) {
-				tr = t;
-				break;
-			}
-		}
-	}
-	foreach (Place* p, mPetriNet->places()) {
-		QString tmp = p->name();
-		if(tmp.startsWith('P')) {
-			int num; bool ok;
-			if(((num = tmp.remove(0,1).toInt(&ok)) == col) && ok) {
-				pl = p;
-				break;
-			}
-		}
-	}
+	Transition* tr = mPetriNet->findTransitionWithNumber(row);
+	Place *pl = mPetriNet->findPlaceWithNumber(col);
 
 	if(tr && pl) {
 		bool s = this->blockSignals(true);
 		if(which == PetriMatrix::dMinusMatrix) {
-			bool found = false;
-			foreach (AbstractArc* arc, pl->outputArcs()) {
-				if(arc->to() == static_cast<Node*>(tr)) {
-					found = true;
-					if(val == 0) {
-						removeItem(arc);
-						break;
-					}
-					arc->setWeight(val);
-				}
-			}
-			if(!found && val) {
-				addArc(pl,tr);
-				foreach (AbstractArc* arc, pl->outputArcs()) {
-					if(arc->to() == static_cast<Node*>(tr)) {
-						arc->setWeight(val);
-						break;
-					}
-				}
+			AbstractArc* arc = pl->findArcTo(static_cast<Node*>(tr));
+			if(arc) {
+				arc->setWeight(val);
+			} else {
+				addArc(pl,tr); // TODO: implement new addArc with weight parameter
+				arc = pl->findArcTo(static_cast<Node*>(tr));
+				if(!arc)
+					throw Exception("Unable to find added arc");
+				arc->setWeight(val);
 			}
 
 		} else if (which == PetriMatrix::dPlusMatrix) {
-			bool found = false;
-			foreach (AbstractArc* arc, tr->outputArcs()) {
-				if(arc->to() == static_cast<Node*>(pl)) {
-					found = true;
-					if(val == 0) {
-						removeItem(arc);
-						break;
-					}
-					arc->setWeight(val);
-				}
-			}
-			if(!found && val) {
+			AbstractArc* arc = tr->findArcTo(static_cast<Node*>(pl));
+			if(arc) {
+				arc->setWeight(val);
+			} else {
 				addArc(tr,pl);
-				foreach (AbstractArc* arc, tr->outputArcs()) {
-					if(arc->to() == static_cast<Node*>(pl)) {
-						arc->setWeight(val);
-						break;
-					}
-				}
+				arc = tr->findArcTo(static_cast<Node*>(pl));
+				if(!arc)
+					throw Exception("Unable to find added arc");
+				arc->setWeight(val);
 			}
 		}
 		this->blockSignals(s);

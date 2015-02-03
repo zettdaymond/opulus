@@ -102,6 +102,13 @@ public:
 	}
 };
 
+class DuplicatedNumberException : public Exception {
+	Q_DECLARE_TR_FUNCTIONS(DuplicatedNumberException);
+public:
+	DuplicatedNumberException(int number, QString whatItem) : Exception(tr("This net already has %2 with number: %1").arg(number).arg(whatItem)) {
+	}
+};
+
 class ItemNotFoundException : public Exception {
 	Q_DECLARE_TR_FUNCTIONS(ItemNotFoundException);
 public:

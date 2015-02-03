@@ -24,7 +24,7 @@
 #include "item.h"
 #include <QDebug>
 
-CmdRemoveItem::CmdRemoveItem(Item* item) : mId(item->id()), mPetriNet(item->petriNet()), mItemNumber(-1) {
+CmdRemoveItem::CmdRemoveItem(Item* item) : mId(item->id()), mPetriNet(item->petriNet()) {
 	setText(tr("Remove item"));
 }
 
@@ -35,81 +35,11 @@ CmdRemoveItem::~CmdRemoveItem() {
 void CmdRemoveItem::undo() {
 	while (mItems.count()) {
 		Item* i = mItems.takeLast();
-		fixPlaceTransitionNumeration(mItemNumber, i, mPetriNet);
 		mPetriNet->addItem(i);
 	}
 	mItems.clear();
 }
 
 void CmdRemoveItem::redo() {
-	Item* item = mPetriNet->item(mId);
-	mItemNumber = fixPlaceTransitionNumeration(item, mPetriNet);
 	mItems = mPetriNet->removeItem(mId);
-}
-
-int CmdRemoveItem::fixPlaceTransitionNumeration(Item *to_delete, PetriNet *from)
-{
-	int ret = -1;
-	if (to_delete->isA<Transition>() || to_delete->isA<Place>()) {
-		Node *t = static_cast<Node*>(to_delete);
-		QString name = t->name();
-		if(name.startsWith('T') || name.startsWith('P')) {
-			bool ok;
-			int tnum = name.remove(0,1).toInt(&ok);
-			if(ok) {
-				ret = tnum;
-				QVector<Node*> nodes;
-
-				if(to_delete->isA<Transition>()) {
-					foreach (Transition* t, from->transitions()) {
-						nodes.push_back(t);
-					}
-				} else {
-					foreach (Place* p, from->places()) {
-						nodes.push_back(p);
-					}
-				}
-
-				foreach (Node* n, nodes) {
-					QString tmp = n->name();
-					QChar l = tmp[0];
-					int num; bool ok;
-					if((num = tmp.remove(0,1).toInt(&ok)) > ret && ok) {
-						n->setName(l + QString::number(num-1));
-						qDebug() << "fixed name for" << n->name();
-					}
-				}
-			}
-		}
-
-	}
-	return ret;
-}
-
-
-void CmdRemoveItem::fixPlaceTransitionNumeration(int restore_num, Item *restored, PetriNet *net)
-{
-	if(restore_num < 0)
-		return;
-
-	if(restored->isA<Transition>()) {
-		foreach (Transition* tr, net->transitions()) {
-			QString tmp = tr->name();
-			int num; bool ok;
-			if((num = tmp.remove(0,1).toInt(&ok)) >= restore_num && ok) {
-				tr->setName("T" + QString::number(num+1));
-				return;
-			}
-		}
-	}
-	if (restored->isA<Place>()) {
-		foreach (Place* p, net->places()) {
-			QString tmp = p->name();
-			int num; bool ok;
-			if((num = tmp.remove(0,1).toInt(&ok)) >= restore_num && ok) {
-				p->setName("P" + QString::number(num+1));
-				return;
-			}
-		}
-	}
 }

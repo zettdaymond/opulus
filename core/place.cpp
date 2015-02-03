@@ -27,7 +27,7 @@
 #include <QXmlStreamWriter>
 #include <QDomElement>
 
-Place::Place(PetriNet* pn, const QPointF& pos, const ItemId& id) : Node(pn, pos, id), mCapacity(Infinity) {
+Place::Place(PetriNet* pn, const QPointF& pos, const ItemId& id, const QString &name) : Node(pn, pos, id, name), mCapacity(Infinity) {
 }
 
 uint Place::numTokens() const {
@@ -78,10 +78,11 @@ void Place::save(QXmlStreamWriter& out){
 }
 
 void Place::load(PetriNet* pn, const QDomElement& elem) {
-	Place* place = pn->createPlace(QPointF(), elem.attribute("id"));
+	Place* place = new Place(pn, QPointF(), elem.attribute("id"), QString());
 	Node::load(place, elem);
 	place->setNumTokens(elem.attribute("tokens", "0").toUInt());
-    place->setCapacity(elem.attribute("capacity", QString::number(Place::Infinity)).toUInt());
+	place->setCapacity(elem.attribute("capacity", QString::number(Place::Infinity)).toUInt());
+	pn->addItem(place);
 }
 
 void Place::updateTransitionsStatus() {

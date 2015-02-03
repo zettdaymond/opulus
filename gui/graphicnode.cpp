@@ -36,7 +36,10 @@ Item* GraphicNode::item() const {
 }
 
 void GraphicNode::itemChanged() {
-	mLabel->setText(mNode->name());
+	if(mNode->hasCustomName())
+		mLabel->setText(mNode->name() + " ("+QString::number(mNode->number()) +")");
+	else	mLabel->setText(mNode->name());
+
 	setPos(mNode->pos());
 	updateArcs();
 	update();

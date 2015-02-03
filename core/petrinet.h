@@ -68,6 +68,7 @@ public:
 	InhibitorArc* createInhibitorArc(Place* place, Transition* transition, const ItemId& = ItemId());
 	/**
 	* Remove an item and all it's dependences from the petri net.
+	* Places or transitions will have their numbers corrected, if necessary.
 	* @return A list of all items removed. \p item will be the last item in the list.
 	*/
 	QLinkedList<Item*> removeItem(Item* item);
@@ -80,9 +81,17 @@ public:
 	void notifyAboutItemModification(Item* item);
 	/// Returns all petri net transitions.
 	const QSet<Transition*>& transitions() const { return mTransitions; }
+	/// Returns the number of petri net transitions.
+	int transitionCount() const { return mTransitions.count(); }
+	/// Returns transition with number \p number, or nullptr if not found.
+	Transition* findTransitionWithNumber(int number);
 
+	/// Returns all petri net places.
 	const QSet<Place*>& places() const { return mPlaces; }
+	/// Returns the number of petri net places.
 	int placeCount() const { return mPlaces.count(); }
+	/// Returns place with number \p number, or nullptr if not found.
+	Place* findPlaceWithNumber(int number);
 
 	/// Set the current PetriNet marking.
 	void setCurrentMarking(const Marking& marking);
@@ -115,7 +124,7 @@ public:
 	/// Fire a random transition.
 	void fireRandomTransition();
 
-	/// Add an item to the petri net
+	/// Add an item to the petri net. Places or transitions will have their numbers corrected, if necessary.
 	void addItem(Item* item);
 	/// Returns the number of items in this petri net.
 	int itemCount() const { return mItems.count(); }

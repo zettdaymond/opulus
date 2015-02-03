@@ -36,28 +36,50 @@ typedef QSet<AbstractArc*> ArcCollection;
 class Node : public Item {
 public:
 	/// Constructs a new Item at the position \p pos.
-	Node(PetriNet* pn, const QPointF& pos, ItemId id) : Item(pn, id), mPos(pos) {}
-	/// Return the node name
+	Node(PetriNet* pn, const QPointF& pos, ItemId id, const QString& name)
+		: Item(pn, id),
+		mName(name),
+		mPos(pos),
+		mNumber(-1),
+		mHasCustomName(false) { }
+	/// Returns the node name.
 	const QString& name() const { return mName; }
-	/// Set the node name
+	/// Sets the node name.
 	void setName(const QString& name);
-	/// Returns the current item position
+	/// Returns true if node has custome name.
+	bool hasCustomName() const { return mHasCustomName; }
+	/// Returns node number.
+	int number() const { return mNumber; }
+	/// Sets node number.
+	void setNumber(int number);
+	/// Increments node number.
+	int incrementNumber();
+	/// Decrements node number, result must be nonnegative.
+	int decrementNumber();
+	/// Returns the current item position.
 	const QPointF& pos() const { return mPos; }
-	/// Set the item position
+	/// Sets the item position.
 	void setPos(const QPointF& pos);
-	/// Add an arc to this node.
+	/// Adds an arc to this node.
 	void addInputArc(AbstractArc* arc);
-	/// Add an arc from this node.
+	/// Adds an arc from this node.
 	void addOutputArc(AbstractArc* arc);
-	/// Remove an input arc.
+	/// Removes an input arc.
 	void removeInputArc(AbstractArc* arc);
-	/// Remove an output arc.
+	/// Removes an output arc.
 	void removeOutputArc(AbstractArc* arc);
-
+	/// Returns number of arcs to this node.
 	int numInputArcs() const { return mInput.count(); }
+	/// Returns number of arcs from this node.
 	int numOutputArcs() const { return mOutput.count(); }
+	/// Returns arc from this node to node \p to, NULL if not found.
+	AbstractArc* findArcTo(Node* to);
+	/// Returns arc to this node from node\p from, NULL if not found.
+	AbstractArc* findArcFrom(Node* from);
 
+	/// Returns all arcs to this node.
 	const ArcCollection& inputArcs() { return mInput; }
+	/// Returns all arcs from this node.
 	const ArcCollection& outputArcs() { return mOutput; }
 
 	void save(QXmlStreamWriter& out);
@@ -68,10 +90,13 @@ protected:
 	QLinkedList<Item*> beforeDelete();
 
 private:
+	void updateDefaultName();
 	QString mName;
 	QPointF mPos;
 	ArcCollection mInput;
 	ArcCollection mOutput;
+	int mNumber;
+	bool mHasCustomName;
 };
 
 #endif

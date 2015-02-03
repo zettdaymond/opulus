@@ -25,7 +25,36 @@
 
 void Node::setName(const QString& name) {
 	mName = name;
+	mHasCustomName = true;
 	notifyModification();
+}
+
+void Node::updateDefaultName() {
+	if(!mHasCustomName && mName.size() > 0) {
+		mName = mName[0] + QString::number(mNumber);
+	}
+}
+
+void Node::setNumber(int number) {
+	Q_ASSERT(number >= 0);
+	mNumber = number;
+	updateDefaultName();
+	notifyModification();
+}
+
+int Node::incrementNumber() {
+	++mNumber;
+	updateDefaultName();
+	notifyModification();
+	return mNumber;
+}
+
+int Node::decrementNumber() {
+	Q_ASSERT(mNumber > 0);
+	--mNumber;
+	updateDefaultName();
+	notifyModification();
+	return mNumber;
 }
 
 void Node::setPos(const QPointF& pos) {
@@ -49,6 +78,22 @@ void Node::removeOutputArc(AbstractArc* arc) {
 	mOutput.remove(arc);
 }
 
+AbstractArc *Node::findArcTo(Node *to) {
+	foreach (AbstractArc* arc, mOutput) {
+		if(arc->to() == to)
+			return arc;
+	}
+	return NULL;
+}
+
+AbstractArc *Node::findArcFrom(Node *from) {
+	foreach (AbstractArc* arc, mInput) {
+		if(arc->from() == from)
+			return arc;
+	}
+	return NULL;
+}
+
 QLinkedList<Item*> Node::beforeDelete() {
 	QLinkedList<Item*> arcs;
 
@@ -62,6 +107,7 @@ QLinkedList<Item*> Node::beforeDelete() {
 void Node::save(QXmlStreamWriter& out) {
 	out.writeAttribute("id", id().toString());
 	out.writeAttribute("name", name());
+	out.writeAttribute("number",QString::number(mNumber));
 	out.writeAttribute("x", QString::number(pos().x()));
 	out.writeAttribute("y", QString::number(pos().y()));
 }
@@ -71,6 +117,6 @@ void Node::load(Node* node, QDomElement elem) {
 	position.setX(elem.attribute("x").toDouble());
 	position.setY(elem.attribute("y").toDouble());
 	node->setPos(position);
-	// load name
-	node->setName(elem.attribute("name"));
+	node->mName = elem.attribute("name");
+	node->setNumber(elem.attribute("number").toInt());
 }
