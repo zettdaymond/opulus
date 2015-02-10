@@ -15,32 +15,32 @@ set(opulusgui_srcs
     graphicarc.cpp
     miniview.cpp
     propertyeditormodel.cpp
-	propertyeditordelegate.cpp
+    propertyeditordelegate.cpp
     property.cpp
-	intproperty.cpp
+    intproperty.cpp
     propertyhandler.cpp
     placepropertyhandler.cpp
-	transitionpropertyhandler.cpp
-	arcpropertyhandler.cpp
-	analyserstatusdlg.cpp
+    transitionpropertyhandler.cpp
+    arcpropertyhandler.cpp
+    analyserstatusdlg.cpp
 
-	commands/cmdcreateplace.cpp
-	commands/cmdcreatetransition.cpp
-	commands/cmdcreatearc.cpp
-	commands/cmdcreateinhibitorarc.cpp
-	commands/cmdremoveitem.cpp
-	commands/cmdmovenode.cpp
-	matrixwidget.cpp
+    commands/cmdcreateplace.cpp
+    commands/cmdcreatetransition.cpp
+    commands/cmdcreatearc.cpp
+    commands/cmdcreateinhibitorarc.cpp
+    commands/cmdremoveitem.cpp
+    commands/cmdmovenode.cpp
+    matrixwidget.cpp
 )
 
 set(opulusgui_uis
-	mainwindow.ui
-	analyserstatus.ui
-	matrixwidget.ui
+    mainwindow.ui
+    analyserstatus.ui
+    matrixwidget.ui
 )
 
 set(opulusgui_rcs
-	gui.qrc
+    gui.qrc
 )
 
 qt5_add_resources(opulusgui_rc_srcs ${opulusgui_rcs})
