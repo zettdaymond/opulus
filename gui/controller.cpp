@@ -219,8 +219,10 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 		if(which == MatrixType::dMinusMatrix) {
 			AbstractArc* arc = pl->findArcTo(static_cast<Node*>(tr));
 			if(arc) {
-				arc->setWeight(val);
-			} else {
+				if(val == 0) {
+					removeItem(arc);
+				} else arc->setWeight(val);
+			} else if(val) {
 				addArc(pl,tr); // TODO: implement new addArc with weight parameter
 				arc = pl->findArcTo(static_cast<Node*>(tr));
 				if(!arc)
@@ -231,8 +233,10 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 		} else if (which == MatrixType::dPlusMatrix) {
 			AbstractArc* arc = tr->findArcTo(static_cast<Node*>(pl));
 			if(arc) {
-				arc->setWeight(val);
-			} else {
+				if(val == 0) {
+					removeItem(arc);
+				} else arc->setWeight(val);
+			} else if(val) {
 				addArc(tr,pl);
 				arc = tr->findArcTo(static_cast<Node*>(pl));
 				if(!arc)
