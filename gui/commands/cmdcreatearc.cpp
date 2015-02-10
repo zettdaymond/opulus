@@ -33,10 +33,6 @@ CmdCreateArc::CmdCreateArc(PetriNet* petriNet, Transition* from, Place* to) {
 	mInvertArgs = true;
 }
 
-CmdCreateArc::~CmdCreateArc() {
-	qDeleteAll(mItems);
-}
-
 void CmdCreateArc::init(PetriNet* petriNet, Place* p, Transition* t) {
 	mPetriNet = petriNet;
 	mPlace = p->id();
@@ -45,8 +41,9 @@ void CmdCreateArc::init(PetriNet* petriNet, Place* p, Transition* t) {
 }
 
 void CmdCreateArc::undo() {
-	mItems = mPetriNet->removeItem(mArc);
-	Q_ASSERT(mItems.count() == 1);
+	QLinkedList<Item*> items = mPetriNet->removeItem(mArc);
+	Q_ASSERT(items.count() == 1);
+	qDeleteAll(items);
 }
 
 void CmdCreateArc::redo() {
@@ -54,12 +51,9 @@ void CmdCreateArc::redo() {
 	Place* p = dynamic_cast<Place*>(mPetriNet->item(mPlace));
 	if (!p || !t) {
 		qWarning("this should never happen! " __FILE__);
-	} else if(mItems.isEmpty()) {
+	} else {
 		Arc* a =  mInvertArgs ?	mPetriNet->createArc(t, p, mArc) :  mPetriNet->createArc(p, t, mArc);
 		mArc = a->id();
-	} else {
-		mPetriNet->addItem(mItems.takeFirst());
-		mItems.clear();
 	}
 }
 

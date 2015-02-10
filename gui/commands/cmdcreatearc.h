@@ -22,7 +22,6 @@
 
 #include <QUndoCommand>
 #include <QCoreApplication>
-#include <QLinkedList>
 #include "itemid.h"
 
 class PetriNet;
@@ -36,8 +35,6 @@ class CmdCreateArc : public QUndoCommand {
 public:
 	CmdCreateArc(PetriNet* petriNet, Place* from, Transition* to);
 	CmdCreateArc(PetriNet* petriNet, Transition* from, Place* to);
-	virtual ~CmdCreateArc();
-
 	void undo();
 	void redo();
 private:
@@ -46,7 +43,6 @@ private:
 	ItemId mPlace;
 	ItemId mTransition;
 	bool mInvertArgs;
-	QLinkedList<Item*> mItems;
 
 	void init(PetriNet* petriNet, Place* p, Transition* t);
 };
