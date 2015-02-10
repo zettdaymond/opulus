@@ -268,7 +268,7 @@
   </widget>
   <widget class="QDockWidget" name="matrixDock">
    <property name="windowTitle">
-    <string>Matrix Analysis</string>
+    <string>Advanced Input/Output</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
