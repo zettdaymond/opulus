@@ -165,9 +165,8 @@ void Controller::useFireTransitionTool() {
 	mScene->useFireTransitionTool();
 }
 
-void Controller::matrixResized(int rows, int cols)
-{
-	const int transitions_size = mPetriNet->transitions().size();
+void Controller::matrixResized(int rows, int cols) {
+	const int transitions_size = mPetriNet->transitionCount();
 	if(rows < transitions_size) {
 		showWarningMessage(tr("Please select and delete transition manually."), MessageWidget::Forever);
 		emit netChanged(mPetriNet);
@@ -202,23 +201,22 @@ void Controller::matrixResized(int rows, int cols)
 	}
 }
 
-void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, int val)
-{
-	if(row >= mPetriNet->transitions().size() || col >= mPetriNet->placeCount()) {
+void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
+	Q_ASSERT(row >= 0 && col >= 0 && val >= 0);
+	if(row >= mPetriNet->transitionCount() || col >= mPetriNet->placeCount()) {
 		bool st = this->blockSignals(true);
 		matrixResized(
-			std::max(row+1, mPetriNet->transitions().size()),
+			std::max(row+1, mPetriNet->transitionCount()),
 			std::max(col+1, mPetriNet->placeCount()));
 		this->blockSignals(st);
 	}
-	Q_ASSERT(row >= 0 && col >= 0 && val >= 0);
 
 	Transition* tr = mPetriNet->findTransitionWithNumber(row);
 	Place *pl = mPetriNet->findPlaceWithNumber(col);
 
 	if(tr && pl) {
 		bool s = this->blockSignals(true);
-		if(which == PetriMatrix::dMinusMatrix) {
+		if(which == MatrixType::dMinusMatrix) {
 			AbstractArc* arc = pl->findArcTo(static_cast<Node*>(tr));
 			if(arc) {
 				arc->setWeight(val);
@@ -230,7 +228,7 @@ void Controller::matrixUpdate(PetriMatrix::MatrixType which, int row, int col, i
 				arc->setWeight(val);
 			}
 
-		} else if (which == PetriMatrix::dPlusMatrix) {
+		} else if (which == MatrixType::dPlusMatrix) {
 			AbstractArc* arc = tr->findArcTo(static_cast<Node*>(pl));
 			if(arc) {
 				arc->setWeight(val);

@@ -9,11 +9,10 @@ namespace Ui {
 class MatrixWidget;
 }
 
-namespace PetriMatrix {
-	enum MatrixType {
-		dMinusMatrix = 0x1, dPlusMatrix = 0x2
-	};
-}
+enum class MatrixType {
+	dMinusMatrix = 1, dPlusMatrix = 2
+};
+
 
 class MatrixWidget : public QWidget
 {
@@ -24,22 +23,22 @@ public:
 	~MatrixWidget();
 
 signals:
-	void matrix_value_changed(PetriMatrix::MatrixType which, int row, int col, int val);
-	void matrices_size_changed(int rows, int cols);
+	void matrixValueChanged(MatrixType which, int row, int col, int val);
+	void matrixSizeChanged(int rows, int cols);
 
 public slots:
 	void updateMatrices(const PetriNet* petri_net);
 
 private slots:
-	void on_height_spinbox_valueChanged(int arg1);
-	void on_width_spinbox_valueChanged(int arg1);
-	void d_minus_table_value_changed(int row, int col);
-	void d_plus_table_value_changed(int row, int col);
-	void io_update_button_pressed();
-	void updateIOFunctions();
+	void rowsSpinboxChanged(int val);
+	void colsSpinboxChanged(int val);
+	void dMinusTableChanged(int row, int col);
+	void dPlusTableChanged(int row, int col);
+	void IOUpdateNetPressed();
+	void IOUpdateText();
 
 private:
-	QMap<int, QMap<int,int> > parseIOText(const QString& text);
+	QMap<int,QMap<int,int>> parseIOText(const QString& text);
 	Ui::MatrixWidget *ui;
 };
 

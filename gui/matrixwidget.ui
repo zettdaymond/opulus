@@ -27,14 +27,14 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
-          <widget class="QLabel" name="height_label">
+          <widget class="QLabel" name="label_rows">
            <property name="text">
             <string>Rows:</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="height_spinbox">
+          <widget class="QSpinBox" name="rowsSpinbox">
            <property name="minimum">
             <number>0</number>
            </property>
@@ -44,7 +44,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="width_spinbox">
+          <widget class="QSpinBox" name="colsSpinbox">
            <property name="minimum">
             <number>0</number>
            </property>
@@ -63,14 +63,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="d_minus_label">
+            <widget class="QLabel" name="label_minus">
              <property name="text">
               <string>D- Matrix:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="d_minus_matrix">
+            <widget class="QTableWidget" name="dMinusTable">
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
@@ -95,14 +95,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="d_plus_label">
+            <widget class="QLabel" name="label_plus">
              <property name="text">
               <string>D+ Matrix:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="d_plus_matrix">
+            <widget class="QTableWidget" name="dPlusTable">
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
@@ -123,7 +123,7 @@
           </layout>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="width_label">
+          <widget class="QLabel" name="label_cols">
            <property name="text">
             <string>Columns:</string>
            </property>
@@ -139,27 +139,27 @@
          <item row="1" column="0">
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="1" column="0">
-            <widget class="QTextEdit" name="i_textedit"/>
+            <widget class="QTextEdit" name="IFunctionTextedit"/>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="i_label">
+            <widget class="QLabel" name="label_I">
              <property name="text">
               <string>I Function</string>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QTextEdit" name="o_textedit"/>
+            <widget class="QTextEdit" name="OFunctionTextedit"/>
            </item>
            <item row="2" column="0">
-            <widget class="QLabel" name="o_label">
+            <widget class="QLabel" name="label_O">
              <property name="text">
               <string>O Function</string>
              </property>
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QPushButton" name="io_update_net_btn">
+            <widget class="QPushButton" name="IOUpdateNetBtn">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -186,8 +186,8 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>d_plus_matrix</tabstop>
-  <tabstop>d_minus_matrix</tabstop>
+  <tabstop>dPlusTable</tabstop>
+  <tabstop>dMinusTable</tabstop>
  </tabstops>
  <resources/>
  <connections/>

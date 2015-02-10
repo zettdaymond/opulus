@@ -119,7 +119,7 @@ public slots:
 	void useFireTransitionTool();
 
 	void matrixResized(int rows, int cols);
-	void matrixUpdate(PetriMatrix::MatrixType which, int row, int col, int val);
+	void matrixUpdate(MatrixType which, int row, int col, int val);
 
 	void zoomIn();
 	void zoomOut();

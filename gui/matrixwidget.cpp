@@ -1,6 +1,6 @@
 #include "matrixwidget.h"
 #include "ui_matrixwidget.h"
-#include "../core/matrix_util.h"
+#include "matrix_util.h"
 #include <QDebug>
 #include <QFont>
 #include <algorithm>
@@ -13,15 +13,20 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 	QFont f("unexistent");
 	f.setPixelSize(14);
 	f.setStyleHint(QFont::Monospace);
-	ui->i_textedit->setFont(f);
-	ui->o_textedit->setFont(f);
-	connect(ui->d_minus_matrix, SIGNAL(cellChanged(int,int)),
-		this, SLOT(d_minus_table_value_changed(int,int)));
-	connect(ui->d_plus_matrix, SIGNAL(cellChanged(int,int)),
-		this, SLOT(d_plus_table_value_changed(int,int)));
+	ui->IFunctionTextedit->setFont(f);
+	ui->OFunctionTextedit->setFont(f);
 
-	connect(ui->io_update_net_btn, SIGNAL(pressed()), this, SLOT(io_update_button_pressed()));
-	connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateIOFunctions()));
+	connect(ui->dMinusTable, SIGNAL(cellChanged(int,int)),
+		this, SLOT(dMinusTableChanged(int,int)));
+	connect(ui->dPlusTable, SIGNAL(cellChanged(int,int)),
+		this, SLOT(dPlusTableChanged(int,int)));
+
+	connect(ui->IOUpdateNetBtn, SIGNAL(pressed()), this, SLOT(IOUpdateNetPressed()));
+	connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(IOUpdateText()));
+	connect(ui->rowsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(rowsSpinboxChanged(int)));
+	connect(ui->colsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(colsSpinboxChanged(int)));
+	connect(ui->dMinusTable, SIGNAL(cellChanged(int,int)), this, SLOT(dMinusTableChanged(int,int)));
+	connect(ui->dPlusTable, SIGNAL(cellChanged(int,int)), this, SLOT(dPlusTableChanged(int,int)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -29,84 +34,88 @@ MatrixWidget::~MatrixWidget()
 	delete ui;
 }
 
-void MatrixWidget::on_height_spinbox_valueChanged(int arg1)
+void MatrixWidget::rowsSpinboxChanged(int val)
 {
-	if(arg1 < 0)
+	if(val < 0)
 		return;
-	ui->d_minus_matrix->setRowCount(arg1);
-	ui->d_plus_matrix->setRowCount(arg1);
-	emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
+	ui->dMinusTable->setRowCount(val);
+	ui->dPlusTable->setRowCount(val);
+	emit matrixSizeChanged(ui->dMinusTable->rowCount(), ui->dMinusTable->columnCount());
 }
 
-void MatrixWidget::on_width_spinbox_valueChanged(int arg1)
+void MatrixWidget::colsSpinboxChanged(int val)
 {
-	if(arg1 < 0)
+	if(val < 0)
 		return;
-	ui->d_minus_matrix->setColumnCount(arg1);
-	ui->d_plus_matrix->setColumnCount(arg1);
-	emit matrices_size_changed(ui->d_minus_matrix->rowCount(), ui->d_minus_matrix->columnCount());
+	ui->dMinusTable->setColumnCount(val);
+	ui->dPlusTable->setColumnCount(val);
+	emit matrixSizeChanged(ui->dMinusTable->rowCount(), ui->dMinusTable->columnCount());
 }
 
-void MatrixWidget::d_minus_table_value_changed(int row, int col)
+void MatrixWidget::dMinusTableChanged(int row, int col)
 {
-	if(!ui->d_minus_matrix->item(row,col))
-		return;
-
-	bool ok;
-	int val = ui->d_minus_matrix->item(row,col)->text().toInt(&ok);
-
-	if(ok && val >= 0)
-		emit matrix_value_changed(PetriMatrix::dMinusMatrix,row,col,val);
-}
-
-void MatrixWidget::d_plus_table_value_changed(int row, int col)
-{
-	if(!ui->d_plus_matrix->item(row,col))
+	if(!ui->dMinusTable->item(row,col))
 		return;
 
 	bool ok;
-	int val = ui->d_plus_matrix->item(row,col)->text().toInt(&ok);
+	int val = ui->dMinusTable->item(row,col)->text().toInt(&ok);
 
 	if(ok && val >= 0)
-		emit matrix_value_changed(PetriMatrix::dPlusMatrix,row, col, val);
+		emit matrixValueChanged(MatrixType::dMinusMatrix,row,col,val);
 }
 
-void MatrixWidget::io_update_button_pressed()
+void MatrixWidget::dPlusTableChanged(int row, int col)
 {
-	QMap<int, QMap<int,int> > m = parseIOText(ui->o_textedit->toPlainText());
-	QMap<int, QMap<int,int> > mi = parseIOText(ui->i_textedit->toPlainText());
+	if(!ui->dPlusTable->item(row,col))
+		return;
+
+	bool ok;
+	int val = ui->dPlusTable->item(row,col)->text().toInt(&ok);
+
+	if(ok && val >= 0)
+		emit matrixValueChanged(MatrixType::dPlusMatrix,row,col,val);
+}
+
+void MatrixWidget::IOUpdateNetPressed()
+{
+	QMap<int, QMap<int,int> > m = parseIOText(ui->OFunctionTextedit->toPlainText());
+	QMap<int, QMap<int,int> > mi = parseIOText(ui->IFunctionTextedit->toPlainText());
 	QMap<int, QMap<int,int> >::iterator it = m.begin();
 
-	bool wspinstate = ui->width_spinbox->blockSignals(true);
-	bool hspinstate = ui->height_spinbox->blockSignals(true);
+	bool wspinstate = ui->rowsSpinbox->blockSignals(true);
+	bool hspinstate = ui->colsSpinbox->blockSignals(true);
 
-	for(int i = 0; i < ui->d_minus_matrix->rowCount(); ++i) {
-		for(int j = 0; j < ui->d_minus_matrix->columnCount(); ++j) {
-			ui->d_minus_matrix->item(i,j)->setText("0");
-			ui->d_plus_matrix->item(i,j)->setText("0");
+	const int rows = ui->dMinusTable->rowCount();
+	const int cols = ui->dMinusTable->columnCount();
+	Q_ASSERT((rows == ui->dPlusTable->rowCount()) && (cols == ui->dPlusTable->columnCount()));
+
+	for(int i = 0; i < rows; ++i) {
+		for(int j = 0; j < cols; ++j) {
+			ui->dMinusTable->item(i,j)->setText("0");
+			ui->dPlusTable->item(i,j)->setText("0");
 		}
 	}
 
-	bool dminstate = ui->d_minus_matrix->blockSignals(true);
-	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
+	bool dminstate = ui->dMinusTable->blockSignals(true);
+	bool dplusstate = ui->dPlusTable->blockSignals(true);
 
 	for(; it != m.end(); ++it) {
 		QMap<int,int>::iterator place = it.value().begin();
 		for(;place != it.value().end(); ++place) {
-			emit matrix_value_changed(PetriMatrix::dPlusMatrix, it.key(), place.key(), place.value());
+			emit matrixValueChanged(MatrixType::dPlusMatrix, it.key(), place.key(), place.value());
 		}
 	}
 	for(it = mi.begin(); it != mi.end(); ++it) {
 		QMap<int,int>::iterator place = it.value().begin();
 		for( ;place != it.value().end(); ++place) {
-			emit matrix_value_changed(PetriMatrix::dMinusMatrix, it.key(), place.key(), place.value());
+			emit matrixValueChanged(MatrixType::dMinusMatrix, it.key(), place.key(), place.value());
 		}
 	}
 
-	ui->d_minus_matrix->blockSignals(dminstate);
-	ui->d_plus_matrix->blockSignals(dplusstate);
-	ui->width_spinbox->blockSignals(wspinstate);
-	ui->height_spinbox->blockSignals(hspinstate);
+	ui->dMinusTable->blockSignals(dminstate);
+	ui->dPlusTable->blockSignals(dplusstate);
+	ui->rowsSpinbox->blockSignals(wspinstate);
+	ui->colsSpinbox->blockSignals(hspinstate);
 }
 
 void MatrixWidget::updateMatrices(const PetriNet *petri_net)
@@ -116,107 +125,118 @@ void MatrixWidget::updateMatrices(const PetriNet *petri_net)
 
 	Eigen::MatrixXi d_min = d_minus_matrix(petri_net);
 	Eigen::MatrixXi d_plu = d_plus_matrix(petri_net);
+	Q_ASSERT((d_min.rows() == d_plu.rows()) && (d_min.cols() == d_plu.cols()));
 
-	bool dminstate = ui->d_minus_matrix->blockSignals(true);
-	bool dplusstate = ui->d_plus_matrix->blockSignals(true);
-	bool wspinstate = ui->width_spinbox->blockSignals(true);
-	bool hspinstate = ui->height_spinbox->blockSignals(true);
+	bool dminstate = ui->dMinusTable->blockSignals(true);
+	bool dplusstate = ui->dPlusTable->blockSignals(true);
+	bool rspinstate = ui->rowsSpinbox->blockSignals(true);
+	bool cspinstate = ui->colsSpinbox->blockSignals(true);
 
-	ui->width_spinbox->setValue(d_min.cols());
-	ui->height_spinbox->setValue(d_min.rows());
+	ui->colsSpinbox->setValue(d_min.cols());
+	ui->rowsSpinbox->setValue(d_min.rows());
 
-	ui->d_minus_matrix->setRowCount(d_min.rows());
-	ui->d_plus_matrix->setRowCount(d_plu.rows());
-	ui->d_minus_matrix->setColumnCount(d_min.cols());
-	ui->d_plus_matrix->setColumnCount(d_plu.cols());
+	ui->dMinusTable->setRowCount(d_min.rows());
+	ui->dPlusTable->setRowCount(d_plu.rows());
+	ui->dMinusTable->setColumnCount(d_min.cols());
+	ui->dPlusTable->setColumnCount(d_plu.cols());
 
-	for(int i = 0; i < d_min.rows(); ++i) {
-		if(!ui->d_minus_matrix->verticalHeaderItem(i))
-			ui->d_minus_matrix->setVerticalHeaderItem(i, new QTableWidgetItem(QString("T")+QString::number(i)));
+	const int rows = d_min.rows();
+	const int cols = d_min.cols();
 
-		for(int j = 0; j < d_min.cols(); ++j) {
+	for(int i = 0; i < rows; ++i) {
+		if(!ui->dMinusTable->verticalHeaderItem(i))
+			ui->dMinusTable->setVerticalHeaderItem(i,
+				new QTableWidgetItem(QString("T")+QString::number(i)));
 
-			if(ui->d_minus_matrix->item(i,j))
-				ui->d_minus_matrix->item(i,j)->setText(QString::number(d_min(i,j)));
-			else ui->d_minus_matrix->setItem(i,j, new QTableWidgetItem(QString::number(d_min(i,j))));
+		for(int j = 0; j < cols; ++j) {
+			if(ui->dMinusTable->item(i,j))
+				ui->dMinusTable->item(i,j)->setText(QString::number(d_min(i,j)));
+			else ui->dMinusTable->setItem(i,j, new QTableWidgetItem(QString::number(d_min(i,j))));
 		}
 	}
-	for(int i = 0; i < d_plu.rows(); ++i) {
-		if(!ui->d_plus_matrix->verticalHeaderItem(i))
-			ui->d_plus_matrix->setVerticalHeaderItem(i, new QTableWidgetItem(QString("T")+QString::number(i)));
+	for(int i = 0; i < rows; ++i) {
+		if(!ui->dPlusTable->verticalHeaderItem(i))
+			ui->dPlusTable->setVerticalHeaderItem(i,
+				new QTableWidgetItem(QString("T")+QString::number(i)));
 
-		for(int j = 0; j < d_plu.cols(); ++j) {
-			if(ui->d_plus_matrix->item(i,j))
-				ui->d_plus_matrix->item(i,j)->setText(QString::number(d_plu(i,j)));
-			else ui->d_plus_matrix->setItem(i,j, new QTableWidgetItem(QString::number(d_plu(i,j))));
+		for(int j = 0; j < cols; ++j) {
+			if(ui->dPlusTable->item(i,j))
+				ui->dPlusTable->item(i,j)->setText(QString::number(d_plu(i,j)));
+			else ui->dPlusTable->setItem(i,j, new QTableWidgetItem(QString::number(d_plu(i,j))));
 		}
 	}
 
-	for(int i = 0; i < d_min.cols(); ++i) {
-		if(!ui->d_minus_matrix->horizontalHeaderItem(i))
-			ui->d_minus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
+	for(int i = 0; i < cols; ++i) {
+		if(!ui->dMinusTable->horizontalHeaderItem(i))
+			ui->dMinusTable->setHorizontalHeaderItem(i,
+				new QTableWidgetItem(QString("P")+QString::number(i)));
 
-		if(!ui->d_plus_matrix->horizontalHeaderItem(i))
-			ui->d_plus_matrix->setHorizontalHeaderItem(i, new QTableWidgetItem(QString("P")+QString::number(i)));
+		if(!ui->dPlusTable->horizontalHeaderItem(i))
+			ui->dPlusTable->setHorizontalHeaderItem(i,
+				new QTableWidgetItem(QString("P")+QString::number(i)));
 	}
 
 	if(ui->tabWidget->currentWidget() == ui->tab_io) {
-		updateIOFunctions();
+		IOUpdateText();
 	}
-	ui->d_minus_matrix->blockSignals(dminstate);
-	ui->d_plus_matrix->blockSignals(dplusstate);
-	ui->width_spinbox->blockSignals(wspinstate);
-	ui->height_spinbox->blockSignals(hspinstate);
+	ui->dMinusTable->blockSignals(dminstate);
+	ui->dPlusTable->blockSignals(dplusstate);
+	ui->colsSpinbox->blockSignals(cspinstate);
+	ui->rowsSpinbox->blockSignals(rspinstate);
 
 }
 
-void MatrixWidget::updateIOFunctions()
+void MatrixWidget::IOUpdateText()
 {
-	QString text;
-	for(int i =0; i < ui->d_minus_matrix->rowCount(); ++i) {
-		text.push_back('T');
-		text.push_back(QString::number(i));
-		text.push_back(" = ");
-		for(int j = 0; j < ui->d_minus_matrix->columnCount(); ++j) {
-			for(int k = 0; k < ui->d_minus_matrix->item(i,j)->text().toInt(); ++k) {
-				text.push_back('P');
-				text.push_back(QString::number(j));
-				text.push_back(' ');
-			}
-		}
-		text.push_back('\n');
-	}
+	const int rows = ui->dMinusTable->rowCount();
+	const int cols = ui->dMinusTable->columnCount();
+	Q_ASSERT((rows == ui->dPlusTable->rowCount()) && (cols == ui->dPlusTable->columnCount()));
+
+	QString minus_text;
 	QString plus_text;
-	for(int i =0; i < ui->d_plus_matrix->rowCount(); ++i) {
+	for(int i =0; i < rows; ++i) {
+		minus_text.push_back('T');
 		plus_text.push_back('T');
+		minus_text.push_back(QString::number(i));
 		plus_text.push_back(QString::number(i));
+		minus_text.push_back(" = ");
 		plus_text.push_back(" = ");
 
-		for(int j = 0; j < ui->d_plus_matrix->columnCount(); ++j) {
-			for(int k = 0; k < ui->d_plus_matrix->item(i,j)->text().toInt(); ++k) {
+		for(int j = 0; j < cols; ++j) {
+			Q_ASSERT(ui->dMinusTable->item(i,j) && ui->dPlusTable->item(i,j));
+
+			for(int k = 0; k < ui->dMinusTable->item(i,j)->text().toInt(); ++k) {
+				minus_text.push_back('P');
+				minus_text.push_back(QString::number(j));
+				minus_text.push_back(' ');
+			}
+			for(int k = 0; k < ui->dPlusTable->item(i,j)->text().toInt(); ++k) {
 				plus_text.push_back('P');
 				plus_text.push_back(QString::number(j));
 				plus_text.push_back(' ');
 			}
+
 		}
+		minus_text.push_back('\n');
 		plus_text.push_back('\n');
 	}
 
-	bool iprev = ui->i_textedit->blockSignals(true);
-	bool oprev = ui->o_textedit->blockSignals(true);
-	ui->i_textedit->setText(text);
-	ui->o_textedit->setText(plus_text);
-	ui->i_textedit->blockSignals(iprev);
-	ui->o_textedit->blockSignals(oprev);
+	bool iprev = ui->IFunctionTextedit->blockSignals(true);
+	bool oprev = ui->OFunctionTextedit->blockSignals(true);
+
+	ui->IFunctionTextedit->setText(minus_text);
+	ui->OFunctionTextedit->setText(plus_text);
+
+	ui->IFunctionTextedit->blockSignals(iprev);
+	ui->OFunctionTextedit->blockSignals(oprev);
 }
 
-QMap<int, QMap<int, int> > MatrixWidget::parseIOText(const QString &text)
+QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
 {
 	QStringList list = text.split('\n');
 	QMap<int, QMap<int,int> > res;
 
 	foreach (const QString& line, list) {
-	//	qDebug() << "parsing" << line;
 		int pos = 0; // skip space
 		for(int i = 0; i < line.size(); ++i) {
 			if(line[i].isSpace())
@@ -226,7 +246,6 @@ QMap<int, QMap<int, int> > MatrixWidget::parseIOText(const QString &text)
 		// must start with 't'
 		if(line.size() <= pos) continue;
 		if(line[pos].toLower() != 't') continue;
-	//	qDebug() << "skipped" << pos << "whitespace";
 
 		bool found_eq = false;
 		QString transition_num, place_num;
