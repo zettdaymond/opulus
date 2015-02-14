@@ -458,12 +458,12 @@
   </action>
   <action name="actionExportToPNG">
    <property name="text">
-    <string>Image PNG</string>
+    <string>PNG Image</string>
    </property>
   </action>
   <action name="actionExportToPS">
    <property name="text">
-    <string>Post Script</string>
+    <string>PDF Document</string>
    </property>
   </action>
   <action name="actionExportToSVG">
