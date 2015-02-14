@@ -91,7 +91,7 @@ void MainWindow::loadI18n(const QString& language) {
 
 	QDir dir = i18nDir();
 	dir.setNameFilters(QStringList() << "?*"+language+".qm");
-	
+
 	foreach (QString langFile, dir.entryList()) {
 		QTranslator* tr = new QTranslator;
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
@@ -123,7 +123,7 @@ void MainWindow::setupActions() {
 	connect(ui.actionAddArc, SIGNAL(triggered(bool)), mController, SLOT(useArcTool()));
 	connect(ui.actionAddInhibitorArc, SIGNAL(triggered(bool)), mController, SLOT(useInhibitorArcTool()));
 	connect(ui.actionAddRemoveTokens, SIGNAL(triggered(bool)), mController, SLOT(useTokenTool()));
-	
+
 	connect(ui.actionWhatsThis, SIGNAL(triggered(bool)), this, SLOT(enterWhatIsThisMode()));
 	connect(ui.actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
 	connect(ui.actionExportToPNG, SIGNAL(triggered(bool)), mController, SLOT(exportToPNG()));
@@ -318,7 +318,7 @@ void MainWindow::executeAnalyser() {
 void MainWindow::about() {
 	QMessageBox::about(this, tr("About"),
 			tr("<h1>Opulus version %1</h1>\n"
-			"<p>Copyright 2007-2008 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://opulus.sf.net\">http://opulus.sf.net</a>.</p>\n"
+			"<p>Copyright 2007-2015 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://opulus.sf.net\">http://opulus.sf.net</a>.</p>\n"
 			"<h2>Authors</h2>\n"
 			"<dl>\n"
 			"<dt>Hugo Parente Lima</dt>\n"
@@ -327,10 +327,15 @@ void MainWindow::about() {
 			"<dt>Adauto Trigueiro de Almeida Filho</dt>\n"
 			"<dd><a href=\"mailto:adautofilho@gmail.com\">adautofilho@gmail.com</a><br>\n"
 			"Developer.</dd>\n"
-			"<dt>Clerton Ribeiro de Ara\xFAjo Filho</dt>\n"
+			"<dt>Clerton Ribeiro de Araújo Filho</dt>\n"
 			"<dd><a href=\"mailto:clertonfilho@gmail.com\">clertonfilho@gmail.com</a><br>\n"
 			"Developer.</dd>\n"
-			"</dl>\n"
+			"<dt>cat</dt>\n"
+			"<dd><a href=\"mailto:captainslowpoke@gmail.com\">captainslowpoke@gmail.com</a><br>\n"
+			"Developer.</dd>\n"
+			"<dt>zd</dt>\n"
+			"<dd><a href=\"mailto:zettday@gmail.com\">zettday@gmail.com</a><br>\n"
+			"Developer.</dd>\n"
 			"<h2>Contributors</h2>\n"
 			"<dl>\n"
 			"<dt>Carlos Sanchis</dt>\n"
@@ -351,9 +356,9 @@ void MainWindow::cleanStateChanged(bool value) {
 void MainWindow::searchAvailableLanguages() {
 	QDir dir = i18nDir();
 	dir.setNameFilters(QStringList() << "opulus_*.qm");
-	
-	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();	
-	
+
+	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();
+
 	QActionGroup* languages = new QActionGroup(this);
 	QAction* action = ui.menuChangeLanguage->addAction("English/United States");
 	action->setData("en_US");
@@ -381,7 +386,7 @@ void MainWindow::changeLanguage() {
 	QString lang = action->data().toString();
 	loadI18n(lang);
 	ui.retranslateUi(this);
-	
+
 	// update analyser menu
 	QHash<QAction*, Analyser*>::iterator it = mAnalysers.begin();
 	for (; it != mAnalysers.end(); ++it) {
