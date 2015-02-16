@@ -8,12 +8,9 @@ find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-#include(opulus.cmake)
+
 include(translation.cmake)
 #SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# translations
-#set(I18N pt_BR es)
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "Build type not especified, building as release.")
@@ -47,8 +44,7 @@ add_subdirectory(tests)
 add_subdirectory(windowsinstaller)
 
 # i18n stuff
-#qt5_add_translations(opulus core gui)
-install(FILES ${opulus_QMS} DESTINATION share/opulus/i18n)
+install(FILES ${Opulus_QMS} DESTINATION share/opulus/i18n)
 
 # .desktop file
 install(FILES opulus.desktop DESTINATION share/applications)
