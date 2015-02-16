@@ -22,7 +22,7 @@
     <message>
         <location filename="../gui/commands/cmdcreateinhibitorarc.cpp" line="27"/>
         <source>Create inhibitor arc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Создать дугу-ингибитор</translation>
     </message>
 </context>
 <context>
@@ -74,12 +74,12 @@
     <message>
         <location filename="../gui/controller.cpp" line="385"/>
         <source>Export</source>
-        <translation type="unfinished">Экспорт</translation>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../gui/controller.cpp" line="401"/>
         <source>Image PNG (*.png)</source>
-        <translation type="unfinished">Изображение PNG (*.png)</translation>
+        <translation>Изображение PNG (*.png)</translation>
     </message>
     <message>
         <location filename="../gui/controller.cpp" line="413"/>
@@ -102,12 +102,12 @@
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="26"/>
         <source>Legend</source>
-        <translation type="unfinished">Легенда</translation>
+        <translation>Легенда</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="112"/>
         <source>Initial marking</source>
-        <translation type="unfinished">Начальная маркировка</translation>
+        <translation>Начальная маркировка</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="199"/>
@@ -122,17 +122,17 @@
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="224"/>
         <source>Zoom out</source>
-        <translation type="unfinished">Отдалить</translation>
+        <translation>Отдалить</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="241"/>
         <source>Zoom in</source>
-        <translation type="unfinished">Приблизить</translation>
+        <translation>Приблизить</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.ui" line="282"/>
         <source>Net Properties</source>
-        <translation type="unfinished">Свойства сети</translation>
+        <translation>Свойства сети</translation>
     </message>
 </context>
 <context>
@@ -140,17 +140,17 @@
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="56"/>
         <source>Coverage Graph</source>
-        <translation type="unfinished">Граф достижимости</translation>
+        <translation>Граф достижимости</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="64"/>
         <source>There are no places in this petri net.</source>
-        <translation type="unfinished">В сети Петри нет позиций.</translation>
+        <translation type="unfinished">В этой сети Петри нет позиций.</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="68"/>
         <source>Creating graph...</source>
-        <translation type="unfinished">Создание графа...</translation>
+        <translation>Создание графа...</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="116"/>
@@ -170,13 +170,13 @@
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="193"/>
         <source>Coverage graph plugin</source>
-        <translation type="unfinished">Граф достижимости</translation>
+        <translation>Граф достижимости</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/coveragegraph.cpp" line="193"/>
         <source>&lt;html&gt;You need graphviz installed on your computer in order to use this plugin. If graphiviz is already installed, make sure that it is in your system path.
 You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http://www.graphviz.org&lt;/a&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;Чтобы использовать этот плагин, вам нужна установленная программа graphviz. Если graphiviz проверьте что путь до него указан в системной переменной PATH.
+        <translation type="unfinished">&lt;html&gt;Чтобы использовать этот плагин, вам нужна установленная программа graphviz. Если graphiviz установлен, проверьте что путь до него указан в системной переменной PATH.
 Вы можете скачать graphviz перейдя по ссылке: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http://www.graphviz.org&lt;/a&gt;&lt;/html&gt;</translation>
     </message>
 </context>
@@ -190,12 +190,12 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="36"/>
         <source>File</source>
-        <translation type="unfinished">Файл</translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="40"/>
         <source>Export to...</source>
-        <translation type="unfinished">Экспорт...</translation>
+        <translation>Экспорт...</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="48"/>
@@ -205,18 +205,18 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="63"/>
         <source>Tool</source>
-        <translation type="unfinished">Инструмент</translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="74"/>
         <location filename="../gui/mainwindow.ui" line="231"/>
         <source>Simulation</source>
-        <translation type="unfinished">Симуляция</translation>
+        <translation>Симуляция</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="82"/>
         <source>Analysis</source>
-        <translation type="unfinished">Анализ</translation>
+        <translation>Анализ</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="87"/>
@@ -231,34 +231,34 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="104"/>
         <source>View</source>
-        <translation type="unfinished">Вид</translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="120"/>
         <source>Main</source>
-        <translation type="unfinished">Главная</translation>
+        <translation>Главная</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="134"/>
         <source>Tools</source>
-        <translation type="unfinished">Инструменты</translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="175"/>
         <location filename="../gui/mainwindow.ui" line="532"/>
         <source>Miniature</source>
-        <translation type="unfinished">Миниатюра</translation>
+        <translation>Миниатюра</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="215"/>
         <location filename="../gui/mainwindow.ui" line="543"/>
         <source>Property Editor</source>
-        <translation type="unfinished">Редактор свойств</translation>
+        <translation>Редактор свойств</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="244"/>
         <source>Zoom</source>
-        <translation type="unfinished">Масштаб</translation>
+        <translation>Масштаб</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="257"/>
@@ -303,23 +303,23 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="315"/>
         <source>Quit</source>
-        <translation type="unfinished">Выход</translation>
+        <translation>Выход</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="327"/>
         <location filename="../gui/mainwindow.cpp" line="197"/>
         <source>Start simulation</source>
-        <translation type="unfinished">Запустить симуляцию</translation>
+        <translation>Запустить симуляцию</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="330"/>
         <source>Start/Stop simulation.</source>
-        <translation type="unfinished">Запустить/остановить симуляцию.</translation>
+        <translation>Запустить/Остановить симуляцию.</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="345"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выбор</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="348"/>
@@ -415,12 +415,12 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="477"/>
         <source>Fire random transition</source>
-        <translation type="unfinished">Запустить случайные переходы</translation>
+        <translation>Запустить случайный переход</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="486"/>
         <source>Zoom in</source>
-        <translation type="unfinished">Приблизить</translation>
+        <translation>Приблизить</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="489"/>
@@ -430,7 +430,7 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="498"/>
         <source>Zoom out</source>
-        <translation type="unfinished">Отдалить</translation>
+        <translation>Отдалить</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="501"/>
@@ -445,7 +445,7 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="518"/>
         <source>Add an inhibitor arc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить дугу-ингибитор</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="521"/>
@@ -455,12 +455,12 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="554"/>
         <source>Input/Output</source>
-        <translation type="unfinished">Ввод/Вывод</translation>
+        <translation>Ввод/Вывод</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="192"/>
         <source>Stop simulation</source>
-        <translation type="unfinished">Остановить симуляцию</translation>
+        <translation>Остановить симуляцию</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.cpp" line="214"/>
@@ -504,32 +504,32 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/matrixwidget.ui" line="26"/>
         <source>Matrix</source>
-        <translation type="unfinished">Матрица</translation>
+        <translation>Матрица</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="32"/>
         <source>Rows:</source>
-        <translation type="unfinished">Строки:</translation>
+        <translation>Строки:</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="68"/>
         <source>D- Matrix:</source>
-        <translation type="unfinished">Матрица D-:</translation>
+        <translation type="unfinished">D- :</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="100"/>
         <source>D+ Matrix:</source>
-        <translation type="unfinished">Матрица D+:</translation>
+        <translation type="unfinished">D+ :</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="128"/>
         <source>Columns:</source>
-        <translation type="unfinished">Cnjk,ws:</translation>
+        <translation>Столбцы:</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="136"/>
         <source>IO Functions</source>
-        <translation type="unfinished">IO Функции</translation>
+        <translation>IO Функции</translation>
     </message>
     <message>
         <location filename="../gui/matrixwidget.ui" line="147"/>
@@ -544,7 +544,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/matrixwidget.ui" line="170"/>
         <source>Update Net</source>
-        <translation type="unfinished">Обновить сеть</translation>
+        <translation>Обновить сеть</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/petrinetscene.cpp" line="266"/>
         <source>Inhibitor arcs must be from a place to a transition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дуги-ингибиторы могут иметь направление только от позиции к переходу.</translation>
     </message>
     <message>
         <location filename="../gui/petrinetscene.cpp" line="282"/>
@@ -617,7 +617,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../core/place.cpp" line="57"/>
         <source>You need to remove %1 tokens before set the capacity to %2</source>
-        <translation type="unfinished">Вам нужно удалить %1 фишек прежде чем устанавливать объем равный %2</translation>
+        <translation type="unfinished">Вам нужно удалить %1 фишек прежде чем устанавливать емкость равную %2</translation>
     </message>
 </context>
 <context>
@@ -625,12 +625,12 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/propertyeditormodel.cpp" line="138"/>
         <source>Property</source>
-        <translation type="unfinished">Свойство</translation>
+        <translation>Свойство</translation>
     </message>
     <message>
         <location filename="../gui/propertyeditormodel.cpp" line="140"/>
         <source>Value</source>
-        <translation type="unfinished">Значение</translation>
+        <translation>Значение</translation>
     </message>
 </context>
 <context>
@@ -638,32 +638,32 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/arcpropertyhandler.cpp" line="29"/>
         <source>Weight</source>
-        <translation type="unfinished">Вес</translation>
+        <translation>Вес</translation>
     </message>
     <message>
         <location filename="../gui/graphicabstractarc.cpp" line="178"/>
         <source>Remove control point</source>
-        <translation type="unfinished">Удалить контрольную точку</translation>
+        <translation>Удалить контрольную точку</translation>
     </message>
     <message>
         <location filename="../gui/placepropertyhandler.cpp" line="29"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../gui/placepropertyhandler.cpp" line="32"/>
         <source>Capacity</source>
-        <translation type="unfinished">Объем</translation>
+        <translation type="unfinished">Емкость</translation>
     </message>
     <message>
         <location filename="../gui/placepropertyhandler.cpp" line="37"/>
         <source>Tokens</source>
-        <translation type="unfinished">Фишки</translation>
+        <translation>Фишки</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="13"/>
         <source>&lt;h1&gt;Analysis Results&lt;/h1&gt;</source>
-        <translation type="unfinished">&lt;h1&gt;Результаты Анализа&lt;/h1&gt;</translation>
+        <translation>&lt;h1&gt;Результаты Анализа&lt;/h1&gt;</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="14"/>
@@ -673,7 +673,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="15"/>
         <source>&lt;h2&gt;Transitions:&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Переходы:&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Переходы:&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="16"/>
@@ -683,77 +683,77 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="17"/>
         <source>&lt;li&gt; Dead :</source>
-        <translation type="unfinished">&lt;li&gt; Мертвые :</translation>
+        <translation>&lt;li&gt; Мертвые :</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="23"/>
         <source>&lt;li&gt; Potential Dead :</source>
-        <translation type="unfinished">&lt;li&gt; Потенциально мертвые :</translation>
+        <translation>&lt;li&gt; Потенциально Мертвые :</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="29"/>
         <source>&lt;li&gt;Potential Live :</source>
-        <translation type="unfinished">&lt;li&gt;Потенциально живые :</translation>
+        <translation>&lt;li&gt;Потенциально Живые :</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="35"/>
         <source>&lt;li&gt;Live :</source>
-        <translation type="unfinished">&lt;li&gt;Живые :</translation>
+        <translation>&lt;li&gt;Живые :</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="41"/>
         <source>&lt;li&gt;Stable :</source>
-        <translation type="unfinished">&lt;li&gt;Устойчивые :</translation>
+        <translation>&lt;li&gt;Устойчивые :</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="49"/>
         <source>&lt;h2&gt;Petri Net:&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Сеть Петри:&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Сеть Петри:&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="51"/>
         <source>&lt;li&gt;Safe: </source>
-        <translation type="unfinished">&lt;li&gt;Безопасная: </translation>
+        <translation>&lt;li&gt;Безопасность: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="52"/>
         <source>&lt;li&gt;Bounded: </source>
-        <translation type="unfinished">&lt;li&gt;Ограниченная: </translation>
+        <translation>&lt;li&gt;Ограниченность: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="53"/>
         <source>&lt;li&gt;Live: </source>
-        <translation type="unfinished">&lt;li&gt;Живая: </translation>
+        <translation>&lt;li&gt;Живость: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="54"/>
         <source>&lt;li&gt;Preserve: </source>
-        <translation type="unfinished">&lt;li&gt;Сохраняющая: </translation>
+        <translation>&lt;li&gt;Сохранение: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="55"/>
         <source>&lt;li&gt;Stritly preserving: </source>
-        <translation type="unfinished">&lt;li&gt;Строго ограниченная: </translation>
+        <translation>&lt;li&gt;Строгое сохранение: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="56"/>
         <source>&lt;li&gt;Stable: </source>
-        <translation type="unfinished">&lt;li&gt;Устойчивая: </translation>
+        <translation>&lt;li&gt;Устойчивость: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="57"/>
         <source>&lt;li&gt;Parralel: </source>
-        <translation type="unfinished">&lt;li&gt;Параллельная: </translation>
+        <translation>&lt;li&gt;Параллельность: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="58"/>
         <source>&lt;li&gt;Conflicted: </source>
-        <translation type="unfinished">&lt;li&gt;Конфликтная: </translation>
+        <translation>&lt;li&gt;Конфликтность: </translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="59"/>
         <source>&lt;li&gt;Invertable: </source>
-        <translation type="unfinished">&lt;li&gt;Обратимая: </translation>
+        <translation>&lt;li&gt;Обратимость: </translation>
     </message>
 </context>
 <context>
@@ -776,7 +776,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/reachability/reachability.ui" line="118"/>
         <source>End Marking</source>
-        <translation type="unfinished">Конечная маркировка</translation>
+        <translation type="unfinished">Искомая маркировка</translation>
     </message>
 </context>
 <context>
@@ -784,32 +784,32 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="28"/>
         <source>There are no places in this petri net.</source>
-        <translation type="unfinished">В сети Петри нет позиций.</translation>
+        <translation type="unfinished">В этой сети Петри нет позиций.</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="33"/>
         <source>There are no transitions in this petri net.</source>
-        <translation type="unfinished">В сети Петри нет переходов.</translation>
+        <translation type="unfinished">В этой сети Петри нет переходов.</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="40"/>
         <source>Place count in your &apos;End marking&apos; doesn&apos;t equal petri nets place count</source>
-        <translation type="unfinished">Число позиций в искомой маркировке не соответствует числу позиций в сети Петри</translation>
+        <translation type="unfinished">Число позиций в искомой маркировке не соответствует числу позиций в этой сети Петри</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="77"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="77"/>
         <source>Some of cells is empty</source>
-        <translation type="unfinished">Некоторые ячейки пусты</translation>
+        <translation>Некоторые ячейки пусты</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="92"/>
         <source>&lt;h1&gt;Analysis Results&lt;/h1&gt;</source>
-        <translation type="unfinished">&lt;h1&gt;Результаты Анализа&lt;/h1&gt;</translation>
+        <translation>&lt;h1&gt;Результаты Анализа&lt;/h1&gt;</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="93"/>
@@ -819,7 +819,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="96"/>
         <source>&lt;li&gt;Marking : (</source>
-        <translation type="unfinished">&lt;li&gt;Маркировка : (</translation>
+        <translation>&lt;li&gt;Маркировка : (</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="101"/>
@@ -829,17 +829,17 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="163"/>
         <source>Prepare...</source>
-        <translation type="unfinished">Подготовка...</translation>
+        <translation>Подготовка...</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="170"/>
         <source>Somthing has wrohg... Restart programm and check your petri net</source>
-        <translation type="unfinished">Что-то пошло не так. Перезапустите программу или проверьте сеть Петри</translation>
+        <translation>Что-то пошло не так. Перезапустите программу или проверьте сеть Петри</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="210"/>
         <source>Calculating...</source>
-        <translation type="unfinished">Вычисление...</translation>
+        <translation>Вычисление...</translation>
     </message>
 </context>
 <context>
@@ -847,7 +847,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/reachability/results.ui" line="14"/>
         <source>Results</source>
-        <translation type="unfinished">Результаты</translation>
+        <translation>Результаты</translation>
     </message>
 </context>
 <context>
@@ -855,7 +855,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/transitionpropertyhandler.cpp" line="29"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../gui/transitionpropertyhandler.cpp" line="32"/>
