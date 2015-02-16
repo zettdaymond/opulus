@@ -45,6 +45,12 @@ void PetriNet::notifyAboutItemModification(Item* item) {
 		emit itemModified(item);
 }
 
+void PetriNet::notifyAboutArcWeightChanged(Arc *arc) {
+	Q_ASSERT(arc->petriNet() == this);
+	if(mModifyNotificationEnabled)
+		emit arcWeightChanged(arc);
+}
+
 Place* PetriNet::createPlace(const QPointF& pos, const ItemId& id) {
 	Place* place = new Place(this, pos, id.isValid() ? id : nextId(), "P");
 	place->setNumber(mPlaces.count());

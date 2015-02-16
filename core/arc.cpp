@@ -52,7 +52,12 @@ void Arc::fire() {
 	if (mDirection == At_ToTransition)
 		static_cast<Place*>(from())->removeTokens(weight());
 	else
-		static_cast<Place*>(to())->addTokens(weight());			
+		static_cast<Place*>(to())->addTokens(weight());
+}
+
+void Arc::setWeight(uint weight) {
+	AbstractArc::setWeight(weight);
+	petriNet()->notifyAboutArcWeightChanged(this);
 }
 
 void Arc::save(QXmlStreamWriter& out) {

@@ -85,11 +85,15 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 	connect(mScene, SIGNAL(itemSelected(Item*)),
 			mPropEditorModel, SLOT(setModelSource(Item*)));
 
+	connect(mPetriNet, SIGNAL(placeCreated(Place*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(transitionCreated(Transition*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(arcCreated(Arc*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(arcWeightChanged(Arc*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
+
+
 	connect(mUndoStack, SIGNAL(cleanChanged(bool)), this, SIGNAL(cleanChanged(bool)));
 	qsrand(0);
-
-    connect(mPropEditorModel, SIGNAL(modelReset()),this,SLOT(undoRedoReaction()));
-    //FIXME: change name to slot undoRedoReation();
 }
 
 Controller::~Controller() {
@@ -110,15 +114,13 @@ bool Controller::hasPetriNet() const {
 
 QAction* Controller::createRedoAction() {
 	QAction* action = mUndoStack->createRedoAction(this);
-    connect(action, SIGNAL(triggered()),this,SLOT(undoRedoReaction()));
 	action->setIcon(QIcon(":/redo"));
 	action->setShortcut(QKeySequence::Redo);
 	return action;
 }
 
 QAction* Controller::createUndoAction() {
-    QAction* action = mUndoStack->createUndoAction(this);
-    connect(action, SIGNAL(triggered()),this,SLOT(undoRedoReaction()));
+	QAction* action = mUndoStack->createUndoAction(this);
 	action->setIcon(QIcon(":/undo"));
 	action->setShortcut(QKeySequence::Undo);
 	return action;
@@ -169,13 +171,11 @@ void Controller::matrixResized(int rows, int cols) {
 	const int transitions_size = mPetriNet->transitionCount();
 	if(rows < transitions_size) {
 		showWarningMessage(tr("Please select and delete transition manually."), MessageWidget::Forever);
-		emit netChanged(mPetriNet);
 		return;
 	}
 
 	if(cols < mPetriNet->placeCount()) {
 		showWarningMessage(tr("Please select and delete place manually."), MessageWidget::Forever);
-		emit netChanged(mPetriNet);
 		return;
 	}
 	if(rows > transitions_size) {
@@ -245,8 +245,11 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 			}
 		}
 		this->blockSignals(s);
-		emit netChanged(mPetriNet);
 	}
+}
+
+void Controller::netUpdated() {
+	emit netChanged(PetriNetMatrices(d_minus_matrix(mPetriNet), d_plus_matrix(mPetriNet), d_matrix(mPetriNet)));
 }
 
 void Controller::addPlace(const QPointF& position) {
@@ -323,7 +326,6 @@ void Controller::fireNRandomTransitions() {
 
 void Controller::removeItem(Item* item) {
 	mUndoStack->push(new CmdRemoveItem(item));
-    emit netChanged(mPetriNet);
 }
 
 void Controller::startSimulation() {
@@ -404,7 +406,6 @@ void Controller::loadPetriNet(const QString& fileName) {
 		showErrorMessage(e.message());
 	}
     QApplication::restoreOverrideCursor();
-    emit netChanged(mPetriNet);
 }
 
 void Controller::savePetriNet(const QString& fileName) {
@@ -442,11 +443,6 @@ void Controller::analysisFatalError(const QString& msg) {
 			  mAnalysisRunner->analyser()->name(), msg);
 }
 
-void Controller::undoRedoReaction()
-{
-    emit netChanged(mPetriNet);
-}
-
 void Controller::zoomIn() {
 	mView->scale(1.1, 1.1);
 }
@@ -464,7 +460,6 @@ void Controller::pushCommandNoCatch(QUndoCommand* cmd) {
 bool Controller::pushCommand(QUndoCommand* cmd) {
 	try {
 		pushCommandNoCatch(cmd);
-		emit netChanged(mPetriNet);
 		return true;
 	} catch (Exception& e) {
 		showErrorMessage(e.message(), 10000);

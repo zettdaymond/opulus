@@ -77,8 +77,10 @@ public:
 	bool contains(Item* item) const;
 	/// Returns the item with id \p id.
 	Item* item(const ItemId& id) const;
-	/// emit the signal itemModified
+	/// emits itemModified signal if ModifyNotification is enabled.
 	void notifyAboutItemModification(Item* item);
+	/// emits arcWeightChanged signal if ModifyNotification is enabled.
+	void notifyAboutArcWeightChanged(Arc* arc);
 	/// Returns all petri net transitions.
 	const QSet<Transition*>& transitions() const { return mTransitions; }
 	/// Returns the number of petri net transitions.
@@ -133,6 +135,7 @@ signals:
 	void placeCreated(Place* place);
 	void transitionCreated(Transition* transition);
 	void arcCreated(Arc* arc);
+	void arcWeightChanged(Arc* arc);
 	void inhibitorArcCreated(InhibitorArc* arc);
 	void itemModified(Item* item);
 	void itemRemoved(Item* item);

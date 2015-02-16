@@ -38,6 +38,7 @@ friend class PetriNet;
 public:
 	bool canFireTransition() const;
 	void fire();
+	void setWeight(uint weight) override;
 
 	void save(QXmlStreamWriter& out);
 	static void load(PetriNet* pn, const QDomElement& elem);

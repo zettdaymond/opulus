@@ -39,7 +39,7 @@ public:
 	QPointF* addIntermediatePoint(const QPointF& point, int segmentIndex);
 	void removeIntermediatePoint(QPointF* point);
 	const IntermediatePointList& intermediatePoints() const { return mIntermediatePoints; }
-	void setWeight(uint weight);
+	virtual void setWeight(uint weight);
 	uint weight() const { return mWeight; }
 	
 	void updateTransitionStatus();

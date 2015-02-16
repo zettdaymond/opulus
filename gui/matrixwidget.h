@@ -3,16 +3,12 @@
 
 #include <QWidget>
 #include <QMap>
+#include "matrix_util.h"
 
 class PetriNet;
 namespace Ui {
 class MatrixWidget;
 }
-
-enum class MatrixType {
-	dMinusMatrix = 1, dPlusMatrix = 2
-};
-
 
 class MatrixWidget : public QWidget
 {
@@ -27,7 +23,7 @@ signals:
 	void matrixSizeChanged(int rows, int cols);
 
 public slots:
-	void updateMatrices(const PetriNet* petri_net);
+	void updateMatrices(PetriNetMatrices matrices);
 
 private slots:
 	void rowsSpinboxChanged(int val);

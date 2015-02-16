@@ -16,7 +16,13 @@ else( MINGW )
 endif( MINGW )
 
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR}/../gui ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../gui)
+include_directories(
+	${QT_INCLUDES}
+	${CMAKE_CURRENT_BINARY_DIR}/../gui
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/../gui
+	${CMAKE_CURRENT_SOURCE_DIR}/../core)
+
 add_executable(opulus ${opulus_SRCS})
 target_link_libraries(opulus opulusgui)
 

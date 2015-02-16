@@ -118,13 +118,11 @@ void MatrixWidget::IOUpdateNetPressed()
 	ui->colsSpinbox->blockSignals(hspinstate);
 }
 
-void MatrixWidget::updateMatrices(const PetriNet *petri_net)
+void MatrixWidget::updateMatrices(PetriNetMatrices matrices)
 {
-	if(!petri_net)
-		return;
 
-	Eigen::MatrixXi d_min = d_minus_matrix(petri_net);
-	Eigen::MatrixXi d_plu = d_plus_matrix(petri_net);
+	Eigen::MatrixXi d_min = matrices.dMinus;
+	Eigen::MatrixXi d_plu = matrices.dPlus;
 	Q_ASSERT((d_min.rows() == d_plu.rows()) && (d_min.cols() == d_plu.cols()));
 
 	bool dminstate = ui->dMinusTable->blockSignals(true);
