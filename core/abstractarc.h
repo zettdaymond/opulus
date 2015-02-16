@@ -41,7 +41,7 @@ public:
 	const IntermediatePointList& intermediatePoints() const { return mIntermediatePoints; }
 	virtual void setWeight(uint weight);
 	uint weight() const { return mWeight; }
-	
+
 	void updateTransitionStatus();
 	virtual bool canFireTransition() const = 0;
 	virtual void fire() = 0;
@@ -49,10 +49,10 @@ public:
 	void save(QXmlStreamWriter& out);
 	static void load(AbstractArc* arc, QDomElement elem);
 
-protected:	
+protected:
 	AbstractArc(PetriNet* pn, Transition* from, Place* to, const ItemId& id);
 	AbstractArc(PetriNet* pn, Place* from, Transition* to, const ItemId& id);
-	
+
 	void beforeAdd();
 	QLinkedList<Item*> beforeDelete();
 
@@ -62,7 +62,7 @@ protected:
 	} mDirection;
 
 private:
-	
+
 
 	Node* mFrom;
 	Node* mTo;

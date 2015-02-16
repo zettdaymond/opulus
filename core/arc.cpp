@@ -45,7 +45,7 @@ bool Arc::canFireTransition() const {
 				return false;
 		}
 	}
-	return true;	
+	return true;
 }
 
 void Arc::fire() {
