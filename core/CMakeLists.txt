@@ -11,9 +11,13 @@ set(opuluscore_srcs
     inhibitorarc.cpp
     simulation.cpp
     marking.cpp
+    analyser.h
     analysisrunner.cpp
     analysisreporter.cpp
     matrix_util.cpp
+    exceptions.h
+    version.h
+    itemid.h
 )
 
 
