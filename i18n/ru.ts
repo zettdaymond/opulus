@@ -221,12 +221,12 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="87"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Помощь</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="91"/>
         <source>Change language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сменить язык</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="104"/>
@@ -379,23 +379,23 @@ You can get graphviz at: &lt;a href=&quot;http://www.graphviz.org&quot;&gt;http:
     <message>
         <location filename="../gui/mainwindow.ui" line="434"/>
         <source>User Manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Документация пользователя</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="439"/>
         <location filename="../gui/mainwindow.cpp" line="319"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">О программе</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="444"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qt</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="453"/>
         <source>What is this?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Что это?</translation>
     </message>
     <message>
         <location filename="../gui/mainwindow.ui" line="458"/>
@@ -491,7 +491,26 @@ Developer.&lt;/dd&gt;
 &lt;dd&gt;&lt;a href=&quot;csanchisb@yahoo.es&quot;&gt;csanchisb@yahoo.es&lt;/a&gt;&lt;br&gt;
 Spanish translation.&lt;/dd&gt;
 &lt;/dl&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;h1&gt;Opulus версии %1&lt;/h1&gt;
+&lt;p&gt;Copyright 2007-2008 Opulus developers. Opulus распространяется в соответствии с положениями лицензии GPL v2. Смотрите файл COPYING для дополнительной информации или посетите &lt;a href=&quot;http://opulus.sf.net&quot;&gt;http://opulus.sf.net&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Авторы&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;Hugo Parente Lima&lt;/dt&gt;
+&lt;dd&gt;&lt;a href=&quot;mailto:hugo.pl@gmail.com&quot;&gt;hugo.pl@gmail.com&lt;/a&gt;&lt;br&gt;
+Разработчик, автор идеи.&lt;/dd&gt;
+&lt;dt&gt;Adauto Trigueiro de Almeida Filho&lt;/dt&gt;
+&lt;dd&gt;&lt;a href=&quot;mailto:adautofilho@gmail.com&quot;&gt;adautofilho@gmail.com&lt;/a&gt;&lt;br&gt;
+Разработчик.&lt;/dd&gt;
+&lt;dt&gt;Clerton Ribeiro de Ara�jo Filho&lt;/dt&gt;
+&lt;dd&gt;&lt;a href=&quot;mailto:clertonfilho@gmail.com&quot;&gt;clertonfilho@gmail.com&lt;/a&gt;&lt;br&gt;
+Разработчик.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2&gt;Вклад&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;Carlos Sanchis&lt;/dt&gt;
+&lt;dd&gt;&lt;a href=&quot;csanchisb@yahoo.es&quot;&gt;csanchisb@yahoo.es&lt;/a&gt;&lt;br&gt;
+Испанский перевод.&lt;/dd&gt;
+&lt;/dl&gt;</translation>
     </message>
 </context>
 <context>
@@ -609,7 +628,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../gui/petrinetscene.cpp" line="311"/>
         <source>You need to choose a transition!</source>
-        <translation type="unfinished">Вам нажно выбрать переход!</translation>
+        <translation type="unfinished">Вам нужно выбрать переход!</translation>
     </message>
 </context>
 <context>
@@ -678,7 +697,7 @@ Spanish translation.&lt;/dd&gt;
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="16"/>
         <source>&lt;ul&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="17"/>
@@ -755,6 +774,16 @@ Spanish translation.&lt;/dd&gt;
         <source>&lt;li&gt;Invertable: </source>
         <translation>&lt;li&gt;Обратимость: </translation>
     </message>
+    <message>
+        <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="69"/>
+        <source>true</source>
+        <translation type="unfinished">Да</translation>
+    </message>
+    <message>
+        <location filename="../plugins/coveragegraph/extended/analysis_utils.cpp" line="71"/>
+        <source>false</source>
+        <translation type="unfinished">Нет</translation>
+    </message>
 </context>
 <context>
     <name>Reachability</name>
@@ -781,6 +810,11 @@ Spanish translation.&lt;/dd&gt;
 </context>
 <context>
     <name>ReachabilityPlugin</name>
+    <message>
+        <location filename="../plugins/reachability/reachability.cpp" line="21"/>
+        <source>Reachability of Marking</source>
+        <translation type="unfinished">Достижимость маркировки</translation>
+    </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="28"/>
         <source>There are no places in this petri net.</source>
@@ -825,6 +859,16 @@ Spanish translation.&lt;/dd&gt;
         <location filename="../plugins/reachability/reachability.cpp" line="101"/>
         <source>&lt;li&gt;Reachable :</source>
         <translation type="unfinished">&lt;li&gt;Достижима :</translation>
+    </message>
+    <message>
+        <location filename="../plugins/reachability/reachability.cpp" line="103"/>
+        <source>true &lt;/li&gt;</source>
+        <translation type="unfinished">Да</translation>
+    </message>
+    <message>
+        <location filename="../plugins/reachability/reachability.cpp" line="106"/>
+        <source>false &lt;/li&gt;</source>
+        <translation type="unfinished">Нет</translation>
     </message>
     <message>
         <location filename="../plugins/reachability/reachability.cpp" line="163"/>

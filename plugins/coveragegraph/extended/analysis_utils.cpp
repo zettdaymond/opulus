@@ -66,7 +66,7 @@ QString formingAnalyseResultPage(TransitionAnalyser & ta, PropertyAnalyser & pa,
 QString bToStr(bool b)
 {
     if (b)
-        return "true";
+        return QObject::tr("true");
     else
-        return "false";
+        return QObject::tr("false");
 }

@@ -1,7 +1,7 @@
 
 find_package(Qt5LinguistTools REQUIRED)
 
-#set(REFRESH_TRANSLATIONS 1)
+set(REFRESH_TRANSLATIONS 1)
 
 IF(REFRESH_TRANSLATIONS)
     IF(NOT QT_LUPDATE_EXECUTABLE AND NOT Qt5_LUPDATE_EXECUTABLE)
@@ -30,6 +30,8 @@ IF(QT_LRELEASE_EXECUTABLE OR Qt5_LRELEASE_EXECUTABLE)
       FILE(GLOB_RECURSE translate_core_SRCS ${CMAKE_SOURCE_DIR}/core/*.cpp)
       FILE(GLOB_RECURSE translate_gui_SRCS ${CMAKE_SOURCE_DIR}/gui/*.cpp)
 
+      FILE(GLOB_RECURSE translate_core_HEADS ${CMAKE_SOURCE_DIR}/core/*.h)
+
       FILE(GLOB_RECURSE translate_plugin_cg_SRCS ${CMAKE_SOURCE_DIR}/plugins/coveragegraph/*.cpp)
       FILE(GLOB_RECURSE translate_plugin_reach_SRCS ${CMAKE_SOURCE_DIR}/plugins/reachability/*.cpp)
 
@@ -37,8 +39,8 @@ IF(QT_LRELEASE_EXECUTABLE OR Qt5_LRELEASE_EXECUTABLE)
       FILE(GLOB_RECURSE translate_plugin_cg_UIS ${CMAKE_SOURCE_DIR}/plugins/coveragegraph/*.ui)
       FILE(GLOB_RECURSE translate_plugin_reach_UIS ${CMAKE_SOURCE_DIR}/plugins/reachability/*.ui)
 
-      SET(translate_SRCS ${translate_main_SRCS} ${translate_core_SRCS} ${translate_gui_SRCS} ${translate_plugin_cg_SRCS} ${translate_plugin_reach_SRCS}
-        ${translate_gui_UIS} ${translate_plugin_cg_UIS} ${translate_plugin_reach_UIS} )
+      SET(translate_SRCS ${translate_main_SRCS} ${translate_core_SRCS} ${translate_core_HEADS} ${translate_gui_SRCS} ${translate_plugin_cg_SRCS} ${translate_plugin_reach_SRCS}
+        ${translate_gui_UIS} ${translate_plugin_cg_UIS} ${translate_plugin_reach_UIS})
   ENDIF(REFRESH_TRANSLATIONS)
       IF(Qt5_FOUND)
           IF(REFRESH_TRANSLATIONS)

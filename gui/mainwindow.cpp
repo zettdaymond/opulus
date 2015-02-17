@@ -49,7 +49,7 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	if (firstWindow) {
 		QSettings settings;
-		QString locale = settings.value("language", QLocale::system().name()).toString();
+        QString locale = settings.value("language", QLocale::system().name()).toString();
 		loadI18n(locale);
 	}
 	ui.setupUi(this);
@@ -90,10 +90,10 @@ void MainWindow::loadI18n(const QString& language) {
 	mTranslators.clear();
 
 	QDir dir = i18nDir();
-	dir.setNameFilters(QStringList() << "?*"+language+".qm");
-	
+    dir.setNameFilters(QStringList() << "?*"+language+".qm");
+
 	foreach (QString langFile, dir.entryList()) {
-		QTranslator* tr = new QTranslator;
+        QTranslator* tr = new QTranslator;
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
 			QApplication::installTranslator(tr);
 			mTranslators << tr;
@@ -350,7 +350,7 @@ void MainWindow::cleanStateChanged(bool value) {
 
 void MainWindow::searchAvailableLanguages() {
 	QDir dir = i18nDir();
-	dir.setNameFilters(QStringList() << "opulus_*.qm");
+    dir.setNameFilters(QStringList() << "opulus_*.qm");
 	
 	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();	
 	
