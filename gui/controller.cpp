@@ -170,13 +170,19 @@ void Controller::useFireTransitionTool() {
 void Controller::matrixResized(int rows, int cols) {
 	const int transitions_size = mPetriNet->transitionCount();
 	if(rows < transitions_size) {
-		showWarningMessage(tr("Please select and delete transition manually."), MessageWidget::Forever);
-		return;
+		// TODO: move this into a function
+		foreach (Transition* t, mPetriNet->transitions()) {
+			if(t->number() >= rows)
+				removeItem(t);
+		}
 	}
 
 	if(cols < mPetriNet->placeCount()) {
-		showWarningMessage(tr("Please select and delete place manually."), MessageWidget::Forever);
-		return;
+		// TODO: move this into a function
+		foreach (Place* p, mPetriNet->places()) {
+			if(p->number() >= cols)
+				removeItem(p);
+		}
 	}
 	if(rows > transitions_size) {
 		for(int i = transitions_size; i < rows; ++i) {
