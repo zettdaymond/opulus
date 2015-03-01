@@ -17,13 +17,14 @@ class MatrixWidget : public QWidget
 public:
 	explicit MatrixWidget(QWidget *parent = 0);
 	~MatrixWidget();
+    void retranslate();
 
 signals:
 	void matrixValueChanged(MatrixType which, int row, int col, int val);
 	void matrixSizeChanged(int rows, int cols);
 
 public slots:
-	void updateMatrices(PetriNetMatrices matrices);
+    void updateMatrices(PetriNetMatrices matrices);
 
 private slots:
 	void rowsSpinboxChanged(int val);

@@ -184,6 +184,11 @@ void MatrixWidget::updateMatrices(PetriNetMatrices matrices)
 
 }
 
+void MatrixWidget::retranslate()
+{
+    ui->retranslateUi(this);
+}
+
 void MatrixWidget::IOUpdateText()
 {
 	const int rows = ui->dMinusTable->rowCount();

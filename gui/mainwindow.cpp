@@ -386,6 +386,7 @@ void MainWindow::changeLanguage() {
 	QString lang = action->data().toString();
 	loadI18n(lang);
 	ui.retranslateUi(this);
+    ui.matrixWidget->retranslate();
 
 	// update analyser menu
 	QHash<QAction*, Analyser*>::iterator it = mAnalysers.begin();
