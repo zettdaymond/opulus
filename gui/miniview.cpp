@@ -109,4 +109,4 @@ void MiniView::mouseReleaseEvent(QMouseEvent*) {
 	setCursor(Qt::OpenHandCursor);
 }
 
-#include "miniview.moc"
+//#include "miniview.moc"

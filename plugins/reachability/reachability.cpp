@@ -18,7 +18,7 @@ QString ReachabilityPlugin::internalName() const
 
 QString ReachabilityPlugin::name() const
 {
-    return "Reachability of Marking";
+    return tr("Reachability of Marking");
 }
 
 void ReachabilityPlugin::analyse(PetriNet *pn, AnalysisReporter *reporter)
@@ -100,10 +100,10 @@ void ReachabilityPlugin::finish(QWidget *parentWidget)
         out += ")</li>";
         out +=  tr("<li>Reachable :");
         if (_isReachable == true) {
-            out += "true </li>";
+            out += tr("true </li>");
         }
         else {
-            out += "false </li>";
+            out += tr("false </li>");
         }
         out += "</ul>";
         QDialog dlg(parentWidget);

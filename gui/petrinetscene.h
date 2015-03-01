@@ -21,6 +21,7 @@
 #ifndef PETRINETSCENE_H
 #define PETRINETSCENE_H
 
+//#include <QVariant>
 #include <QGraphicsScene>
 #include <QHash>
 #include <QSet>
@@ -37,7 +38,6 @@ class GraphicItem;
 class Controller;
 
 class QGraphicsLineItem;
-
 /**
 * @ingroup gui
 */

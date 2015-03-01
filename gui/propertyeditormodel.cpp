@@ -167,4 +167,4 @@ void PropertyEditorModel::itemModified(Item* item) {
 	}
 }
 
-#include "propertyeditormodel.moc"
+//#include "propertyeditormodel.moc"

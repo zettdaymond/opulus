@@ -468,4 +468,4 @@ bool Controller::pushCommand(QUndoCommand* cmd) {
 }
 
 
-#include "controller.moc"
+//#include "controller.moc"

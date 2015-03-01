@@ -49,7 +49,7 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	if (firstWindow) {
 		QSettings settings;
-		QString locale = settings.value("language", QLocale::system().name()).toString();
+        QString locale = settings.value("language", QLocale::system().name()).toString();
 		loadI18n(locale);
 	}
 	ui.setupUi(this);
@@ -93,7 +93,7 @@ void MainWindow::loadI18n(const QString& language) {
 	dir.setNameFilters(QStringList() << "?*"+language+".qm");
 
 	foreach (QString langFile, dir.entryList()) {
-		QTranslator* tr = new QTranslator;
+        	QTranslator* tr = new QTranslator;
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
 			QApplication::installTranslator(tr);
 			mTranslators << tr;
@@ -395,4 +395,4 @@ void MainWindow::changeLanguage() {
 	QSettings().setValue("language", lang);
 }
 
-#include "mainwindow.moc"
+//#include "mainwindow.moc"

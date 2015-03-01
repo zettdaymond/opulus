@@ -64,4 +64,4 @@ void AnalysisRunner::run() {
 	analyserLock.unlock();
 }
 
-#include "analysisrunner.moc"
+//#include "analysisrunner.moc"

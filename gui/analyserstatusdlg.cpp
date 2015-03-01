@@ -63,4 +63,4 @@ void AnalyserStatusDlg::showEvent(QShowEvent* ev) {
 	mTimer->start(200);
 }
 
-#include "analyserstatusdlg.moc"
+//#include "analyserstatusdlg.moc"

@@ -322,4 +322,4 @@ void PetriNetScene::cleanTool(const MethodPointer& method) {
 	}
 }
 
-#include "petrinetscene.moc"
+//#include "petrinetscene.moc"

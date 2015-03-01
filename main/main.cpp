@@ -25,11 +25,11 @@
 *	Application entry point.
 */
 int main(int argc, char** argv) {
-	QApplication app(argc, argv);
-	QApplication::setApplicationName("Opulus");
-	QApplication::setOrganizationDomain("opulus.sourceforge.net");
-	app.setWindowIcon(QIcon(":/opulus"));
+    QApplication app(argc, argv);
+    QApplication::setApplicationName("Opulus");
+    QApplication::setOrganizationDomain("opulus.sourceforge.net");
+    app.setWindowIcon(QIcon(":/opulus"));
 
-	new MainWindow(true);
-	return app.exec();
+    new MainWindow(true);
+    return app.exec();
 }
