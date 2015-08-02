@@ -75,8 +75,8 @@ MainWindow::~MainWindow() {
 
 QDir MainWindow::i18nDir() const {
 	QDir dir(QApplication::applicationDirPath()+"/../share/opulus/i18n/");
-	if (!dir.exists())
-		qWarning("i18n directory not found!");
+    if (!dir.exists())
+        qWarning("i18n directory not found!");
 	dir.setFilter(QDir::Files | QDir::NoSymLinks);
 	return dir;
 }
@@ -90,7 +90,7 @@ void MainWindow::loadI18n(const QString& language) {
 	mTranslators.clear();
 
 	QDir dir = i18nDir();
-	dir.setNameFilters(QStringList() << "?*"+language+".qm");
+    dir.setNameFilters(QStringList() << "*"+language+".qm");
 
 	foreach (QString langFile, dir.entryList()) {
         	QTranslator* tr = new QTranslator;
@@ -355,7 +355,7 @@ void MainWindow::cleanStateChanged(bool value) {
 
 void MainWindow::searchAvailableLanguages() {
 	QDir dir = i18nDir();
-	dir.setNameFilters(QStringList() << "opulus_*.qm");
+    dir.setNameFilters(QStringList() << "*.qm");
 
 	QString currentLanguage = QSettings().value("language", QLocale::system().name()).toString();
 
@@ -367,7 +367,7 @@ void MainWindow::searchAvailableLanguages() {
 	languages->addAction(action);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(changeLanguage()));
 
-	QRegExp regex("opulus_(.*)\\.qm$");
+    QRegExp regex("(.*)\\.qm$");
 	foreach (QString lang, dir.entryList()) {
 		if (regex.exactMatch(lang)) {
 			QLocale locale(regex.cap(1));

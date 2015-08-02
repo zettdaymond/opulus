@@ -1,4 +1,4 @@
-project(opulus)
+#project(opulus)
 
 
 if( MINGW )
@@ -32,5 +32,8 @@ if (CMAKE_BUILD_TYPE STREQUAL release)
 		set_target_properties(opulus PROPERTIES LINK_FLAGS "-mwindows")
 	endif (Q_WS_WIN)
 endif (CMAKE_BUILD_TYPE STREQUAL release)
+
+#copy
+add_dependencies( opulus copyfiles )
 
 install(TARGETS opulus DESTINATION bin)

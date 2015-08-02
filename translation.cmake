@@ -67,3 +67,11 @@ IF(QT_LRELEASE_EXECUTABLE OR Qt5_LRELEASE_EXECUTABLE)
 ENDIF(QT_LRELEASE_EXECUTABLE OR Qt5_LRELEASE_EXECUTABLE)
 
 
+# Copy the translation qm files
+add_custom_target(  copyfiles DEPENDS ${Opulus_QMS}
+                            COMMENT "Copying translation files to share location...")
+add_custom_command( TARGET copyfiles PRE_BUILD COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/share/i18n COMMENT create dir for translations)
+foreach( QM ${Opulus_QMS} )
+    add_custom_command( TARGET copyfiles POST_BUILD COMMAND cmake -E copy ${QM} ${CMAKE_BINARY_DIR}/share/i18n/)
+endforeach( QM )
+
