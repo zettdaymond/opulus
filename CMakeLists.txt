@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 2.8.12)
 
+project(opulus)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 set(QT_MIN_VERSION    "5.0")
 find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
+
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -14,7 +16,7 @@ include(translation.cmake)
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "Build type not especified, building as release.")
-        message(STATUS "Use     |release to set the build type.")
+        message(STATUS "Use   -DCMAKE_BUILD_TYPE=debug|release to set the build type.")
 	set(CMAKE_BUILD_TYPE release)
 endif(NOT CMAKE_BUILD_TYPE)
 
