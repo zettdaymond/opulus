@@ -33,65 +33,62 @@
 QString formingAnalyseResultPage(TransitionAnalyser & ta, PropertyAnalyser & pa,
                                  PreservingMatrixAnalyser & pma, InvertibilityAnalyser & ia)
 {
-    QString out = "";
+    QString out = QObject::tr(
+                "<h1>Analysis Results</h1>"
+                "<hr />"
+                "<h2>Transitions:</h2>"
+                "<ul>"
+                "<li>Dead : %1 </li>"
+                "<li>Potential Dead : %2 </li>"
+                "<li>Potential Live :%3 </li>"
+                "<li>Live : %4 </li>"
+                "<li>Stable : %5 </li>"
+                "</ul>").arg(formTransList(ta.deadTransitions()),
+                             formTransList(ta.potentialDeadTransitions()),
+                             formTransList(ta.potentialLiveTransitions()),
+                             formTransList(ta.liveTransitions()),
+                             formTransList(ta.stableTransitions())
+                             );
 
-    out +=  QObject::tr("<h1>Analysis Results</h1>") +
-            QObject::tr("<hr />") +
-            QObject::tr("<h2>Transitions:</h2>");
-    out +=  QObject::tr("<ul>");
-    out +=  QObject::tr("<li> Dead :");
-    foreach (Transition * t, ta.deadTransitions()) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=   QObject::tr("<li> Potential Dead :");
-    foreach (Transition * t, ta.potentialDeadTransitions()) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  QObject::tr("<li>Potential Live :");
-    foreach (Transition * t, ta.potentialLiveTransitions()) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  QObject::tr("<li>Live :");
-    foreach (Transition * t, ta.liveTransitions()) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out +=  QObject::tr("<li>Stable :");
-    foreach (Transition * t, ta.stableTransitions()) {
-        out += t->name() + ", ";
-    }
-    out += "</li>";
-
-    out += "</ul>";
-
-    out += QObject::tr("<h2>Petri Net:</h2>");
-    out += "<ul>";
-    out += QObject::tr("<li>Safe: ") + bToStr(pa.isSafety()) + "</li>";
-    out += QObject::tr("<li>Bounded: ") + bToStr(pa.isRestricted()) + "</li>";
-    out += QObject::tr("<li>Live: ") + bToStr(ta.isNetLive())+ "</li>";
-    out += QObject::tr("<li>Preserve: ") + bToStr(pma.isPreserving())+ "</li>";
-    out += QObject::tr("<li>Stritly preserving: ") + bToStr(pma.isStrictlyPreserving())+ "</li>";
-    out += QObject::tr("<li>Stable: ") + bToStr(ta.isNetStable())+ "\n";
-    out += QObject::tr("<li>Parralel: ") + bToStr(pa.isParallel())+ "</li>";
-    out += QObject::tr("<li>Conflicted: ") + bToStr(pa.isConflict())+ "</li>";
-    out += QObject::tr("<li>Invertable: ") + bToStr(ia.isInvertibility())+ "</li>";
-    out += "</ul>";
+    out += QObject::tr(
+                "<h2>Petri Net:</h2>"
+                "<ul>"
+                "<li>Safe: %1 </li>"
+                "<li>Bounded: %2 </li>"
+                "<li>Live: %3 </li>"
+                "<li>Preserve: %4 </li>"
+                "<li>Stritly preserve: %5 </li>"
+                "<li>Stable: %6 </li>"
+                "<li>Parralel: %7 </li>"
+                "<li>Conflicted: %8 </li>"
+                "<li>Invertable: %9 </li>"
+                "</ul>").arg(bToS(pa.isSafety()),
+                             bToS(pa.isRestricted()),
+                             bToS(ta.isNetLive()),
+                             bToS(pma.isPreserving()),
+                             bToS(pma.isStrictlyPreserving()),
+                             bToS(ta.isNetStable()),
+                             bToS(pa.isParallel()),
+                             bToS(pa.isConflict()),
+                             bToS(ia.isInvertibility())
+                             );
 
     return out;
 }
 
 
-QString bToStr(bool b)
+QString bToS(bool b)
 {
-    if (b)
-        return QObject::tr("true");
-    else
-        return QObject::tr("false");
+    return b ? QObject::tr("true") :  QObject::tr("false");
+}
+QString formTransList(const QSet<Transition*> &transitionSet)
+{
+    QString out = "";
+    for (Transition * t : transitionSet) {
+        out += t->name() + ", ";
+    }
+    if (out != "") {
+        out.remove(out.size() - 2 , 2);
+    }
+    return out;
 }

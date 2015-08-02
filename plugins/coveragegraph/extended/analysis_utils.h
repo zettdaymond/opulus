@@ -23,12 +23,17 @@
 * THE SOFTWARE.
 */
 
-#include <QString>
+#ifndef ANALYSIS_UTILS_H
+#define ANALYSIS_UTILS_H
 
+#include <QString>
+class Transition;
 class TransitionAnalyser;
 class PropertyAnalyser;
 class PreservingMatrixAnalyser;
 class InvertibilityAnalyser;
 QString formingAnalyseResultPage(TransitionAnalyser &ta, PropertyAnalyser &pa,
                           PreservingMatrixAnalyser &pma, InvertibilityAnalyser &ia);
-QString bToStr(bool b);
+QString bToS(bool b);
+QString formTransList(const QSet<Transition *> &transitionSet);
+#endif

@@ -23,6 +23,9 @@
 * THE SOFTWARE.
 */
 
+#ifndef MARKING_NODE_H
+#define MARKING_NODE_H
+
 #include "marking.h"
 class MarkingNode {
 public:
@@ -37,3 +40,4 @@ private:
 
     void applyOmega();
 };
+#endif
