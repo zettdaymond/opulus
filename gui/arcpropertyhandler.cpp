@@ -37,7 +37,7 @@ bool ArcPropertyHandler::setPropertyValue(int propertyIdx, const QVariant& value
 
 	try {
 		if (propertyIdx == 0) {
-			mController->setItemAttribute(mArc, &AbstractArc::setWeight, value.toUInt());
+            mController->setItemAttribute(mArc, &AbstractArc::setWeight, value.toUInt(), mArc->weight());
 			prop->setValue(value);
 			return true;
 		}

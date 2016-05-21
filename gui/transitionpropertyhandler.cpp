@@ -46,11 +46,11 @@ bool TransitionPropertyHandler::setPropertyValue(int propertyIdx, const QVariant
 
 	try {
 		if (propertyIdx == 0)
-			mController->renameNode(mTransition, value.toString());
+            mController->setItemAttribute<Transition, Node, const QString&>(mTransition, &Transition::setName, value.toString(), mTransition->name());
 		else if (propertyIdx == 1) {
 			StringFromListProperty* prop = static_cast<StringFromListProperty*>(mProperties[propertyIdx]);
 			double rotation = ROTATIONS[prop->indexOf(value.toString())];
-			mController->setItemAttribute(mTransition, &Transition::setRotation, rotation);
+            mController->setItemAttribute(mTransition, &Transition::setRotation, rotation, mTransition->rotation());
 		}
 		mProperties[propertyIdx]->setValue(value);
 		return true;

@@ -24,6 +24,7 @@
 #include <QObject>
 #include "exceptions.h"
 #include "matrix_util.h"
+#include "commands/cmdchangeproperty.hpp"
 
 class QWidget;
 class QGraphicsView;
@@ -133,15 +134,19 @@ signals:
 public:
 	// TODO: will be possile create such thing in a command when we implement the
 	// command pattern o do the undo/redo?
-	template<typename Type, typename ParamType>
-	void setItemAttribute(Type* obj, void(Type::* method)(ParamType), ParamType param) {
-		try {
-			(obj->*method)(param);
-		} catch (Exception& e) {
-			showErrorMessage(e.message());
-			throw;
-		}
-	}
+//    template<class Type, typename ParamType>
+//	void setItemAttribute(Type* obj, void(Type::* method)(ParamType), ParamType param) {
+//		try {
+//			(obj->*method)(param);
+//		} catch (Exception& e) {
+//			showErrorMessage(e.message());
+//			throw;
+//		}
+//	}
+    template<typename Type, typename Base, typename ParamType>
+    void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
+        pushCommand(new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet));
+    }
 private slots:
 	void analysisFinished();
 	void analysisFatalError(const QString& msg);

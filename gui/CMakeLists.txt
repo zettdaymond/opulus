@@ -28,6 +28,7 @@ set(opulusgui_srcs
     commands/cmdcreatetransition.cpp
     commands/cmdcreatearc.cpp
     commands/cmdcreateinhibitorarc.cpp
+    commands/cmdchangeproperty.hpp
     commands/cmdremoveitem.cpp
     commands/cmdmovenode.cpp
     matrixwidget.cpp

@@ -45,17 +45,18 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 
 	try {
 		switch (propertyIdx) {
-			case 0:
-				mController->renameNode(mPlace, value.toString());
+            case 0:
+                mController->setItemAttribute<Place, Node, const QString&>
+                        (mPlace, &Place::setName, value.toString(), mPlace->name());
 				break;
 			case 1: {
 				int ivalue = value.toUInt();
 				uint realValue = !ivalue ? Place::Infinity : ivalue;
-				mController->setItemAttribute(mPlace, &Place::setCapacity, realValue);
+                mController->setItemAttribute(mPlace, &Place::setCapacity, realValue,mPlace->capacity());
 				break;
 			}
 			case 2:
-				mController->setItemAttribute(mPlace, &Place::setNumTokens, value.toUInt());
+                mController->setItemAttribute(mPlace, &Place::setNumTokens, value.toUInt(), mPlace->numTokens());
 				break;
 			default:
 				return false;
