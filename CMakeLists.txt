@@ -21,7 +21,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # adtional compiler options for release and debug modes
-add_definitions(-Wall)
+add_definitions(-Wall -Wextra)
 if (${CMAKE_BUILD_TYPE} STREQUAL release)
         add_definitions(-DQT_NO_DEBUG -O2)
 else (${CMAKE_BUILD_TYPE} STREQUAL release)
