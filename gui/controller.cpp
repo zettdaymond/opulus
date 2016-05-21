@@ -458,7 +458,7 @@ void Controller::zoomOut() {
 }
 
 void Controller::pushCommandNoCatch(QUndoCommand* cmd) {
-	std::auto_ptr<QUndoCommand> ptr(cmd);
+    std::unique_ptr<QUndoCommand> ptr(cmd);
 	mUndoStack->push(ptr.get());
 	ptr.release();
 }
