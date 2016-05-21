@@ -27,6 +27,7 @@ set(opulusgui_srcs
     commands/cmdcreateplace.cpp
     commands/cmdcreatetransition.cpp
     commands/cmdcreatearc.cpp
+    commands/cmdcreatearcwithweight.cpp
     commands/cmdcreateinhibitorarc.cpp
     commands/cmdchangeproperty.hpp
     commands/cmdremoveitem.cpp
