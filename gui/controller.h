@@ -93,6 +93,8 @@ public slots:
 	void removeToken(Place* place);
 	/// Move a node to \p pos.
 	void moveNode(Node* node, const QPointF& pos);
+	/// Move a nodes to corresponding pos in \p poses.
+	void moveNodeGroup(QVector<Node*>& nodes, const QVector<QPointF>& poses);
 	QPointF* addIntermediatePoint(AbstractArc* arc, const QPointF& point, int segmentIndex);
 	/// try to fire the transition \p t.
 	void fireTransition(Transition* t);

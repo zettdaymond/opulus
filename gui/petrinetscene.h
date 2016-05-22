@@ -49,6 +49,7 @@ public:
 	GraphicItem* graphicItem(Item* item) const;
 
 	void moveNode(Node* node, const QPointF& pos);
+	void moveNodeGroup(QVector<Node*>& nodes, const QVector<QPointF>& poses);
 	QPointF* addIntermediatePoint(AbstractArc* arc, const QPointF& point, int segmentIndex);
 
 	void useSelectTool();

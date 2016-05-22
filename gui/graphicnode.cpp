@@ -48,11 +48,33 @@ void GraphicNode::itemChanged() {
 void GraphicNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (pos() != mNode->pos()) {
 		PetriNetScene* sc = static_cast<PetriNetScene*>(scene());
+
 		// move all selected nodes
-		foreach(QGraphicsItem* i, sc->selectedItems()) {
-			GraphicNode* gnode = dynamic_cast<GraphicNode*>(i);
-			if (gnode)
+		//If there is only one node to move,
+		//then use specialized method on efficiency reason.
+		auto selectedItems = sc->selectedItems();
+		if (selectedItems.size() == 1) {
+			GraphicNode* gnode = dynamic_cast<GraphicNode*>(selectedItems[0]);
+			if (gnode) {
 				sc->moveNode(gnode->mNode, gnode->pos());
+			}
+		} else {
+			QVector<Node*> nodes;
+			nodes.reserve(selectedItems.size());
+			QVector<QPointF> poses;
+			poses.reserve(selectedItems.size());
+
+			foreach(QGraphicsItem* i, selectedItems) {
+				GraphicNode* gnode = dynamic_cast<GraphicNode*>(i);
+				if (gnode) {
+					nodes.push_back(gnode->mNode);
+					poses.push_back(gnode->pos());
+				}
+			}
+
+			if (nodes.size() != 0) {
+				sc->moveNodeGroup(nodes, poses);
+			}
 		}
 	}
 	QGraphicsItem::mouseReleaseEvent(event);

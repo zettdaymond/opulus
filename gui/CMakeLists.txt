@@ -32,6 +32,7 @@ set(opulusgui_srcs
     commands/cmdchangeproperty.hpp
     commands/cmdremoveitem.cpp
     commands/cmdmovenode.cpp
+    commands/cmdmovenodegroup.cpp
     matrixwidget.cpp
     opulusmath.h
 )

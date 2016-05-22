@@ -55,6 +55,7 @@
 #include "commands/cmdcreateinhibitorarc.h"
 #include "commands/cmdremoveitem.h"
 #include "commands/cmdmovenode.h"
+#include "commands/cmdmovenodegroup.h"
 
 Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), mView(view), mParentWidget(parent), mAnalyserStatusDlg(0), mUndoStack(0), mSimulation(0) {
 	mUndoStack = new QUndoStack(this);
@@ -326,6 +327,10 @@ void Controller::removeToken(Place* place) {
 
 void Controller::moveNode(Node* node, const QPointF& pos) {
 	pushCommand(new CmdMoveNode(node, pos));
+}
+
+void Controller::moveNodeGroup(QVector<Node*> &nodes, const QVector<QPointF>& poses) {
+	pushCommand(new CmdMoveNodeGroup(nodes, poses));
 }
 
 QPointF* Controller::addIntermediatePoint(AbstractArc* arc, const QPointF& point, int segmentIndex) {

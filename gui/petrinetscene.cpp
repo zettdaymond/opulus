@@ -30,6 +30,7 @@
 #include "controller.h"
 #include "messagewidget.h"
 
+#include <QVector>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
@@ -53,6 +54,10 @@ PetriNetScene::PetriNetScene(Controller* controller) : mController(controller), 
 
 void PetriNetScene::moveNode(Node* node, const QPointF& pos) {
 	mController->moveNode(node, pos);
+}
+
+void PetriNetScene::moveNodeGroup(QVector<Node*> &nodes, const QVector<QPointF> &poses) {
+	mController->moveNodeGroup(nodes,poses);
 }
 
 QPointF* PetriNetScene::addIntermediatePoint(AbstractArc* arc, const QPointF& point, int segmentIndex) {
