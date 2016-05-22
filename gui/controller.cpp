@@ -310,18 +310,17 @@ void Controller::addInhibitorArc(Place* from, Transition* to) {
 }
 
 void Controller::addToken(Place* place) {
-	try {
-		place->addToken();
-	} catch(Exception& e) {
-		showErrorMessage(e.message());
+	if (place->numTokens() != Marking::OMEGA) {
+		setItemAttribute(place, &Place::setNumTokens, place->numTokens() + 1, place->numTokens());
 	}
 }
 
 void Controller::removeToken(Place* place) {
-	try {
-		place->removeToken();
-	} catch(Exception& e) {
-		showErrorMessage(e.message());
+	Q_ASSERT(place);
+	if(place->numTokens() == 0) {
+		showErrorMessage(NoMoreTokensException().message());
+	} else if (place->numTokens() != Marking::OMEGA) {
+		setItemAttribute(place, &Place::setNumTokens, place->numTokens() - 1, place->numTokens());
 	}
 }
 
