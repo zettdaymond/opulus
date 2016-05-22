@@ -52,8 +52,9 @@ void BoolEditorFactory::updateEditorContents(QWidget* editor, ValueType value) {
 }
 
 QVariant BoolEditorFactory::editorValue(QWidget* editor) {
-    if (QComboBox *combo = qobject_cast<QComboBox*>(editor))
+    if (QComboBox *combo = qobject_cast<QComboBox*>(editor)) {
         return combo->currentIndex() ? true : false;
+    }
 	return false;
 }
 
@@ -77,8 +78,9 @@ void StringEditorFactory::updateEditorContents(QWidget *editor, ValueType value)
 }
 
 QVariant StringEditorFactory::editorValue(QWidget* editor) {
-    if (QLineEdit *lineEdit = qobject_cast<QLineEdit*>(editor))
+    if (QLineEdit *lineEdit = qobject_cast<QLineEdit*>(editor)) {
         return lineEdit->text();
+    }
 	return QString();
 }
 
