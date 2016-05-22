@@ -51,6 +51,7 @@
 #include "commands/cmdcreateplace.h"
 #include "commands/cmdcreatetransition.h"
 #include "commands/cmdcreatearc.h"
+#include "commands/cmdcreatearcwithweight.h"
 #include "commands/cmdcreateinhibitorarc.h"
 #include "commands/cmdremoveitem.h"
 #include "commands/cmdmovenode.h"
@@ -227,13 +228,14 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 			if(arc) {
 				if(val == 0) {
 					removeItem(arc);
-				} else arc->setWeight(val);
+				} else {
+					setItemAttribute(arc, &AbstractArc::setWeight, (uint)val, arc->weight());
+				}
 			} else if(val) {
-				addArc(pl,tr); // TODO: implement new addArc with weight parameter
+				val == 1 ? addArc(pl,tr) : addArc(pl,tr,val);  // TODO: implement new addArc with weight parameter
 				arc = pl->findArcTo(static_cast<Node*>(tr));
 				if(!arc)
 					throw Exception("Unable to find added arc");
-				arc->setWeight(val);
 			}
 
 		} else if (which == MatrixType::dPlusMatrix) {
@@ -241,13 +243,15 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 			if(arc) {
 				if(val == 0) {
 					removeItem(arc);
-				} else arc->setWeight(val);
+				} else {
+					setItemAttribute(arc, &AbstractArc::setWeight, (uint)val, arc->weight());
+				}
 			} else if(val) {
-				addArc(tr,pl);
+				val == 1 ? addArc(tr,pl) : addArc(tr,pl,val);
 				arc = tr->findArcTo(static_cast<Node*>(pl));
-				if(!arc)
+				if(!arc) {
 					throw Exception("Unable to find added arc");
-				arc->setWeight(val);
+				}
 			}
 		}
 		this->blockSignals(s);
@@ -269,8 +273,16 @@ void Controller::addTransition(const QPointF& position) {
 void Controller::addArc(Place* from, Transition* to) {
 	pushCommand(new CmdCreateArc(mPetriNet, from, to));
 }
+
+void Controller::addArc(Place *from, Transition *to, uint weight) {
+	pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
+}
 void Controller::addArc(Transition* from, Place* to) {
 	pushCommand(new CmdCreateArc(mPetriNet, from, to));
+}
+
+void Controller::addArc(Transition *from, Place *to, uint weight) {
+	pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
 }
 
 void Controller::addInhibitorArc(Place* from, Transition* to) {
@@ -322,7 +334,7 @@ void Controller::fireRandomTransition() {
 void Controller::fireNRandomTransitions() {
 	try {
 		if (mSimulation){
-	    int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
+		int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
 			mSimulation->fireNRandomTransitions(n);
 		}
 	} catch (Exception& e) {
@@ -411,7 +423,7 @@ void Controller::loadPetriNet(const QString& fileName) {
 	} catch (Exception& e) {
 		showErrorMessage(e.message());
 	}
-    QApplication::restoreOverrideCursor();
+	QApplication::restoreOverrideCursor();
 }
 
 void Controller::savePetriNet(const QString& fileName) {
@@ -458,7 +470,7 @@ void Controller::zoomOut() {
 }
 
 void Controller::pushCommandNoCatch(QUndoCommand* cmd) {
-    std::unique_ptr<QUndoCommand> ptr(cmd);
+	std::unique_ptr<QUndoCommand> ptr(cmd);
 	mUndoStack->push(ptr.get());
 	ptr.release();
 }

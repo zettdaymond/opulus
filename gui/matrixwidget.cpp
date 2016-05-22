@@ -40,11 +40,6 @@ MatrixWidget::MatrixWidget(QWidget *_parent) :
 	ui->IFunctionTextedit->setFont(f);
 	ui->OFunctionTextedit->setFont(f);
 
-	connect(ui->dMinusTable, SIGNAL(cellChanged(int,int)),
-		this, SLOT(dMinusTableChanged(int,int)));
-	connect(ui->dPlusTable, SIGNAL(cellChanged(int,int)),
-		this, SLOT(dPlusTableChanged(int,int)));
-
 	connect(ui->IOUpdateNetBtn, SIGNAL(pressed()), this, SLOT(IOUpdateNetPressed()));
 	connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(IOUpdateText()));
 	connect(ui->rowsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(rowsSpinboxChanged(int)));

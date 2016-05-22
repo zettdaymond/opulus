@@ -83,7 +83,9 @@ public slots:
 	void addTransition(const QPointF& position);
 	/// Add an arc to the petri net.
 	void addArc(Place* from, Transition* to);
+	void addArc(Place* from, Transition* to, uint weight);
 	void addArc(Transition* from, Place* to);
+	void addArc(Transition* from, Place* to, uint weight);
 	void addInhibitorArc(Place* from, Transition* to);
 	/// Add a token to a place.
 	void addToken(Place* place);
@@ -143,10 +145,10 @@ public:
 //			throw;
 //		}
 //	}
-    template<typename Type, typename Base, typename ParamType>
-    void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
-        pushCommand(new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet));
-    }
+	template<typename Type, typename Base, typename ParamType>
+	void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
+		pushCommand(new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet));
+	}
 private slots:
 	void analysisFinished();
 	void analysisFatalError(const QString& msg);
