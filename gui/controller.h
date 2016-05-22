@@ -104,6 +104,8 @@ public slots:
 	void fireNRandomTransitions();
 	/// Remove the \p item from the petri net.
 	void removeItem(Item* item);
+	/// Remove the \p item group from the petri net.
+	void removeItemGroup(QVector<Item*>& items);
 	/// Start the petri net simulation.
 	void startSimulation();
 	/// Stop the petri net simulation.

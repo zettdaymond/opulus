@@ -118,12 +118,33 @@ GraphicItem* PetriNetScene::graphicItem(Item* item) const {
 
 void PetriNetScene::keyPressEvent(QKeyEvent * event) {
 	if (event->key() == Qt::Key_Delete) {
-		foreach(QGraphicsItem* g, selectedItems()) {
-			if (!mItems.contains(g))
-				continue;
-			GraphicItem* item = dynamic_cast<GraphicItem*>(g);
-			if (item)
-				mController->removeItem(item->item());
+		//If there is only one node to remove,
+		//then use specialized method on efficiency reason.
+		auto selectedItems = this->selectedItems();
+		if (selectedItems.size() == 1) {
+			QGraphicsItem* g = selectedItems[0];
+			if (mItems.contains(g)) {
+				GraphicItem* gItem = dynamic_cast<GraphicItem*>(g);
+				if (gItem) {
+					mController->removeItem(gItem->item());
+				}
+			}
+		} else {
+			QVector<Item*> itemsToRemove;
+			itemsToRemove.reserve(selectedItems.size());
+
+			foreach(QGraphicsItem* g, selectedItems) {
+				if (!mItems.contains(g)) {
+					continue;
+				}
+				GraphicItem* gItem = dynamic_cast<GraphicItem*>(g);
+				if (gItem) {
+					itemsToRemove.push_back(gItem->item());
+				}
+			}
+			if (itemsToRemove.size() > 0) {
+				mController->removeItemGroup(itemsToRemove);
+			}
 		}
 	}
 	QGraphicsScene::keyPressEvent(event);

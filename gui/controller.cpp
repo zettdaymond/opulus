@@ -54,6 +54,7 @@
 #include "commands/cmdcreatearcwithweight.h"
 #include "commands/cmdcreateinhibitorarc.h"
 #include "commands/cmdremoveitem.h"
+#include "commands/cmdremoveitemgroup.h"
 #include "commands/cmdmovenode.h"
 #include "commands/cmdmovenodegroup.h"
 
@@ -367,7 +368,12 @@ void Controller::fireNRandomTransitions() {
 }
 
 void Controller::removeItem(Item* item) {
+	//FIXME: Does need change to pushCommand()?
 	mUndoStack->push(new CmdRemoveItem(item));
+}
+
+void Controller::removeItemGroup(QVector<Item*>& items) {
+	pushCommand(new CmdRemoveItemGroup(items));
 }
 
 void Controller::startSimulation() {

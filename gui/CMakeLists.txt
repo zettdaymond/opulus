@@ -31,6 +31,7 @@ set(opulusgui_srcs
     commands/cmdcreateinhibitorarc.cpp
     commands/cmdchangeproperty.hpp
     commands/cmdremoveitem.cpp
+    commands/cmdremoveitemgroup.cpp
     commands/cmdmovenode.cpp
     commands/cmdmovenodegroup.cpp
     matrixwidget.cpp
