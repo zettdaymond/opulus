@@ -271,18 +271,38 @@ void Controller::addTransition(const QPointF& position) {
 }
 
 void Controller::addArc(Place* from, Transition* to) {
-	pushCommand(new CmdCreateArc(mPetriNet, from, to));
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if(!arc) {
+		pushCommand(new CmdCreateArc(mPetriNet, from, to));
+	} else {
+		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + 1, arc->weight());
+	}
 }
 
 void Controller::addArc(Place *from, Transition *to, uint weight) {
-	pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if (!arc) {
+		pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
+	} else {
+		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + weight, arc->weight());
+	}
 }
 void Controller::addArc(Transition* from, Place* to) {
-	pushCommand(new CmdCreateArc(mPetriNet, from, to));
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if (! arc) {
+		pushCommand(new CmdCreateArc(mPetriNet, from, to));
+	} else {
+		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + 1, arc->weight());
+	}
 }
 
 void Controller::addArc(Transition *from, Place *to, uint weight) {
-	pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if (!arc) {
+		pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
+	} else {
+		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + weight, arc->weight());
+	}
 }
 
 void Controller::addInhibitorArc(Place* from, Transition* to) {
