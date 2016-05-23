@@ -1,14 +1,22 @@
-#include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../core ${CMAKE_CURRENT_SOURCE_DIR}/../gui)
+cmake_minimum_required(VERSION 3.4)
 
-##qt5_generate_moc(petrinettest petrinettest.cpp)
-#add_executable(petrinettest petrinettest.cpp)
-#target_link_libraries(petrinettest ${QT_QTTEST_LIBRARY} opuluscore)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-##qt5_generate_moc(placetest placetest.cpp)
-#add_executable(placetest placetest.cpp)
-#target_link_libraries(placetest ${QT_QTTEST_LIBRARY} opuluscore)
+find_package(Qt5 REQUIRED COMPONENTS Test)
 
-##qt5_generate_moc(undoredotest undoredotest.cpp)
-#add_executable(undoredotest undoredotest.cpp)
-#target_link_libraries(undoredotest ${QT_QTTEST_LIBRARY} opuluscore opulusgui)
+add_executable(petrinet petrinettest.cpp)
+add_executable(place placetest.cpp)
+add_executable(undoredo undoredotest.cpp)
 
+target_link_libraries(petrinet opulus::core Qt5::Test)
+target_link_libraries(place opulus::core Qt5::Test)
+target_link_libraries(undoredo opulus::gui Qt5::Test)
+
+set(TESTS_WD ${PROJECT_BINARY_DIR}/bin)
+
+add_test(NAME petrinet COMMAND petrinet WORKING_DIRECTORY ${TESTS_WD})
+add_test(NAME place COMMAND place WORKING_DIRECTORY ${TESTS_WD})
+add_test(NAME undoredo COMMAND undoredo WORKING_DIRECTORY ${TESTS_WD})

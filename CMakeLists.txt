@@ -16,7 +16,9 @@ add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(main)
 add_subdirectory(plugins)
-#add_subdirectory(tests)
+
+enable_testing()
+add_subdirectory(tests)
 #add_subdirectory(windowsinstaller)
 
 # i18n stuff

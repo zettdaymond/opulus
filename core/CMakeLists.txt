@@ -37,6 +37,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(opuluscore PUBLIC -Wall -Wextra)
 endif()
 
+set_target_properties(opuluscore PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
+
 install(TARGETS opuluscore 
 	ARCHIVE DESTINATION lib 
 	LIBRARY DESTINATION lib 

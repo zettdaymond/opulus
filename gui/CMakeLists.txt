@@ -65,6 +65,10 @@ target_link_libraries(
     Qt5::PrintSupport
 )
 
+set_target_properties(opulusgui PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
+
 install(TARGETS opulusgui
     ARCHIVE DESTINATION lib 
     LIBRARY DESTINATION lib 

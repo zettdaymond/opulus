@@ -9,4 +9,8 @@ add_executable(opulus main.cpp ${UI_RESOURCES_RCC})
 
 target_link_libraries(opulus opulus::gui)
 
+set_target_properties(opulus PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
+
 install(TARGETS opulus DESTINATION bin)
