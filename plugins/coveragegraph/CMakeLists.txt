@@ -1,48 +1,39 @@
-project(coverageGraph)
+cmake_minimum_required(VERSION 3.4)
 
-set(coverageGraph_SRCS
-    coveragegraph.cpp
-    #extended
-    extended/analysis_utils.cpp
-    extended/preservingmatrixanalyser.cpp
-    extended/propertyanalyser.cpp
-    extended/transitionanaliser.cpp
-    extended/markingnode.cpp
-    extended/invertibilityanalyser.cpp
+set(coverage_srcs
+	coveragegraph.cpp
+	extended/analysis_utils.cpp
+	extended/preservingmatrixanalyser.cpp
+	extended/propertyanalyser.cpp
+	extended/transitionanaliser.cpp
+	extended/markingnode.cpp
+	extended/invertibilityanalyser.cpp
 )
-set(coverageGraph_UIS
-	coveragegraph.ui
-)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#qt5_add_translations(coverageGraph .)
+find_package(Qt5 REQUIRED COMPONENTS Gui Svg Xml PrintSupport)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../core ${CMAKE_CURRENT_BINARY_DIR})
-qt5_wrap_ui(coverageGraph_ui_srcs ${coverageGraph_UIS})
+add_library(coverage SHARED ${coverage_srcs})
 
-
-#add_definitions(${QT_DEFINITIONS})
-#add_definitions(-DQT_PLUGIN)
-#add_definitions(-DQT_SHARED)
-
-#add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
-add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
-
-target_link_libraries(coverageGraph opuluscore)
 target_link_libraries(
-    coverageGraph
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::Svg
+	coverage
+	PUBLIC
+	opulus::core
+	Qt5::Widgets
+	Qt5::Gui
+	Qt5::Svg
 )
 
-set_target_properties(coverageGraph PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
-    RUNTIME_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
+set_target_properties(coverage PROPERTIES
+	LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
 
-install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
+#install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
 
-install(TARGETS coverageGraph DESTINATION share/opulus/plugins)
+install(TARGETS coverage DESTINATION share/opulus/plugins)
 

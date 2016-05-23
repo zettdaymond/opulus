@@ -1,52 +1,26 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.4)
 
 project(opulus)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
 
-set(QT_MIN_VERSION    "5.0")
-find_package(Qt5 COMPONENTS Core Widgets Xml Gui PrintSupport Svg Test REQUIRED)
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+	message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
+endif()
 
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release")
+endif()
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-include(translation.cmake)
-#SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-if(NOT CMAKE_BUILD_TYPE)
-	message(STATUS "Build type not especified, building as release.")
-        message(STATUS "Use   -DCMAKE_BUILD_TYPE=debug|release to set the build type.")
-	set(CMAKE_BUILD_TYPE release)
-endif(NOT CMAKE_BUILD_TYPE)
-
-# adtional compiler options for release and debug modes
-add_definitions(-Wall -Wextra)
-if (${CMAKE_BUILD_TYPE} STREQUAL release)
-        add_definitions(-DQT_NO_DEBUG -O2)
-else (${CMAKE_BUILD_TYPE} STREQUAL release)
-        add_definitions(-ggdb)
-endif (${CMAKE_BUILD_TYPE} STREQUAL release)
-
-#compiller flags
-set(GCC_COVERAGE_COMPILE_FLAGS "-std=c++1y")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-
-#linker flags
-#set(GCC_COVERAGE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Xlinker --allow-multiple-definition ")
-set(GCC_COVERAGE_LINKER_FLAGS "")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+set(BUILD_SHARED_LIBS ON) # strange bugs with QRC when building static libs
 
 add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(main)
 add_subdirectory(plugins)
-add_subdirectory(tests)
-add_subdirectory(windowsinstaller)
+#add_subdirectory(tests)
+#add_subdirectory(windowsinstaller)
 
 # i18n stuff
-install(FILES ${Opulus_QMS} DESTINATION share/opulus/i18n)
+# install(FILES ${Opulus_QMS} DESTINATION share/opulus/i18n)
 
 # .desktop file
 install(FILES opulus.desktop DESTINATION share/applications)

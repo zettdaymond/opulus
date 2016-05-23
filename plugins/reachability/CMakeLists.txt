@@ -1,40 +1,33 @@
-project(reachability)
+cmake_minimum_required(VERSION 3.4)
 
-set(reachability_SRCS
+set(reachability_srcs
     reachability.cpp
     delegate.cpp
 )
-set(reachability_UIS
-        reachability.ui
-        results.ui
-)
 
-#qt5_add_translations(reachability .)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../core ${CMAKE_CURRENT_BINARY_DIR})
+find_package(Qt5 REQUIRED COMPONENTS Gui Svg Xml PrintSupport)
 
-qt5_wrap_ui(reachability_ui_srcs ${reachability_UIS})
-
-
-add_definitions(${QT_DEFINITIONS})
-
-add_library(reachability SHARED ${reachability_SRCS} ${reachability_ui_srcs} ${reachability_moc_srcs})
-target_link_libraries(reachability opuluscore)
+add_library(reachability SHARED ${reachability_srcs})
 
 target_link_libraries(
     reachability
-    Qt5::Core
+    opulus::core
     Qt5::Widgets
     Qt5::Gui
     Qt5::Svg
 )
 
 set_target_properties(reachability PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
-    RUNTIME_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
-install(FILES ${reachability_QMS} DESTINATION share/opulus/i18n)
+#install(FILES ${reachability_QMS} DESTINATION share/opulus/i18n)
 
-#install(TARGETS reachability DESTINATION share/opulus/plugins)
+install(TARGETS reachability DESTINATION share/opulus/plugins)
 
