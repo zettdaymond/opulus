@@ -46,6 +46,7 @@ public:
 
 signals:
 	void matrixValueChanged(MatrixType which, int row, int col, int val);
+	void IOFunctionsUpdated(Eigen::MatrixXi dMinus, Eigen::MatrixXi dPlus);
 	void matrixSizeChanged(int rows, int cols);
 
 public slots:

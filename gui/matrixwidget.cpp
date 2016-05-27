@@ -106,29 +106,55 @@ void MatrixWidget::IOUpdateNetPressed()
 	bool wspinstate = ui->rowsSpinbox->blockSignals(true);
 	bool hspinstate = ui->colsSpinbox->blockSignals(true);
 
-	const int rows = mMinus.rowCount();
-	const int cols = mMinus.columnCount();
-	Q_ASSERT((rows == mPlus.rowCount()) && (cols == mPlus.columnCount()));
+//	const int rows = m.size();
+//	const int cols = m.size() > 0 ? m.begin().value().size() : 0;
+//	std::max_element(m.keys().begin(), m.keys().end());
+//	Q_ASSERT((rows == mPlus.rowCount()) && (cols == mPlus.columnCount()));
 
-	Eigen::MatrixXi z = Eigen::MatrixXi::Zero(mMinus.rowCount(), mMinus.columnCount());
-	mMinus.updateMatrix(z);
-	mPlus.updateMatrix(z);
+//	Eigen::MatrixXi z = Eigen::MatrixXi::Zero(mMinus.rowCount(), mMinus.columnCount());
+//	mMinus.updateMatrix(z);
+//	mPlus.updateMatrix(z);
 
 	bool dminstate = ui->dMinusTable->blockSignals(true);
 	bool dplusstate = ui->dPlusTable->blockSignals(true);
 
+	Eigen::MatrixXi dPlus = Eigen::MatrixXi::Zero(0,0);
+	Eigen::MatrixXi dMinus = Eigen::MatrixXi::Zero(0,0);
+
 	for(; it != m.end(); ++it) {
+		if (it.key() >= dPlus.rows()) {
+			dPlus.conservativeResizeLike(Eigen::MatrixXi::Zero(it.key() + 1, dPlus.cols() ));
+		}
+
 		QMap<int,int>::iterator place = it.value().begin();
 		for(;place != it.value().end(); ++place) {
-			emit matrixValueChanged(MatrixType::dPlusMatrix, it.key(), place.key(), place.value());
+			if (place.key() >= dPlus.cols()) {
+				dPlus.conservativeResizeLike(Eigen::MatrixXi::Zero(dPlus.rows(), place.key() + 1 ));
+			}
+			dPlus(it.key(), place.key()) = place.value();
 		}
 	}
+
 	for(it = mi.begin(); it != mi.end(); ++it) {
+		if (it.key() >= dMinus.rows()) {
+			dMinus.conservativeResizeLike(Eigen::MatrixXi::Zero(it.key() + 1, dMinus.cols() ));
+		}
+
 		QMap<int,int>::iterator place = it.value().begin();
 		for( ;place != it.value().end(); ++place) {
-			emit matrixValueChanged(MatrixType::dMinusMatrix, it.key(), place.key(), place.value());
+			if (place.key() >= dMinus.cols()) {
+				dMinus.conservativeResizeLike(Eigen::MatrixXi::Zero(dMinus.rows(), place.key() + 1 ));
+			}
+			dMinus(it.key(), place.key()) = place.value();
 		}
 	}
+	auto rows = std::max(dMinus.rows(), dPlus.rows());
+	auto cols = std::max(dMinus.cols(), dPlus.cols());
+
+	dMinus.conservativeResizeLike(Eigen::MatrixXi::Zero(rows,cols));
+	dPlus.conservativeResizeLike(Eigen::MatrixXi::Zero(rows,cols));
+
+	emit IOFunctionsUpdated(dMinus, dPlus);
 
 	ui->dMinusTable->blockSignals(dminstate);
 	ui->dPlusTable->blockSignals(dplusstate);
@@ -153,6 +179,10 @@ void MatrixWidget::updateMatrices(PetriNetMatrices matrices)
 
 	mMinus.updateMatrix(d_min);
 	mPlus.updateMatrix(d_plu);
+
+	if(ui->tabWidget->currentWidget() == ui->tab_io) {
+			IOUpdateText();
+	}
 
 	ui->dMinusTable->blockSignals(dminstate);
 	ui->dPlusTable->blockSignals(dplusstate);

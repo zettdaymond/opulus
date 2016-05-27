@@ -65,6 +65,7 @@ void NetMatrixModel::updateMatrix(Eigen::MatrixXi& mtx)
 	mMtx = mtx;
 	if (update) {
 		emit layoutChanged();
+		emit dataChanged(createIndex(0,0), createIndex(mMtx.rows(), mMtx.cols()));
 	}
 }
 
