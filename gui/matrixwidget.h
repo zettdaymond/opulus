@@ -28,6 +28,7 @@
 #include <QWidget>
 #include <QMap>
 #include "matrix_util.h"
+#include "netmatrixmodel.h"
 
 class PetriNet;
 namespace Ui {
@@ -53,14 +54,16 @@ public slots:
 private slots:
 	void rowsSpinboxChanged(int val);
 	void colsSpinboxChanged(int val);
-	void dMinusTableChanged(int row, int col);
-	void dPlusTableChanged(int row, int col);
+	void dMinusTableChanged(int row, int col, int val);
+	void dPlusTableChanged(int row, int col, int val);
 	void IOUpdateNetPressed();
 	void IOUpdateText();
 
 private:
 	QMap<int,QMap<int,int>> parseIOText(const QString& text);
 	Ui::MatrixWidget *ui;
+	NetMatrixModel mPlus;
+	NetMatrixModel mMinus;
 };
 
 #endif // MATRIXWIDGET_H

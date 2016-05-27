@@ -70,27 +70,15 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="dMinusTable">
+            <widget class="QTableView" name="dMinusTable">
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
              <property name="textElideMode">
               <enum>Qt::ElideLeft</enum>
              </property>
-             <property name="rowCount">
-              <number>0</number>
-             </property>
-             <property name="columnCount">
-              <number>0</number>
-             </property>
              <attribute name="horizontalHeaderDefaultSectionSize">
               <number>30</number>
-             </attribute>
-             <attribute name="horizontalHeaderMinimumSectionSize">
-              <number>25</number>
-             </attribute>
-             <attribute name="verticalHeaderDefaultSectionSize">
-              <number>28</number>
              </attribute>
             </widget>
            </item>
@@ -102,21 +90,12 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="dPlusTable">
+            <widget class="QTableView" name="dPlusTable">
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
-             <property name="rowCount">
-              <number>0</number>
-             </property>
-             <property name="columnCount">
-              <number>0</number>
-             </property>
              <attribute name="horizontalHeaderDefaultSectionSize">
               <number>30</number>
-             </attribute>
-             <attribute name="verticalHeaderDefaultSectionSize">
-              <number>28</number>
              </attribute>
             </widget>
            </item>
