@@ -181,13 +181,14 @@ void Controller::useFireTransitionTool() {
 QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 	const int transitions_size = mPetriNet->transitionCount();
 
-	CmdPack* cmdPack = new CmdPack();
+	QVector<QUndoCommand*> cmdPack;
 
+	QVector<Item*> items;
 	if(rows < transitions_size) {
 		// TODO: move this into a function
 		foreach (Transition* t, mPetriNet->transitions()) {
 			if(t->number() >= rows)
-				cmdPack->pushBack(new CmdRemoveItem(t));
+				items.push_back(t);
 		}
 	}
 
@@ -195,16 +196,23 @@ QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 		// TODO: move this into a function
 		foreach (Place* p, mPetriNet->places()) {
 			if(p->number() >= cols)
-				cmdPack->pushBack(new CmdRemoveItem(p));
+				items.push_back(p);
 		}
 	}
+
+	if (items.size() > 0) {
+		cmdPack.push_back(new CmdRemoveItemGroup(items));
+	}
+
+	QVector<QPointF> positions;
 	if(rows > transitions_size) {
 		for(int i = transitions_size; i < rows; ++i) {
 			int x = qrand() % 200 - 100;
 			int y = qrand() % 200 - 100;
 			QGraphicsView *v = scene()->views().takeFirst();
 			QPointF center = v->mapToScene(v->viewport()->rect().center());
-			cmdPack->pushBack(new CmdCreateTransition(mPetriNet, center+QPointF(x,y)));
+			//TODO: cange to CmdCreateTransitionGROUP
+			cmdPack.push_back(new CmdCreateTransition(mPetriNet, center+QPointF(x,y)));
 		}
 	}
 
@@ -214,14 +222,22 @@ QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 			int y = qrand() % 200 - 100;
 			QGraphicsView *v = scene()->views().takeFirst();
 			QPointF center = v->mapToScene(v->viewport()->rect().center());
-			cmdPack->pushBack(new CmdCreatePlace(mPetriNet, center+QPointF(x,y)));
+			//TODO: change to CmdCreatePlaceGroup
+			cmdPack.push_back(new CmdCreatePlace(mPetriNet, center+QPointF(x,y)));
 		}
 
 	}
 
-	registerTransactionUpdate(cmdPack);
+	if (cmdPack.size() > 1) {
+		CmdPack* pack = new CmdPack(cmdPack);
+		registerTransactionUpdate(pack);
+		return pack;
+	}
+	if (cmdPack.size() == 1) {
+		return cmdPack[0];
+	}
 
-	return cmdPack->size() != 0 ? cmdPack : nullptr ;
+	return nullptr;
 }
 
 void Controller::matrixResized(int rows, int cols) {
@@ -348,8 +364,6 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 	mPetriNet->blockSignals(false);
 	this->blockSignals(false);
 
-	disconnect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
-
 	CmdPack* cmdPack = new CmdPack();
 	if (resizeCommands != nullptr) {
 		if (updateCommands->size() > 0) {
@@ -363,8 +377,6 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 	} else if (updateCommands->size() > 0) {
 		pushCommand(updateCommands);
 	}
-	connect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
-	netUpdated();
 }
 
 void Controller::netUpdated() {
