@@ -61,30 +61,14 @@ void MatrixWidget::rowsSpinboxChanged(int val)
 {
 	if(val < 0)
 		return;
-	ui->dMinusTable->setUpdatesEnabled(false);
-	ui->dPlusTable->setUpdatesEnabled(false);
-//	mPlus.startUpdate();
-//	mMinus.startUpdate();
 	emit matrixSizeChanged(val, mMinus.columnCount());
-//	mPlus.endUpdate();
-//	mMinus.endUpdate();
-	ui->dMinusTable->setUpdatesEnabled(true);
-	ui->dPlusTable->setUpdatesEnabled(true);
 }
 
 void MatrixWidget::colsSpinboxChanged(int val)
 {
 	if(val < 0)
 		return;
-	ui->dMinusTable->setUpdatesEnabled(false);
-	ui->dPlusTable->setUpdatesEnabled(false);
-//	mPlus.startUpdate();
-//	mMinus.startUpdate();
 	emit matrixSizeChanged(mMinus.rowCount(), val);
-//	mPlus.endUpdate();
-//	mMinus.endUpdate();
-	ui->dMinusTable->setUpdatesEnabled(true);
-	ui->dPlusTable->setUpdatesEnabled(true);
 }
 
 void MatrixWidget::dMinusTableChanged(int row, int col, int val)
@@ -241,16 +225,16 @@ void MatrixWidget::IOUpdateText()
 	ui->OFunctionTextedit->blockSignals(oprev);
 }
 
-void MatrixWidget::startUpdateMatrixView()
+void MatrixWidget::startUpdateMatrixViewTransaction()
 {
-	mMinus.startUpdate();
-	mPlus.startUpdate();
+	mMinus.startUpdateTransaction();
+	mPlus.startUpdateTransaction();
 }
 
-void MatrixWidget::stopUpdateMatrixView()
+void MatrixWidget::stopUpdateMatrixViewTransaction()
 {
-	mMinus.endUpdate();
-	mPlus.endUpdate();
+	mMinus.stopUpdateTransaction();
+	mPlus.stopUpdateTransaction();
 }
 
 QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
@@ -273,7 +257,7 @@ QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
 		QString transition_num, place_num;
 		int transition = -1, place = -1;
 		for(int i = pos+1; i < line.size(); ++i) {
-			//qDebug() << "@@" << line[i];
+			qDebug() << "@@" << line[i];
 
 			if(!line[i].isDigit() && line[i].toLower() != 'p' && line[i] != '=' && line[i] != ' ')
 				break;
@@ -284,12 +268,12 @@ QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
 				continue;
 			}
 			if(line[i] == '=') {
-				//qDebug() << "found =";
+				qDebug() << "found =";
 				if(found_eq) break; // '=' must appear only once
 				if(transition_num.isEmpty()) break; // not found transition number
-				std::reverse(transition_num.begin(), transition_num.end());
+//				std::reverse(transition_num.begin(), transition_num.end());
 				transition = transition_num.toInt();
-				//qDebug() << "found transition" << transition;
+				qDebug() << "found transition" << transition;
 				transition_num.clear();
 				if(res.find(transition) != res.end())
 					break; // transition must appear only once
@@ -301,16 +285,16 @@ QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
 			if(found_eq && transition >= 0) {
 				if(line[i].isDigit()) {
 					place_num.push_back(line[i]);
-					//qDebug() << "place num" << line[i];
+					qDebug() << "place num" << line[i];
 				}
 				if(line[i].toLower() =='p' || i == line.size()-1) {
 					// have previous place number
-					//qDebug() << "found p";
+					qDebug() << "found p";
 					if(!place_num.isEmpty()) {
-						std::reverse(place_num.begin(), place_num.end());
+//						std::reverse(place_num.begin(), place_num.end());
 						place = place_num.toInt();
 						place_num.clear();
-						//qDebug() << "found place" << place;
+						qDebug() << "found place" << place;
 						if(res[transition].find(place) != res[transition].end()) {
 							++res[transition][place];
 						} else res[transition].insert(place,1);

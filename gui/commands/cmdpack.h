@@ -9,7 +9,7 @@ class CmdPackNotifier : public QObject
 {
 	Q_OBJECT
 signals:
-	void startPackageUpdate();
+	void beginPackageUpdate();
 	void endPackageUpdate();
 };
 

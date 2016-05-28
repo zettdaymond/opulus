@@ -36,7 +36,7 @@ int CmdPack::size()
 
 void CmdPack::undo()
 {
-	emit mNotifier->startPackageUpdate();
+	emit mNotifier->beginPackageUpdate();
 	for (int i = mCmds.size() - 1; i >= 0; i--) {
 		mCmds[i]->undo();
 	}
@@ -45,7 +45,7 @@ void CmdPack::undo()
 
 void CmdPack::redo()
 {
-	emit mNotifier->startPackageUpdate();
+	emit mNotifier->beginPackageUpdate();
 	for (auto cmd : mCmds) {
 		cmd->redo();
 	}

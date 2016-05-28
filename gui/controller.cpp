@@ -251,7 +251,6 @@ void Controller::updateMatrixValue(MatrixType which, int row, int col, int val) 
 	return;
 }
 
-//BUG: After callGUI stop recieving signals
 QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int col, int val)
 {
 	Q_ASSERT(row < mPetriNet->transitionCount() && col < mPetriNet->placeCount());
@@ -260,7 +259,6 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 	Place *pl = mPetriNet->findPlaceWithNumber(col);
 
 	if(tr && pl) {
-//		bool s = this->blockSignals(true);
 		if(which == MatrixType::dMinusMatrix) {
 			AbstractArc* arc = pl->findArcTo(static_cast<Node*>(tr));
 			if(arc) {
@@ -304,7 +302,6 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 				}
 			}
 		}
-//		this->blockSignals(s);
 	}
 	return nullptr;
 }
@@ -312,6 +309,9 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi dPlus)
 {
 	QUndoCommand* resizeCommands = createResizeMatrixCmds(dMinus.rows(), dMinus.cols());
+
+	mPetriNet->blockSignals(true);
+	this->blockSignals(true);
 	if (resizeCommands != nullptr) {
 		resizeCommands->redo();
 	}
@@ -338,16 +338,26 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 	if (resizeCommands != nullptr) {
 		resizeCommands->undo();
 	}
+	mPetriNet->blockSignals(false);
+	this->blockSignals(false);
+
+	disconnect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
 
 	CmdPack* cmdPack = new CmdPack();
 	if (resizeCommands != nullptr) {
-		cmdPack->pushBack(resizeCommands);
-		cmdPack->pushBack(updateCommands);
-		registerTransactionUpdate(cmdPack);
-		pushCommand(cmdPack);
-	} else {
+		if (updateCommands->size() > 0) {
+			cmdPack->pushBack(resizeCommands);
+			cmdPack->pushBack(updateCommands);
+			registerTransactionUpdate(cmdPack);
+			pushCommand(cmdPack);
+		} else {
+			pushCommand(resizeCommands);
+		}
+	} else if (updateCommands->size() > 0) {
 		pushCommand(updateCommands);
 	}
+	connect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
+	netUpdated();
 }
 
 void Controller::netUpdated() {
@@ -443,6 +453,7 @@ void Controller::removeItem(Item* item) {
 }
 
 void Controller::removeItemGroup(QVector<Item*>& items) {
+	//FIXME: Does need change to CmdPack()?
 	pushCommand(new CmdRemoveItemGroup(items));
 }
 
@@ -606,7 +617,7 @@ bool Controller::pushCommand(QUndoCommand* cmd) {
 }
 
 void Controller::registerTransactionUpdate(CmdPack* pack) {
-	connect(pack->mNotifier, &CmdPackNotifier::startPackageUpdate, this, &Controller::startUpdateTransaction);
+	connect(pack->mNotifier, &CmdPackNotifier::beginPackageUpdate, this, &Controller::beginUpdateTransaction);
 	connect(pack->mNotifier, &CmdPackNotifier::endPackageUpdate, this, &Controller::endUpdateTransaction);
 }
 

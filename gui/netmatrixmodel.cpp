@@ -24,7 +24,6 @@ QVariant NetMatrixModel::data(const QModelIndex& index, int role) const
 	}
 	if (role == Qt::DisplayRole) {
 		Q_ASSERT(index.row() < mMtx.rows() && index.column() < mMtx.cols());
-		//TODO: need to cache this operation.
 		return QString::number( mMtx(index.row(), index.column()) );
 	}
 	return QVariant();
@@ -32,13 +31,10 @@ QVariant NetMatrixModel::data(const QModelIndex& index, int role) const
 
 bool NetMatrixModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (role == Qt::EditRole)
-		{
-			//save value from editor to member m_gridData
-			mMtx(index.row(),index.column()) = value.toInt();
-			//for presentation purposes only: build and emit a joined string
-			emit mtxValueChanged( index.row(), index.column(), value.toInt() );
-		}
+	if (role == Qt::EditRole) {
+		mMtx(index.row(),index.column()) = value.toInt();
+		emit mtxValueChanged( index.row(), index.column(), value.toInt() );
+	}
 	return true;
 }
 
@@ -49,8 +45,7 @@ Qt::ItemFlags NetMatrixModel::flags(const QModelIndex& index) const
 
 QVariant NetMatrixModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-	if (role == Qt::DisplayRole)
-	{
+	if (role == Qt::DisplayRole) {
 		if (orientation == Qt::Horizontal) {
 			return QString("P") + QString::number(section);
 		} else if (orientation == Qt::Vertical) {
@@ -69,12 +64,12 @@ void NetMatrixModel::updateMatrix(Eigen::MatrixXi& mtx)
 	}
 }
 
-void NetMatrixModel::startUpdate()
+void NetMatrixModel::startUpdateTransaction()
 {
 	update += 1;
 }
 
-void NetMatrixModel::endUpdate()
+void NetMatrixModel::stopUpdateTransaction()
 {
 	if (update > 0) {
 		update -= 1;
@@ -90,27 +85,4 @@ const int NetMatrixModel::val(int row, int col) const
 	return mMtx(row,col);
 }
 
-void NetMatrixModel::resizeMatrix(int rows, int cols)
-{
-	auto oldRows = mMtx.rows();
-	auto oldCols = mMtx.cols();
-	mMtx.conservativeResizeLike(Eigen::MatrixXi::Zero(rows,cols));
-
-	if (update == 0) {
-		emit layoutChanged();
-	}
-}
-
-void NetMatrixModel::updateMatrixValue(int row, int col, int val)
-{
-	if (row > mMtx.rows() || col > mMtx.cols()) {
-		resizeMatrix(row > mMtx.rows() ? row : mMtx.rows(),
-					 col > mMtx.cols() ? col : mMtx.cols());
-	}
-	mMtx(row,col) = val;
-	if (update) {
-		QModelIndex topLeft = createIndex(row,col);
-		emit dataChanged(topLeft, topLeft);
-	}
-}
 

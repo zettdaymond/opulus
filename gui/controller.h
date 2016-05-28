@@ -141,7 +141,7 @@ public slots:
 signals:
 	void cleanChanged(bool);
 	void netChanged(PetriNetMatrices matrices);
-	void startUpdateTransaction();
+	void beginUpdateTransaction();
 	void endUpdateTransaction();
 public:
 	template<typename Type, typename Base, typename ParamType>

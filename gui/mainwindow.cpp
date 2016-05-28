@@ -69,10 +69,10 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	connect(ui.matrixWidget, &MatrixWidget::IOFunctionsUpdated,
 			mController, &Controller::updateBasedOnMatrices);
 
-	connect(mController, &Controller::startUpdateTransaction,
-			ui.matrixWidget, &MatrixWidget::startUpdateMatrixView);
+	connect(mController, &Controller::beginUpdateTransaction,
+			ui.matrixWidget, &MatrixWidget::startUpdateMatrixViewTransaction);
 	connect(mController, &Controller::endUpdateTransaction,
-			ui.matrixWidget, &MatrixWidget::stopUpdateMatrixView);
+			ui.matrixWidget, &MatrixWidget::stopUpdateMatrixViewTransaction);
 
 	searchAvailableLanguages();
 	show();

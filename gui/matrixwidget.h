@@ -51,8 +51,8 @@ signals:
 
 public slots:
 	void updateMatrices(PetriNetMatrices matrices);
-	void startUpdateMatrixView();
-	void stopUpdateMatrixView();
+	void startUpdateMatrixViewTransaction();
+	void stopUpdateMatrixViewTransaction();
 
 private slots:
 	void rowsSpinboxChanged(int val);
