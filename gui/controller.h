@@ -141,8 +141,6 @@ public slots:
 signals:
 	void cleanChanged(bool);
 	void netChanged(PetriNetMatrices matrices);
-	void beginUpdateTransaction();
-	void endUpdateTransaction();
 public:
 	template<typename Type, typename Base, typename ParamType>
 	void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
@@ -155,6 +153,8 @@ public:
 
 	QUndoCommand* createAddArcCmd(auto from, auto to);
 	QUndoCommand* createAddArcWithWeightCmd(auto from, auto to, uint weight);
+	void enableGuiNotifications();
+	void disableGuiNotifications();
 private slots:
 	void analysisFinished();
 	void analysisFatalError(const QString& msg);
@@ -173,13 +173,14 @@ private:
 	PropertyEditorModel* mPropEditorModel;
 	Simulation* mSimulation;
 
+	uint mIsGuiNotificationEnabled = 0;
+
 	QString showExportFileDialog(const QString& filter, const QString& defaultSuffix);
 	void paintScene(QPaintDevice* device);
 	void pushCommandNoCatch(QUndoCommand* cmd);
 	bool pushCommand(QUndoCommand* cmd);
 	QUndoCommand*createResizeMatrixCmds(int rows, int cols);
 	QUndoCommand*createUpdateMatrixCmds(MatrixType which, int row, int col, int val);
-	void registerTransactionUpdate(CmdPack* pack);
 };
 
 #endif

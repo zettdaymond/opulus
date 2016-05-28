@@ -229,8 +229,7 @@ QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 	}
 
 	if (cmdPack.size() > 1) {
-		CmdPack* pack = new CmdPack(cmdPack);
-		registerTransactionUpdate(pack);
+		CmdPack* pack = new CmdPack(this, cmdPack);
 		return pack;
 	}
 	if (cmdPack.size() == 1) {
@@ -262,10 +261,9 @@ void Controller::updateMatrixValue(MatrixType which, int row, int col, int val) 
 	QUndoCommand* updateCmd = createUpdateMatrixCmds(which, row, col, val);
 
 	if (resizeCmd != nullptr && updateCmd != nullptr) {
-		CmdPack* pack = new CmdPack();
+		CmdPack* pack = new CmdPack(this);
 		pack->pushBack(resizeCmd);
 		pack->pushBack(updateCmd);
-		registerTransactionUpdate(pack);
 		pushCommand(pack);
 	} else if (resizeCmd == nullptr && updateCmd != nullptr) {
 		pushCommand( updateCmd );
@@ -339,7 +337,7 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 		resizeCommands->redo();
 	}
 
-	CmdPack* updateCommands = new CmdPack();
+	CmdPack* updateCommands = new CmdPack(this);
 
 	for(int i = 0; i < dMinus.rows(); i++) {
 		for(int j = 0; j < dMinus.cols(); j++) {
@@ -364,12 +362,11 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 	mPetriNet->blockSignals(false);
 	this->blockSignals(false);
 
-	CmdPack* cmdPack = new CmdPack();
+	CmdPack* cmdPack = new CmdPack(this);
 	if (resizeCommands != nullptr) {
 		if (updateCommands->size() > 0) {
 			cmdPack->pushBack(resizeCommands);
 			cmdPack->pushBack(updateCommands);
-			registerTransactionUpdate(cmdPack);
 			pushCommand(cmdPack);
 		} else {
 			pushCommand(resizeCommands);
@@ -380,7 +377,9 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 }
 
 void Controller::netUpdated() {
-	emit netChanged(PetriNetMatrices(d_minus_matrix(mPetriNet), d_plus_matrix(mPetriNet), d_matrix(mPetriNet)));
+	if (mIsGuiNotificationEnabled == 0) {
+		emit netChanged(PetriNetMatrices(d_minus_matrix(mPetriNet), d_plus_matrix(mPetriNet), d_matrix(mPetriNet)));
+	}
 }
 
 void Controller::addPlace(const QPointF& position) {
@@ -635,9 +634,19 @@ bool Controller::pushCommand(QUndoCommand* cmd) {
 	return false;
 }
 
-void Controller::registerTransactionUpdate(CmdPack* pack) {
-	connect(pack->mNotifier, &CmdPackNotifier::beginPackageUpdate, this, &Controller::beginUpdateTransaction);
-	connect(pack->mNotifier, &CmdPackNotifier::endPackageUpdate, this, &Controller::endUpdateTransaction);
+void Controller::enableGuiNotifications()
+{
+	if (mIsGuiNotificationEnabled > 0) {
+		mIsGuiNotificationEnabled -= 1;
+	}
+	if (mIsGuiNotificationEnabled == 0) {
+		netUpdated();
+	}
+}
+
+void Controller::disableGuiNotifications()
+{
+	mIsGuiNotificationEnabled += 1;
 }
 
 

@@ -1,14 +1,17 @@
 #include "cmdpack.h"
+#include "controller.h"
 
-CmdPack::CmdPack() : QUndoCommand()
+CmdPack::CmdPack(Controller* c) :
+	mController(c)
 {
-	mNotifier = new CmdPackNotifier();
+	Q_ASSERT(c);
 }
 
-CmdPack::CmdPack(QVector<CmdPtr>& cmds) :
+CmdPack::CmdPack(Controller* c, QVector<CmdPtr>& cmds) :
+	mController(c),
 	mCmds(cmds)
 {
-	mNotifier = new CmdPackNotifier();
+	Q_ASSERT(c);
 }
 
 CmdPack::~CmdPack()
@@ -16,7 +19,6 @@ CmdPack::~CmdPack()
 	for(auto p : mCmds)	 {
 		delete p;
 	}
-	delete mNotifier;
 }
 
 void CmdPack::pushBack(QUndoCommand* c)
@@ -36,19 +38,19 @@ int CmdPack::size()
 
 void CmdPack::undo()
 {
-	emit mNotifier->beginPackageUpdate();
+	mController->disableGuiNotifications();
 	for (int i = mCmds.size() - 1; i >= 0; i--) {
 		mCmds[i]->undo();
 	}
-	emit mNotifier->endPackageUpdate();
+	mController->enableGuiNotifications();
 }
 
 void CmdPack::redo()
 {
-	emit mNotifier->beginPackageUpdate();
+	mController->disableGuiNotifications();
 	for (auto cmd : mCmds) {
 		cmd->redo();
 	}
-	emit mNotifier->endPackageUpdate();
+	mController->enableGuiNotifications();
 }
 
