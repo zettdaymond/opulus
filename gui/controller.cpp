@@ -426,7 +426,7 @@ void Controller::exportToPS() {
 	QString fileName = showExportFileDialog(tr("PDF (*.pdf)"), "pdf");
 	if (fileName.isNull())
 		return;
-	QPrinter printer(QPrinter::HighResolution);
+	QPrinter printer(QPrinter::ScreenResolution);
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setOutputFileName(fileName);
 	paintScene(&printer);
