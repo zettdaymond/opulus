@@ -211,6 +211,9 @@ QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 		}
 
 	}
+
+	registerTransactionUpdate(cmdPack);
+
 	return cmdPack->size() != 0 ? cmdPack : nullptr ;
 }
 
@@ -239,6 +242,7 @@ void Controller::updateMatrixValue(MatrixType which, int row, int col, int val) 
 		CmdPack* pack = new CmdPack();
 		pack->pushBack(resizeCmd);
 		pack->pushBack(updateCmd);
+		registerTransactionUpdate(pack);
 		pushCommand(pack);
 	} else if (resizeCmd == nullptr && updateCmd != nullptr) {
 		pushCommand( updateCmd );
@@ -339,6 +343,7 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 	if (resizeCommands != nullptr) {
 		cmdPack->pushBack(resizeCommands);
 		cmdPack->pushBack(updateCommands);
+		registerTransactionUpdate(cmdPack);
 		pushCommand(cmdPack);
 	} else {
 		pushCommand(updateCommands);
@@ -598,6 +603,11 @@ bool Controller::pushCommand(QUndoCommand* cmd) {
 		showErrorMessage(e.message(), 10000);
 	}
 	return false;
+}
+
+void Controller::registerTransactionUpdate(CmdPack* pack) {
+	connect(pack->mNotifier, &CmdPackNotifier::startPackageUpdate, this, &Controller::startUpdateTransaction);
+	connect(pack->mNotifier, &CmdPackNotifier::endPackageUpdate, this, &Controller::endUpdateTransaction);
 }
 
 

@@ -51,6 +51,7 @@ class Analyser;
 class AnalysisRunner;
 class AnalyserStatusDlg;
 class QUndoCommand;
+class CmdPack;
 
 /**
 * GUI controller, hold the petri net and can send commands to it.
@@ -140,6 +141,8 @@ public slots:
 signals:
 	void cleanChanged(bool);
 	void netChanged(PetriNetMatrices matrices);
+	void startUpdateTransaction();
+	void endUpdateTransaction();
 public:
 	template<typename Type, typename Base, typename ParamType>
 	void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
@@ -176,6 +179,7 @@ private:
 	bool pushCommand(QUndoCommand* cmd);
 	QUndoCommand*createResizeMatrixCmds(int rows, int cols);
 	QUndoCommand*createUpdateMatrixCmds(MatrixType which, int row, int col, int val);
+	void registerTransactionUpdate(CmdPack* pack);
 };
 
 #endif

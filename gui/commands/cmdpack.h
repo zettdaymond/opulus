@@ -5,11 +5,20 @@
 #include <QCoreApplication>
 #include <QVector>
 
+class CmdPackNotifier : public QObject
+{
+	Q_OBJECT
+signals:
+	void startPackageUpdate();
+	void endPackageUpdate();
+};
+
 class CmdPack : public QUndoCommand {
 	Q_DECLARE_TR_FUNCTIONS(CmdPack)
+
 	using CmdPtr = QUndoCommand*;
 public:
-	CmdPack() = default;
+	CmdPack();
     CmdPack(QVector<CmdPtr>& cmds);
 	virtual ~CmdPack();
 
@@ -20,6 +29,8 @@ public:
 	void redo() override;
 private:
 	QVector<CmdPtr> mCmds;
+public:
+	CmdPackNotifier* mNotifier;
 };
 
 #endif //COMMANDPACK_H

@@ -63,21 +63,25 @@ QVariant NetMatrixModel::headerData(int section, Qt::Orientation orientation, in
 void NetMatrixModel::updateMatrix(Eigen::MatrixXi& mtx)
 {
 	mMtx = mtx;
-	if (update) {
+
+	if (update == 0) {
 		emit layoutChanged();
-		emit dataChanged(createIndex(0,0), createIndex(mMtx.rows(), mMtx.cols()));
 	}
 }
 
 void NetMatrixModel::startUpdate()
 {
-	update = false;
+	update += 1;
 }
 
 void NetMatrixModel::endUpdate()
 {
-	emit layoutChanged();
-	update = true;
+	if (update > 0) {
+		update -= 1;
+	}
+	if (update == 0) {
+		emit layoutChanged();
+	}
 }
 
 const int NetMatrixModel::val(int row, int col) const
@@ -92,7 +96,7 @@ void NetMatrixModel::resizeMatrix(int rows, int cols)
 	auto oldCols = mMtx.cols();
 	mMtx.conservativeResizeLike(Eigen::MatrixXi::Zero(rows,cols));
 
-	if (update) {
+	if (update == 0) {
 		emit layoutChanged();
 	}
 }

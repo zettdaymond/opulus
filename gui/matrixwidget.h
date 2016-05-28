@@ -50,7 +50,9 @@ signals:
 	void matrixSizeChanged(int rows, int cols);
 
 public slots:
-    void updateMatrices(PetriNetMatrices matrices);
+	void updateMatrices(PetriNetMatrices matrices);
+	void startUpdateMatrixView();
+	void stopUpdateMatrixView();
 
 private slots:
 	void rowsSpinboxChanged(int val);

@@ -63,11 +63,11 @@ void MatrixWidget::rowsSpinboxChanged(int val)
 		return;
 	ui->dMinusTable->setUpdatesEnabled(false);
 	ui->dPlusTable->setUpdatesEnabled(false);
-	mPlus.startUpdate();
-	mMinus.startUpdate();
+//	mPlus.startUpdate();
+//	mMinus.startUpdate();
 	emit matrixSizeChanged(val, mMinus.columnCount());
-	mPlus.endUpdate();
-	mMinus.endUpdate();
+//	mPlus.endUpdate();
+//	mMinus.endUpdate();
 	ui->dMinusTable->setUpdatesEnabled(true);
 	ui->dPlusTable->setUpdatesEnabled(true);
 }
@@ -78,11 +78,11 @@ void MatrixWidget::colsSpinboxChanged(int val)
 		return;
 	ui->dMinusTable->setUpdatesEnabled(false);
 	ui->dPlusTable->setUpdatesEnabled(false);
-	mPlus.startUpdate();
-	mMinus.startUpdate();
+//	mPlus.startUpdate();
+//	mMinus.startUpdate();
 	emit matrixSizeChanged(mMinus.rowCount(), val);
-	mPlus.endUpdate();
-	mMinus.endUpdate();
+//	mPlus.endUpdate();
+//	mMinus.endUpdate();
 	ui->dMinusTable->setUpdatesEnabled(true);
 	ui->dPlusTable->setUpdatesEnabled(true);
 }
@@ -239,6 +239,18 @@ void MatrixWidget::IOUpdateText()
 
 	ui->IFunctionTextedit->blockSignals(iprev);
 	ui->OFunctionTextedit->blockSignals(oprev);
+}
+
+void MatrixWidget::startUpdateMatrixView()
+{
+	mMinus.startUpdate();
+	mPlus.startUpdate();
+}
+
+void MatrixWidget::stopUpdateMatrixView()
+{
+	mMinus.endUpdate();
+	mPlus.endUpdate();
 }
 
 QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)
