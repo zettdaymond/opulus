@@ -43,17 +43,17 @@ CmdRemoveItemGroup::~CmdRemoveItemGroup() {
 }
 
 void CmdRemoveItemGroup::undo() {
-	while (mItems.count()) {
-		Item* i = mItems.takeLast();
-		mPetriNet->addItem(i);
+	std::reverse(mItems.begin(), mItems.end());
+	QVector<Item*> v;
+	for (auto* i : mItems) {
+		v.push_back(i);
 	}
+	mPetriNet->addItemGroup(v);
 	mItems.clear();
 }
 
 void CmdRemoveItemGroup::redo() {
 	//FIXME: does we need to call destructor?
 	mItems.clear();
-	for (auto& id : mIds) {
-		mItems += mPetriNet->removeItem(id);
-	}
+	mItems += mPetriNet->removeItemGroup(mIds);
 }

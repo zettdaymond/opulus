@@ -88,12 +88,19 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 			mScene, SLOT(removeItem(Item*)));
 	connect(mScene, SIGNAL(itemSelected(Item*)),
 			mPropEditorModel, SLOT(setModelSource(Item*)));
+	connect(mPetriNet, &PetriNet::itemGroupRemoved,
+			mScene, &PetriNetScene::removeItemGroup);
+	connect(mPetriNet, &PetriNet::itemGroupCreated,
+			mScene, &PetriNetScene::createItemGroup);
+
 
 	connect(mPetriNet, SIGNAL(placeCreated(Place*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(transitionCreated(Transition*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(arcCreated(Arc*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(arcWeightChanged(Arc*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(itemGroupRemoved(QVector<Item*>)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(itemGroupCreated(QVector<Item*>)), this, SLOT(netUpdated()));
 
 
 	connect(mUndoStack, SIGNAL(cleanChanged(bool)), this, SIGNAL(cleanChanged(bool)));

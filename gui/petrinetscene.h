@@ -67,6 +67,8 @@ public slots:
 	void createArc(Arc* arc);
 	void createInhibitorArc(InhibitorArc* arc);
 	void removeItem(Item* item);
+	void removeItemGroup(QVector<Item*> items);
+	void createItemGroup(QVector<Item*> items);
 
 signals:
 	void itemSelected(Item* item);
