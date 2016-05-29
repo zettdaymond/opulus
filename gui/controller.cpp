@@ -287,8 +287,12 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 					return new CmdRemoveItem(arc);
 				} else {
 					//Set weight
-					return createItemAttributeCmd (arc, &AbstractArc::setWeight,
-							(uint)val, arc->weight());
+					if (val != arc->weight()) {
+						return createItemAttributeCmd (arc, &AbstractArc::setWeight,
+								(uint)val, arc->weight());
+					} else {
+						return nullptr;
+					}
 				}
 			} else if(val) {
 				if (val == 1) {
@@ -308,8 +312,12 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 					return new CmdRemoveItem(arc);
 				} else {
 					//Set weight
-					return createItemAttributeCmd(arc, &AbstractArc::setWeight,
-							(uint)val, arc->weight());
+					if( val != arc->weight()) {
+						return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+								(uint)val, arc->weight());
+					} else {
+						return nullptr;
+					}
 				}
 			} else if(val) {
 				if (val == 1) {
@@ -373,6 +381,8 @@ void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi d
 		}
 	} else if (updateCommands->size() > 0) {
 		pushCommand(updateCommands);
+	} else {
+		showWarningMessage(tr("Nothing to update"));
 	}
 }
 
