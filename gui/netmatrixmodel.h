@@ -16,15 +16,11 @@ public:
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 	void updateMatrix(Eigen::MatrixXi& mtx);
-	const int val(int row, int col) const;
+	int val(int row, int col);
 signals:
 	void mtxValueChanged(int,int,int);
-public slots:
-	void startUpdateTransaction();
-	void stopUpdateTransaction();
 private:
 	Eigen::MatrixXi mMtx;
-	uint update = 0;
 };
 
 #endif //NETMATRIXMODEL_H

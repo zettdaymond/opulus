@@ -16,8 +16,8 @@ public:
     void undo();
 	void redo();
 private:
-	QVector<QPointF> mOldPoses;
 	QVector<QPointF> mPoses;
+	QVector<QPointF> mOldPoses;
 	QVector<ItemId> mIds;
 	PetriNet* mPetriNet;
 };

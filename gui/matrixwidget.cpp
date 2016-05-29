@@ -89,16 +89,6 @@ void MatrixWidget::IOUpdateNetPressed()
 
 	bool wspinstate = ui->rowsSpinbox->blockSignals(true);
 	bool hspinstate = ui->colsSpinbox->blockSignals(true);
-
-//	const int rows = m.size();
-//	const int cols = m.size() > 0 ? m.begin().value().size() : 0;
-//	std::max_element(m.keys().begin(), m.keys().end());
-//	Q_ASSERT((rows == mPlus.rowCount()) && (cols == mPlus.columnCount()));
-
-//	Eigen::MatrixXi z = Eigen::MatrixXi::Zero(mMinus.rowCount(), mMinus.columnCount());
-//	mMinus.updateMatrix(z);
-//	mPlus.updateMatrix(z);
-
 	bool dminstate = ui->dMinusTable->blockSignals(true);
 	bool dplusstate = ui->dPlusTable->blockSignals(true);
 
@@ -223,18 +213,6 @@ void MatrixWidget::IOUpdateText()
 
 	ui->IFunctionTextedit->blockSignals(iprev);
 	ui->OFunctionTextedit->blockSignals(oprev);
-}
-
-void MatrixWidget::startUpdateMatrixViewTransaction()
-{
-	mMinus.startUpdateTransaction();
-	mPlus.startUpdateTransaction();
-}
-
-void MatrixWidget::stopUpdateMatrixViewTransaction()
-{
-	mMinus.stopUpdateTransaction();
-	mPlus.stopUpdateTransaction();
 }
 
 QMap<int,QMap<int,int>> MatrixWidget::parseIOText(const QString &text)

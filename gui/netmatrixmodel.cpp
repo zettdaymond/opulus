@@ -58,28 +58,10 @@ QVariant NetMatrixModel::headerData(int section, Qt::Orientation orientation, in
 void NetMatrixModel::updateMatrix(Eigen::MatrixXi& mtx)
 {
 	mMtx = mtx;
-
-	if (update == 0) {
-		emit layoutChanged();
-	}
+	emit layoutChanged();
 }
 
-void NetMatrixModel::startUpdateTransaction()
-{
-	update += 1;
-}
-
-void NetMatrixModel::stopUpdateTransaction()
-{
-	if (update > 0) {
-		update -= 1;
-	}
-	if (update == 0) {
-		emit layoutChanged();
-	}
-}
-
-const int NetMatrixModel::val(int row, int col) const
+int NetMatrixModel::val(int row, int col)
 {
 	Q_ASSERT(row < mMtx.rows() && col < mMtx.cols());
 	return mMtx(row,col);
