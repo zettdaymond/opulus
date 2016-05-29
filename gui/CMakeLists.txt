@@ -23,6 +23,7 @@ set(opulusgui_srcs
     transitionpropertyhandler.cpp
     arcpropertyhandler.cpp
     analyserstatusdlg.cpp
+    netmatrixmodel.cpp
 
     commands/cmdcreateplace.cpp
     commands/cmdcreatetransition.cpp
@@ -34,6 +35,7 @@ set(opulusgui_srcs
     commands/cmdremoveitemgroup.cpp
     commands/cmdmovenode.cpp
     commands/cmdmovenodegroup.cpp
+    commands/cmdpack.cpp
     matrixwidget.cpp
     opulusmath.h
 )

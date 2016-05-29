@@ -71,8 +71,9 @@ public:
 	* Places or transitions will have their numbers corrected, if necessary.
 	* @return A list of all items removed. \p item will be the last item in the list.
 	*/
-	QLinkedList<Item*> removeItem(Item* item);
+	QLinkedList<Item*> removeItem(Item* item, bool notify = true);
 	QLinkedList<Item*> removeItem(const ItemId& id);
+	QLinkedList<Item*> removeItemGroup(const QVector<ItemId>& ids);
 	/// Check if the \p item belong to this petri net.
 	bool contains(Item* item) const;
 	/// Returns the item with id \p id.
@@ -127,9 +128,11 @@ public:
 	void fireRandomTransition();
 
 	/// Add an item to the petri net. Places or transitions will have their numbers corrected, if necessary.
-	void addItem(Item* item);
+	void addItem(Item* item, bool notify = true);
 	/// Returns the number of items in this petri net.
 	int itemCount() const { return mItems.count(); }
+
+	void addItemGroup(QVector<Item*> items);
 
 signals:
 	void placeCreated(Place* place);
@@ -139,7 +142,8 @@ signals:
 	void inhibitorArcCreated(InhibitorArc* arc);
 	void itemModified(Item* item);
 	void itemRemoved(Item* item);
-
+	void itemGroupRemoved(QVector<Item*> items);
+	void itemGroupCreated(QVector<Item*> items);
 private:
 	QSet<Transition*> mTransitions;
 	QSet<Place*> mPlaces;

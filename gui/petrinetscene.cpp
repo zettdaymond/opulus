@@ -92,6 +92,27 @@ void PetriNetScene::createInhibitorArc(InhibitorArc* arc) {
 	g->itemChanged();
 }
 
+void PetriNetScene::createItemGroup(QVector<Item*> items) {
+	for (auto* i : items) {
+		if (i->isA<Place>()) {
+			Place* place = static_cast<Place*>(i);
+			createPlace(place);
+		}
+		if (i->isA<Transition>()) {
+			Transition* tr = static_cast<Transition*>(i);
+			createTransition(tr);
+		}
+		if (i->isA<Arc>()) {
+			Arc* arc = static_cast<Arc*>(i);
+			createArc(arc);
+		}
+		if (i->isA<InhibitorArc>()) {
+			InhibitorArc* arc = static_cast<InhibitorArc*>(i);
+			createInhibitorArc(arc);
+		}
+	}
+}
+
 void PetriNetScene::updateItem(Item* item) {
 	ItemMap::iterator it = mItemMap.find(item);
 	if (it != mItemMap.end()) {
@@ -105,6 +126,12 @@ void PetriNetScene::removeItem(Item* item) {
 		QGraphicsScene::removeItem(gitem);
 		mItems.remove(gitem);
 		delete gitem;
+	}
+}
+
+void PetriNetScene::removeItemGroup(QVector<Item*> items) {
+	for(auto* i : items) {
+		removeItem(i);
 	}
 }
 

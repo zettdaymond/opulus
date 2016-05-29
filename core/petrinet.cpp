@@ -112,7 +112,7 @@ Place* PetriNet::findPlaceWithNumber(int number) {
 }
 
 
-void PetriNet::addItem(Item* item) {
+void PetriNet::addItem(Item* item, bool notify) {
 	if (mItems.contains(item->id()))
 		throw DuplicatedIdException(item->id());
 	mItems.insert(item->id(), item);
@@ -134,10 +134,15 @@ void PetriNet::addItem(Item* item) {
 			}
 		}
 		mPlaces.insert(placeitem);
-		emit placeCreated(placeitem);
+		if (notify) {
+			emit placeCreated(placeitem);
+		}
 	}
-	else if (item->isA<Arc>())
-		emit arcCreated(static_cast<Arc*>(item));
+	else if (item->isA<Arc>()) {
+		if (notify) {
+			emit arcCreated(static_cast<Arc*>(item));
+		}
+	}
 	else if (item->isA<Transition>()) {
 		Transition* transitem = static_cast<Transition*>(item);
 		// correct other transitions' numbers
@@ -156,11 +161,22 @@ void PetriNet::addItem(Item* item) {
 			}
 		}
 		mTransitions.insert(static_cast<Transition*>(item));
-		emit transitionCreated(static_cast<Transition*>(item));
+		if (notify) {
+			emit transitionCreated(static_cast<Transition*>(item));
+		}
 	}
 	else if (item->isA<InhibitorArc>()) {
-		emit inhibitorArcCreated(static_cast<InhibitorArc*>(item));
+		if (notify) {
+			emit inhibitorArcCreated(static_cast<InhibitorArc*>(item));
+		}
 	}
+}
+
+void PetriNet::addItemGroup(QVector<Item*> items) {
+	for(auto i : items) {
+		addItem(i, false);
+	}
+	emit itemGroupCreated(items);
 }
 
 ItemId PetriNet::nextId() {
@@ -171,7 +187,7 @@ ItemId PetriNet::nextId() {
 	return id;
 }
 
-QLinkedList<Item*> PetriNet::removeItem(Item* item) {
+QLinkedList<Item*> PetriNet::removeItem(Item* item, bool notify) {
 	if (!mItems.remove(item->id()))
 		return QLinkedList<Item*>(); // FIXME: Throw an exception?
 	if (item->isA<Transition>()) {
@@ -199,13 +215,29 @@ QLinkedList<Item*> PetriNet::removeItem(Item* item) {
 		}
 	}
 	QLinkedList<Item*> res = item->beforeDelete();
-	emit itemRemoved(item);
+	if (notify) {
+		emit itemRemoved(item);
+	}
 	return res;
 }
 
 QLinkedList<Item*> PetriNet::removeItem(const ItemId& id) {
 	Item* it = mItems.value(id);
 	return it ? removeItem(it) : QLinkedList<Item*>();
+}
+
+QLinkedList<Item*> PetriNet::removeItemGroup(const QVector<ItemId>& ids) {
+	QLinkedList<Item*> l;
+	QVector<Item*> items;
+	for (auto id : ids) {
+		Item* it = mItems.value(id);
+		if (it != nullptr) {
+			items.push_back(it);
+			l += removeItem(it,false);
+		}
+	}
+	emit itemGroupRemoved(items);
+	return l.size() > 0 ? l : QLinkedList<Item*>();
 }
 
 bool PetriNet::contains(Item* item) const {

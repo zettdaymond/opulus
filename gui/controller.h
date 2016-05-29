@@ -25,6 +25,8 @@
 #include "exceptions.h"
 #include "matrix_util.h"
 #include "commands/cmdchangeproperty.hpp"
+//#include "commands/cmdcreatearc.h"
+//#include "commands/cmdcreatearcwithweight.h"
 
 class QWidget;
 class QGraphicsView;
@@ -49,6 +51,7 @@ class Analyser;
 class AnalysisRunner;
 class AnalyserStatusDlg;
 class QUndoCommand;
+class CmdPack;
 
 /**
 * GUI controller, hold the petri net and can send commands to it.
@@ -126,7 +129,8 @@ public slots:
 	void useFireTransitionTool();
 
 	void matrixResized(int rows, int cols);
-	void matrixUpdate(MatrixType which, int row, int col, int val);
+	void updateMatrixValue(MatrixType which, int row, int col, int val);
+	void updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi dPlus);
 	void netUpdated();
 
 	void zoomIn();
@@ -138,21 +142,19 @@ signals:
 	void cleanChanged(bool);
 	void netChanged(PetriNetMatrices matrices);
 public:
-	// TODO: will be possile create such thing in a command when we implement the
-	// command pattern o do the undo/redo?
-//    template<class Type, typename ParamType>
-//	void setItemAttribute(Type* obj, void(Type::* method)(ParamType), ParamType param) {
-//		try {
-//			(obj->*method)(param);
-//		} catch (Exception& e) {
-//			showErrorMessage(e.message());
-//			throw;
-//		}
-//	}
 	template<typename Type, typename Base, typename ParamType>
 	void setItemAttribute(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
 		pushCommand(new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet));
 	}
+	template<typename Type, typename Base, typename ParamType>
+	QUndoCommand * createItemAttributeCmd(Type* obj, void(Base::* method)(ParamType), ParamType param, ParamType old) {
+		return new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet);
+	}
+
+	QUndoCommand* createAddArcCmd(auto from, auto to);
+	QUndoCommand* createAddArcWithWeightCmd(auto from, auto to, uint weight);
+	void enableGuiNotifications();
+	void disableGuiNotifications();
 private slots:
 	void analysisFinished();
 	void analysisFatalError(const QString& msg);
@@ -171,10 +173,14 @@ private:
 	PropertyEditorModel* mPropEditorModel;
 	Simulation* mSimulation;
 
+	uint mIsGuiNotificationEnabled = 0;
+
 	QString showExportFileDialog(const QString& filter, const QString& defaultSuffix);
 	void paintScene(QPaintDevice* device);
 	void pushCommandNoCatch(QUndoCommand* cmd);
 	bool pushCommand(QUndoCommand* cmd);
+	QUndoCommand*createResizeMatrixCmds(int rows, int cols);
+	QUndoCommand*createUpdateMatrixCmds(MatrixType which, int row, int col, int val);
 };
 
 #endif

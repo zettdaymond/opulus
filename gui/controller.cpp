@@ -57,6 +57,7 @@
 #include "commands/cmdremoveitemgroup.h"
 #include "commands/cmdmovenode.h"
 #include "commands/cmdmovenodegroup.h"
+#include "commands/cmdpack.h"
 
 Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), mView(view), mParentWidget(parent), mAnalyserStatusDlg(0), mUndoStack(0), mSimulation(0) {
 	mUndoStack = new QUndoStack(this);
@@ -87,12 +88,19 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 			mScene, SLOT(removeItem(Item*)));
 	connect(mScene, SIGNAL(itemSelected(Item*)),
 			mPropEditorModel, SLOT(setModelSource(Item*)));
+	connect(mPetriNet, &PetriNet::itemGroupRemoved,
+			mScene, &PetriNetScene::removeItemGroup);
+	connect(mPetriNet, &PetriNet::itemGroupCreated,
+			mScene, &PetriNetScene::createItemGroup);
+
 
 	connect(mPetriNet, SIGNAL(placeCreated(Place*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(transitionCreated(Transition*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(arcCreated(Arc*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(arcWeightChanged(Arc*)), this, SLOT(netUpdated()));
 	connect(mPetriNet, SIGNAL(itemRemoved(Item*)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(itemGroupRemoved(QVector<Item*>)), this, SLOT(netUpdated()));
+	connect(mPetriNet, SIGNAL(itemGroupCreated(QVector<Item*>)), this, SLOT(netUpdated()));
 
 
 	connect(mUndoStack, SIGNAL(cleanChanged(bool)), this, SIGNAL(cleanChanged(bool)));
@@ -170,13 +178,17 @@ void Controller::useFireTransitionTool() {
 	mScene->useFireTransitionTool();
 }
 
-void Controller::matrixResized(int rows, int cols) {
+QUndoCommand* Controller::createResizeMatrixCmds(int rows, int cols) {
 	const int transitions_size = mPetriNet->transitionCount();
+
+	QVector<QUndoCommand*> cmdPack;
+
+	QVector<Item*> items;
 	if(rows < transitions_size) {
 		// TODO: move this into a function
 		foreach (Transition* t, mPetriNet->transitions()) {
 			if(t->number() >= rows)
-				removeItem(t);
+				items.push_back(t);
 		}
 	}
 
@@ -184,16 +196,23 @@ void Controller::matrixResized(int rows, int cols) {
 		// TODO: move this into a function
 		foreach (Place* p, mPetriNet->places()) {
 			if(p->number() >= cols)
-				removeItem(p);
+				items.push_back(p);
 		}
 	}
+
+	if (items.size() > 0) {
+		cmdPack.push_back(new CmdRemoveItemGroup(items));
+	}
+
+	QVector<QPointF> positions;
 	if(rows > transitions_size) {
 		for(int i = transitions_size; i < rows; ++i) {
 			int x = qrand() % 200 - 100;
 			int y = qrand() % 200 - 100;
 			QGraphicsView *v = scene()->views().takeFirst();
 			QPointF center = v->mapToScene(v->viewport()->rect().center());
-			addTransition(center+QPointF(x,y));
+			//TODO: cange to CmdCreateTransitionGROUP
+			cmdPack.push_back(new CmdCreateTransition(mPetriNet, center+QPointF(x,y)));
 		}
 	}
 
@@ -203,38 +222,80 @@ void Controller::matrixResized(int rows, int cols) {
 			int y = qrand() % 200 - 100;
 			QGraphicsView *v = scene()->views().takeFirst();
 			QPointF center = v->mapToScene(v->viewport()->rect().center());
-			addPlace(center+QPointF(x,y));
-
+			//TODO: change to CmdCreatePlaceGroup
+			cmdPack.push_back(new CmdCreatePlace(mPetriNet, center+QPointF(x,y)));
 		}
 
 	}
+
+	if (cmdPack.size() > 1) {
+		CmdPack* pack = new CmdPack(this, cmdPack);
+		return pack;
+	}
+	if (cmdPack.size() == 1) {
+		return cmdPack[0];
+	}
+
+	return nullptr;
 }
 
-void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
+void Controller::matrixResized(int rows, int cols) {
+	QUndoCommand* cmd = createResizeMatrixCmds(rows,cols);
+	if (cmd != nullptr) {
+		pushCommand(cmd);
+	}
+}
+
+void Controller::updateMatrixValue(MatrixType which, int row, int col, int val) {
 	Q_ASSERT(row >= 0 && col >= 0 && val >= 0);
+	QUndoCommand* resizeCmd = nullptr;
+
 	if(row >= mPetriNet->transitionCount() || col >= mPetriNet->placeCount()) {
 		bool st = this->blockSignals(true);
-		matrixResized(
-			std::max(row+1, mPetriNet->transitionCount()),
-			std::max(col+1, mPetriNet->placeCount()));
+		resizeCmd = createResizeMatrixCmds(
+					std::max(row+1, mPetriNet->transitionCount()),
+					std::max(col+1, mPetriNet->placeCount()));
 		this->blockSignals(st);
 	}
+
+	QUndoCommand* updateCmd = createUpdateMatrixCmds(which, row, col, val);
+
+	if (resizeCmd != nullptr && updateCmd != nullptr) {
+		CmdPack* pack = new CmdPack(this);
+		pack->pushBack(resizeCmd);
+		pack->pushBack(updateCmd);
+		pushCommand(pack);
+	} else if (resizeCmd == nullptr && updateCmd != nullptr) {
+		pushCommand( updateCmd );
+	}
+
+	return;
+}
+
+QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int col, int val)
+{
+	Q_ASSERT(row < mPetriNet->transitionCount() && col < mPetriNet->placeCount());
 
 	Transition* tr = mPetriNet->findTransitionWithNumber(row);
 	Place *pl = mPetriNet->findPlaceWithNumber(col);
 
 	if(tr && pl) {
-		bool s = this->blockSignals(true);
 		if(which == MatrixType::dMinusMatrix) {
 			AbstractArc* arc = pl->findArcTo(static_cast<Node*>(tr));
 			if(arc) {
 				if(val == 0) {
-					removeItem(arc);
+					return new CmdRemoveItem(arc);
 				} else {
-					setItemAttribute(arc, &AbstractArc::setWeight, (uint)val, arc->weight());
+					//Set weight
+					return createItemAttributeCmd (arc, &AbstractArc::setWeight,
+							(uint)val, arc->weight());
 				}
 			} else if(val) {
-				val == 1 ? addArc(pl,tr) : addArc(pl,tr,val);  // TODO: implement new addArc with weight parameter
+				if (val == 1) {
+					return createAddArcCmd(pl,tr);
+				} else {
+					return createAddArcWithWeightCmd(pl,tr, val);
+				}
 				arc = pl->findArcTo(static_cast<Node*>(tr));
 				if(!arc)
 					throw Exception("Unable to find added arc");
@@ -244,24 +305,81 @@ void Controller::matrixUpdate(MatrixType which, int row, int col, int val) {
 			AbstractArc* arc = tr->findArcTo(static_cast<Node*>(pl));
 			if(arc) {
 				if(val == 0) {
-					removeItem(arc);
+					return new CmdRemoveItem(arc);
 				} else {
-					setItemAttribute(arc, &AbstractArc::setWeight, (uint)val, arc->weight());
+					//Set weight
+					return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+							(uint)val, arc->weight());
 				}
 			} else if(val) {
-				val == 1 ? addArc(tr,pl) : addArc(tr,pl,val);
+				if (val == 1) {
+					return createAddArcCmd(tr,pl);
+				} else {
+					return createAddArcWithWeightCmd(tr,pl, val);
+				}
 				arc = tr->findArcTo(static_cast<Node*>(pl));
 				if(!arc) {
 					throw Exception("Unable to find added arc");
 				}
 			}
 		}
-		this->blockSignals(s);
+	}
+	return nullptr;
+}
+
+void Controller::updateBasedOnMatrices(Eigen::MatrixXi dMinus, Eigen::MatrixXi dPlus)
+{
+	QUndoCommand* resizeCommands = createResizeMatrixCmds(dMinus.rows(), dMinus.cols());
+
+	mPetriNet->blockSignals(true);
+	this->blockSignals(true);
+	if (resizeCommands != nullptr) {
+		resizeCommands->redo();
+	}
+
+	CmdPack* updateCommands = new CmdPack(this);
+
+	for(int i = 0; i < dMinus.rows(); i++) {
+		for(int j = 0; j < dMinus.cols(); j++) {
+			auto val = dMinus(i,j);
+			auto cmd = createUpdateMatrixCmds(MatrixType::dMinusMatrix, i, j, val);
+			//changes happens
+			if (cmd) {
+				updateCommands->pushBack(cmd);
+			}
+			val = dPlus(i,j);
+			cmd = createUpdateMatrixCmds(MatrixType::dPlusMatrix, i, j, val);
+			//changes happens
+			if (cmd) {
+				updateCommands->pushBack(cmd);
+			}
+		}
+	}
+
+	if (resizeCommands != nullptr) {
+		resizeCommands->undo();
+	}
+	mPetriNet->blockSignals(false);
+	this->blockSignals(false);
+
+	CmdPack* cmdPack = new CmdPack(this);
+	if (resizeCommands != nullptr) {
+		if (updateCommands->size() > 0) {
+			cmdPack->pushBack(resizeCommands);
+			cmdPack->pushBack(updateCommands);
+			pushCommand(cmdPack);
+		} else {
+			pushCommand(resizeCommands);
+		}
+	} else if (updateCommands->size() > 0) {
+		pushCommand(updateCommands);
 	}
 }
 
 void Controller::netUpdated() {
-	emit netChanged(PetriNetMatrices(d_minus_matrix(mPetriNet), d_plus_matrix(mPetriNet), d_matrix(mPetriNet)));
+	if (mIsGuiNotificationEnabled == 0) {
+		emit netChanged(PetriNetMatrices(d_minus_matrix(mPetriNet), d_plus_matrix(mPetriNet), d_matrix(mPetriNet)));
+	}
 }
 
 void Controller::addPlace(const QPointF& position) {
@@ -273,38 +391,18 @@ void Controller::addTransition(const QPointF& position) {
 }
 
 void Controller::addArc(Place* from, Transition* to) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if(!arc) {
-		pushCommand(new CmdCreateArc(mPetriNet, from, to));
-	} else {
-		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + 1, arc->weight());
-	}
+	pushCommand( createAddArcCmd(from, to) );
 }
 
 void Controller::addArc(Place *from, Transition *to, uint weight) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if (!arc) {
-		pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
-	} else {
-		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + weight, arc->weight());
-	}
+	pushCommand( createAddArcWithWeightCmd(from, to, weight) );
 }
 void Controller::addArc(Transition* from, Place* to) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if (! arc) {
-		pushCommand(new CmdCreateArc(mPetriNet, from, to));
-	} else {
-		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + 1, arc->weight());
-	}
+	pushCommand( createAddArcCmd(from, to) );
 }
 
 void Controller::addArc(Transition *from, Place *to, uint weight) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if (!arc) {
-		pushCommand(new CmdCreateArcWithWeight(mPetriNet, from, to,weight));
-	} else {
-		setItemAttribute(arc, &AbstractArc::setWeight, arc->weight() + weight, arc->weight());
-	}
+	pushCommand( createAddArcWithWeightCmd(from, to, weight) );
 }
 
 void Controller::addInhibitorArc(Place* from, Transition* to) {
@@ -373,6 +471,7 @@ void Controller::removeItem(Item* item) {
 }
 
 void Controller::removeItemGroup(QVector<Item*>& items) {
+	//FIXME: Does need change to CmdPack()?
 	pushCommand(new CmdRemoveItemGroup(items));
 }
 
@@ -463,11 +562,31 @@ void Controller::savePetriNet(const QString& fileName) {
 	mUndoStack->setClean();
 }
 
+QUndoCommand* Controller::createAddArcWithWeightCmd(auto from, auto to, uint weight) {
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if(!arc) {
+		return new CmdCreateArcWithWeight(mPetriNet, from, to, weight);
+	} else {
+		return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+		arc->weight() + weight, arc->weight());
+	}
+}
+
+QUndoCommand*Controller::createAddArcCmd(auto from, auto to) {
+	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+	if(!arc) {
+		return new CmdCreateArc(mPetriNet, from, to);
+	} else {
+		return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+		arc->weight() + 1, arc->weight());
+	}
+}
+
 void Controller::executeAnalyser(Analyser* analyser) {
 	if (!mAnalyserStatusDlg) {
 		mAnalyserStatusDlg = new AnalyserStatusDlg(mParentWidget);
 		connect(mAnalysisRunner, SIGNAL(analysisStatusMessageChanged(const QString&)),
-			mAnalyserStatusDlg, SLOT(setStatusMessage(const QString&)));
+		mAnalyserStatusDlg, SLOT(setStatusMessage(const QString&)));
 		connect(mAnalysisRunner, SIGNAL(analysisPercentageChanged(int)),
 			mAnalyserStatusDlg, SLOT(setPercenage(int)));
 		connect(mAnalysisRunner, SIGNAL(analysisFatalErrorOccurred(const QString&)),
@@ -513,6 +632,21 @@ bool Controller::pushCommand(QUndoCommand* cmd) {
 		showErrorMessage(e.message(), 10000);
 	}
 	return false;
+}
+
+void Controller::enableGuiNotifications()
+{
+	if (mIsGuiNotificationEnabled > 0) {
+		mIsGuiNotificationEnabled -= 1;
+	}
+	if (mIsGuiNotificationEnabled == 0) {
+		netUpdated();
+	}
+}
+
+void Controller::disableGuiNotifications()
+{
+	mIsGuiNotificationEnabled += 1;
 }
 
 
