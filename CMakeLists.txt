@@ -46,6 +46,9 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKE
 #additional features
 if(_STATIC_PLUGINS)
     add_definitions(-DSTATIC_PLUGINS)
+    message("Plugins link : STATIC")
+else(_STATIC_PLUGINS)
+    message("Plugins link : SHARED")
 endif(_STATIC_PLUGINS)
 
 add_subdirectory(core)
