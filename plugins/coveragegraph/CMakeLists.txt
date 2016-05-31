@@ -1,7 +1,12 @@
 project(coverageGraph)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/plugins/coveragegraph/cmake" ${CMAKE_MODULE_PATH})
+
+find_package(GraphViz REQUIRED)
+
 set(coverageGraph_SRCS
     coveragegraph.cpp
+    utils.cpp
     #extended
     extended/analysis_utils.cpp
     extended/preservingmatrixanalyser.cpp
@@ -31,7 +36,7 @@ else(_STATIC_PLUGINS)
     add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
 endif(_STATIC_PLUGINS)
 
-target_link_libraries(coverageGraph opuluscore)
+target_link_libraries(coverageGraph opuluscore cgraph gvc)
 target_link_libraries(
     coverageGraph
     Qt5::Core

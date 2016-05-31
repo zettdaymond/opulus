@@ -29,7 +29,6 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QLinkedList>
-#include <QProcess>
 #include <QStringList>
 #include <QImage>
 #include <QDialog>
@@ -47,6 +46,8 @@
 #include "extended/invertibilityanalyser.h"
 #include "extended/analysis_utils.h"
 #include "extended/markingnode.h"
+
+#include "utils.h"
 
 CoverageGraph::CoverageGraph()
 {
@@ -72,10 +73,9 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     Marking startMarking = mPetriNet->currentMarking();
     reporter->setStatusMessage(tr("Creating graph..."));
 
-    QTemporaryFile tempFile;
-    tempFile.open();
-    QTextStream scriptStream(&tempFile);
-    scriptStream.setCodec("UTF-8");
+	QString draphDescription;
+	QTextStream scriptStream(&draphDescription);
+	scriptStream.setCodec("UTF-8");
     scriptStream << "digraph G {\n";
     scriptStream << "node [shape=box, style=rounded, fontsize=12, height=0.2]\n";
     scriptStream << "edge [fontsize=12]\n";
@@ -117,7 +117,7 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
         }
     }
     scriptStream << '}';
-    scriptStream.flush();
+	scriptStream.flush();
     reporter->setStatusMessage(tr("Creating graph image with %1 nodes...").arg(allNodes.count()));
     reporter->setPercenage(40);
 
@@ -136,27 +136,8 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     _analyseResult = analyseProperty();
     reporter->setPercenage(60);
 
-    QProcess dot;
-#ifdef Q_OS_WIN
-    QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
-#else
-    QString exec = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
-#endif
-    QStringList args;
-    args << "-Tsvg" << tempFile.fileName();
-    qDebug() << exec;
-    if (mDotInPath == true)
-        dot.start("dot", args);
-    else {
-        dot.start(exec,args);
-    }
-
-    // wait...
-    dot.waitForFinished(-1);
-    reporter->setStatusMessage(tr("Loading graph image..."));
-    reporter->setPercenage(90);
-
-    mSvgData = dot.readAllStandardOutput();
+	//BUG: Is mSvgData call delete for it's data when destructor called? If not, we have memory leak.
+	mSvgData = utils::renderToGraph(draphDescription);
     reporter->setPercenage(100);
     mAnalysisOk = true;
 }
@@ -185,23 +166,6 @@ QString CoverageGraph::analyseProperty()
 }
 
 bool CoverageGraph::setup(QWidget* parentWidget) {
-	QProcess dot;
-#ifdef Q_OS_WIN
-    QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot.exe");
-#else
-    QString exec_path = QDir::toNativeSeparators(qApp->applicationDirPath()+"/graphviz/bin/dot");
-#endif
-    dot.start("dot", QStringList() << "--version");
-    if (!dot.waitForFinished()) {
-        dot.start(exec_path, QStringList() << "--version");
-        if (!dot.waitForFinished()) {
-            QMessageBox::critical(parentWidget, tr("Coverage graph plugin"), tr("<html>You need graphviz installed on your computer in order to use this plugin. If graphiviz is already installed, make sure that it is in your system path.\nYou can get graphviz at: <a href=\"http://www.graphviz.org\">http://www.graphviz.org</a></html>"));
-            return false;
-        }
-        mDotInPath = false;
-        return true;
-    }
-    mDotInPath =true;
     return true;
 }
 
@@ -224,9 +188,9 @@ void CoverageGraph::finish(QWidget* parentWidget) {
     ui.view->setScene(scene);
     ui.markingOrder->setText(mMarkingOrder);
 
-    connect(ui.zoomIn, SIGNAL(clicked(bool)), this, SLOT(zoomIn()));
+	connect(ui.zoomIn, SIGNAL(clicked(bool)), this, SLOT(zoomIn()));
     connect(ui.zoomOut, SIGNAL(clicked(bool)), this, SLOT(zoomOut()));
-    dlg.exec();
+	dlg.exec();
 }
 
 void CoverageGraph::zoomIn() {

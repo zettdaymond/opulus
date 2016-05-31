@@ -58,9 +58,7 @@ private:
 	bool mAnalysisOk;
 	QString mMarkingOrder;
 
-    QString _analyseResult;
-
-    bool mDotInPath;
+	QString _analyseResult;
 
 	void writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName);
 
