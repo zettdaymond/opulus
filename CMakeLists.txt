@@ -9,13 +9,15 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 endif()
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release")
+	message(STATUS "Build type not set, using \"Release\"")
+	set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 option(WITH_PLUGINS "Build and install plugins." ON)
 option(WITH_TRANSLATIONS "Build and install translations." ON)
 option(WITH_TESTS "Build tests." OFF)
 option(BUILD_SHARED_LIBS "Build shared core libraries." ON)
+option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
 
 
 add_subdirectory(core)

@@ -23,6 +23,7 @@ add_library(opulus::core ALIAS opuluscore)
 
 find_package(Qt5 REQUIRED COMPONENTS Core Xml)
 find_package(PkgConfig)
+find_package(Git)
 pkg_search_module(EIGEN3 REQUIRED eigen3)
 
 target_include_directories(opuluscore INTERFACE ${EIGEN3_INCLUDE_DIRS})
@@ -36,6 +37,11 @@ target_compile_features(opuluscore PUBLIC cxx_auto_type cxx_nullptr cxx_override
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(opuluscore PUBLIC -Wall -Wextra)
+	if(GIT_FOUND AND USE_REVISION)
+		execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
+		execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
+		target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
+	endif()
 endif()
 
 set_target_properties(opuluscore PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
