@@ -306,13 +306,14 @@ void MainWindow::loadPlugins() {
 	foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
 		QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 		QObject* plugin = loader.instance();
-		if (mStaticPlugins.loadedPlugins().contains(plugin->objectName()) == true) {
-			qWarning(qPrintable(QString("Plugin %1 already loaded as static plugin and will be skipped.").arg(plugin->objectName())));
-		}
-		else if (!plugin) {
+        if (!plugin) {
 			qWarning(qPrintable("Error loading plugin: "
 					+loader.errorString()));
-		} else {
+        }
+        else if (mStaticPlugins.loadedPlugins().contains(plugin->objectName()) == true) {
+            qWarning(qPrintable(QString("Plugin %1 already loaded as static plugin and will be skipped.").arg(plugin->objectName())));
+        }
+        else {
 			Analyser* analyser = qobject_cast<Analyser*>(plugin);
 			if (analyser) {
 				QAction* action = ui.menuAnalysis->addAction(analyser->name(),
