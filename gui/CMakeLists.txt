@@ -24,6 +24,7 @@ set(opulusgui_srcs
     arcpropertyhandler.cpp
     analyserstatusdlg.cpp
     netmatrixmodel.cpp
+    pluginhandler.cpp
 
     commands/cmdcreateplace.cpp
     commands/cmdcreatetransition.cpp

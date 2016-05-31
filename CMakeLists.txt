@@ -43,6 +43,11 @@ set(GCC_COVERAGE_LINKER_FLAGS "")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
 
+#additional features
+if(_STATIC_PLUGINS)
+    add_definitions(-DSTATIC_PLUGINS)
+endif(_STATIC_PLUGINS)
+
 add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(main)

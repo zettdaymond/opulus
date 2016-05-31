@@ -1,5 +1,10 @@
 #project(opulus)
 
+#if(_STATIC_PLUGINS)
+#    set(MAIN_LINKED_LIBS )
+#elseif(_STATIC_PLUGINS)
+#    set(MAIN_LINKED_LIBS opulusgui)
+#endif(_STATIC_PLUGINS)
 
 if( MINGW )
 	# resource compilation for MinGW
@@ -24,7 +29,13 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/../core)
 
 add_executable(opulus ${opulus_SRCS})
-target_link_libraries(opulus opulusgui)
+
+
+if(_STATIC_PLUGINS)
+    target_link_libraries(opulus opulusgui coverageGraph reachability)
+else(_STATIC_PLUGINS)
+    target_link_libraries(opulus opulusgui)
+endif(_STATIC_PLUGINS)
 
 # Disable console window on windows.
 if (CMAKE_BUILD_TYPE STREQUAL release)

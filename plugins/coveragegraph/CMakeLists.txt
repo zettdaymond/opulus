@@ -25,7 +25,11 @@ qt5_wrap_ui(coverageGraph_ui_srcs ${coverageGraph_UIS})
 #add_definitions(-DQT_SHARED)
 
 #add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
-add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
+if(_STATIC_PLUGINS)
+    add_library(coverageGraph STATIC ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
+else(_STATIC_PLUGINS)
+    add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
+endif(_STATIC_PLUGINS)
 
 target_link_libraries(coverageGraph opuluscore)
 target_link_libraries(

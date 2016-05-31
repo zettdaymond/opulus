@@ -292,6 +292,16 @@ void MainWindow::updateRecentFileActions() {
 }
 
 void MainWindow::loadPlugins() {
+	for (auto& name : mStaticPlugins.objectNames()) {
+		Analyser* analyser = mStaticPlugins.loadStaticAnalizerPlugin(name);
+		if (analyser) {
+			QAction* action = ui.menuAnalysis->addAction(analyser->name(),
+							this, SLOT(executeAnalyser()));
+			mAnalysers.insert(action, analyser);
+			mNonSimulationGroup->addAction(action);
+		}
+	}
+
 	QDir pluginsDir(QApplication::applicationDirPath()+"/../share/opulus/plugins");
 	foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
 		QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));

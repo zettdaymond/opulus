@@ -36,6 +36,10 @@
 #include "ui_reachability.h"
 #include "ui_results.h"
 
+#ifdef STATIC_PLUGINS
+#	define QT_STATICPLUGIN
+#endif
+
 class QTableWidget;
 class Marking;
 //using namespace Eigen;
@@ -45,7 +49,7 @@ class ReachabilityPlugin : public QObject, public Analyser
     Q_PLUGIN_METADATA(IID "opulus.sourceforge.net.Analyser")
     Q_INTERFACES(Analyser)
 public:
-    ReachabilityPlugin() {}
+	ReachabilityPlugin();
     virtual ~ReachabilityPlugin() {}
 
     // Analyser interface

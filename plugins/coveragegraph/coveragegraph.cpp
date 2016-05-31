@@ -48,6 +48,11 @@
 #include "extended/analysis_utils.h"
 #include "extended/markingnode.h"
 
+CoverageGraph::CoverageGraph()
+{
+	setObjectName("CoverageGraph");
+}
+
 QString CoverageGraph::internalName() const {
     return QLatin1String("coverageGraph");
 }

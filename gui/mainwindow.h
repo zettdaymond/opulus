@@ -26,6 +26,8 @@
 #include <QLinkedList>
 #include "ui_mainwindow.h"
 
+#include "pluginhandler.h"
+
 class PetriNetView;
 class Controller;
 class QActionGroup;
@@ -83,6 +85,8 @@ private:
 	void loadPetriNet(const QString& fileName);
 	void loadPlugins();
 	void searchAvailableLanguages();
+
+	PluginHandler mStaticPlugins;
 };
 
 #endif

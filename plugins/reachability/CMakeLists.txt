@@ -18,7 +18,12 @@ qt5_wrap_ui(reachability_ui_srcs ${reachability_UIS})
 
 add_definitions(${QT_DEFINITIONS})
 
-add_library(reachability SHARED ${reachability_SRCS} ${reachability_ui_srcs} ${reachability_moc_srcs})
+if(_STATIC_PLUGINS)
+    add_library(reachability STATIC ${reachability_SRCS} ${reachability_ui_srcs} ${reachability_moc_srcs})
+else(_STATIC_PLUGINS)
+    add_library(reachability SHARED ${reachability_SRCS} ${reachability_ui_srcs} ${reachability_moc_srcs})
+endif(_STATIC_PLUGINS)
+
 target_link_libraries(reachability opuluscore)
 
 target_link_libraries(

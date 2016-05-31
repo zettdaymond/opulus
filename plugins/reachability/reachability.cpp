@@ -36,6 +36,11 @@
 #include <QTableWidget>
 #include <QMessageBox>
 #include <QDebug>
+ReachabilityPlugin::ReachabilityPlugin()
+{
+	setObjectName("ReachabilityPlugin");
+}
+
 QString ReachabilityPlugin::internalName() const
 {
     return "reachability";

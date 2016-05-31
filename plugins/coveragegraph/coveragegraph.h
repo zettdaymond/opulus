@@ -24,6 +24,10 @@
 #include "analyser.h"
 #include "ui_coveragegraph.h"
 
+#ifdef STATIC_PLUGINS
+#	define QT_STATICPLUGIN
+#endif
+
 class QTextStream;
 class Marking;
 
@@ -33,9 +37,10 @@ class Marking;
 */
 class CoverageGraph : public QObject, public Analyser {
 Q_OBJECT
-Q_PLUGIN_METADATA(IID "opulus.sourceforge.net.Analyser")
 Q_INTERFACES(Analyser)
+Q_PLUGIN_METADATA(IID "opulus.sourceforge.net.Analyser")
 public:
+	CoverageGraph();
 	QString internalName() const;
 	QString name() const;
 	void analyse(PetriNet* pn, AnalysisReporter* reporter);
