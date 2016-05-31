@@ -5,12 +5,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_executable(opulus main.cpp ${UI_RESOURCES_RCC})
+if(WIN32)
+	set(SUBSYSTEM WIN32)
+endif()
+
+add_executable(opulus ${SUBSYSTEM} main.cpp ${UI_RESOURCES_RCC})
 
 target_link_libraries(opulus opulus::gui)
 
-set_target_properties(opulus PROPERTIES
-		RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
-)
+set_target_properties(opulus PROPERTIES	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 install(TARGETS opulus DESTINATION bin)

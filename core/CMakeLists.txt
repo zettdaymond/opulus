@@ -33,13 +33,12 @@ target_include_directories(opuluscore PUBLIC
 
 target_link_libraries(opuluscore PUBLIC Qt5::Core Qt5::Xml)
 target_compile_features(opuluscore PUBLIC cxx_auto_type cxx_nullptr cxx_override cxx_noexcept)
+
 if(CMAKE_COMPILER_IS_GNUCXX)
 	target_compile_options(opuluscore PUBLIC -Wall -Wextra)
 endif()
 
-set_target_properties(opuluscore PROPERTIES
-		RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
-)
+set_target_properties(opuluscore PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 install(TARGETS opuluscore 
 	ARCHIVE DESTINATION lib 

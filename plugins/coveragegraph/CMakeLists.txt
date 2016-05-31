@@ -32,8 +32,5 @@ set_target_properties(coverage PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
-
-#install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
-
 install(TARGETS coverage DESTINATION share/opulus/plugins)
 

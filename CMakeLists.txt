@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.4)
 project(opulus)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+	message(STATUS "Source Directory: " ${CMAKE_SOURCE_DIR})
+	message(STATUS "Build Directory:  " ${CMAKE_BINARY_DIR})
 	message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
@@ -10,19 +12,32 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-set(BUILD_SHARED_LIBS ON) # strange bugs with QRC when building static libs
+option(WITH_PLUGINS "Build and install plugins." ON)
+option(WITH_TRANSLATIONS "Build and install translations." ON)
+option(WITH_TESTS "Build tests." OFF)
+option(BUILD_SHARED_LIBS "Build shared core libraries." ON)
+
 
 add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(main)
-add_subdirectory(plugins)
 
-enable_testing()
-add_subdirectory(tests)
-#add_subdirectory(windowsinstaller)
+if(WITH_TRANSLATIONS)
+	message(STATUS "Translations enabled")
+	add_subdirectory(i18n)
+	add_dependencies(opulus opulus_compile_qm)
+endif()
 
-# i18n stuff
-# install(FILES ${Opulus_QMS} DESTINATION share/opulus/i18n)
+if(WITH_PLUGINS)
+	message(STATUS "Plugins enabled")
+	add_subdirectory(plugins)
+endif()
+
+if(WITH_TESTS)
+	message(STATUS "Tests enabled")
+	enable_testing()
+	add_subdirectory(tests)
+endif()
 
 # .desktop file
 install(FILES opulus.desktop DESTINATION share/applications)
