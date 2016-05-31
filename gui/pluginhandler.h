@@ -2,6 +2,7 @@
 #define PLUGINHANDLER_H
 
 #include <QObject>
+#include <QSet>
 #include <QVector>
 
 class Analyser;
@@ -13,9 +14,13 @@ public:
 	~PluginHandler() = default;
 	QVector<QString> objectNames() const;
 
-	Analyser* loadStaticAnalizerPlugin(const QString& objectName);
+	Analyser* loadStaticPlugin(const QString& objectName);
+	QVector<Analyser*> loadPlugins();
+	QSet<QString> loadedPlugins() const;
+
 private:
 	QVector<QString> mObjectNames;
+	QSet<QString> mLoadedPlugins;
 };
 
 #endif // PLUGINHANDLER_H

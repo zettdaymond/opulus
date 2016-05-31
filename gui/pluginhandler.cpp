@@ -18,7 +18,12 @@ QVector<QString> PluginHandler::objectNames() const
 	return mObjectNames;
 }
 
-Analyser* PluginHandler::loadStaticAnalizerPlugin(const QString& objectName)
+QSet<QString> PluginHandler::loadedPlugins() const
+{
+	return mLoadedPlugins;
+}
+
+Analyser* PluginHandler::loadStaticPlugin(const QString& objectName)
 {
 	for(QObject* object : QPluginLoader::staticInstances())
 	{
@@ -29,6 +34,7 @@ Analyser* PluginHandler::loadStaticAnalizerPlugin(const QString& objectName)
 
 			if(plugin != 0)
 			{
+				mLoadedPlugins.insert(objectName);
 				return plugin;
 			}
 		}

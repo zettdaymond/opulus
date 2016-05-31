@@ -293,7 +293,7 @@ void MainWindow::updateRecentFileActions() {
 
 void MainWindow::loadPlugins() {
 	for (auto& name : mStaticPlugins.objectNames()) {
-		Analyser* analyser = mStaticPlugins.loadStaticAnalizerPlugin(name);
+		Analyser* analyser = mStaticPlugins.loadStaticPlugin(name);
 		if (analyser) {
 			QAction* action = ui.menuAnalysis->addAction(analyser->name(),
 							this, SLOT(executeAnalyser()));
@@ -306,7 +306,10 @@ void MainWindow::loadPlugins() {
 	foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
 		QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 		QObject* plugin = loader.instance();
-		if (!plugin) {
+		if (mStaticPlugins.loadedPlugins().contains(plugin->objectName()) == true) {
+			qWarning(qPrintable(QString("Plugin %1 already loaded as static plugin and will be skipped.").arg(plugin->objectName())));
+		}
+		else if (!plugin) {
 			qWarning(qPrintable("Error loading plugin: "
 					+loader.errorString()));
 		} else {
