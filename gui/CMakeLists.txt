@@ -58,7 +58,13 @@ qt5_wrap_ui(opulusgui_ui_srcs ${opulusgui_uis})
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../core)
 add_library(opulusgui SHARED ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
 #target_link_libraries(opulusgui ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} opuluscore)
-target_link_libraries(opulusgui opuluscore)
+
+if(_STATIC_PLUGINS)
+    target_link_libraries(opulusgui opuluscore coverageGraph reachability)
+else(_STATIC_PLUGINS)
+    target_link_libraries(opulusgui opuluscore)
+endif(_STATIC_PLUGINS)
+
 target_link_libraries(
     opulusgui
     Qt5::Core

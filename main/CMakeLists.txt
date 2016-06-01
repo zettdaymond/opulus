@@ -30,12 +30,7 @@ include_directories(
 
 add_executable(opulus ${opulus_SRCS})
 
-
-if(_STATIC_PLUGINS)
-    target_link_libraries(opulus opulusgui coverageGraph reachability)
-else(_STATIC_PLUGINS)
-    target_link_libraries(opulus opulusgui)
-endif(_STATIC_PLUGINS)
+target_link_libraries(opulus opulusgui)
 
 # Disable console window on windows.
 if (CMAKE_BUILD_TYPE STREQUAL release)
