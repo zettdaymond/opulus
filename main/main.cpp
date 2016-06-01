@@ -25,6 +25,7 @@
 *	Application entry point.
 */
 int main(int argc, char** argv) {
+    Q_INIT_RESOURCE(gui);
     QApplication app(argc, argv);
     QApplication::setApplicationName("Opulus");
     QApplication::setOrganizationDomain("opulus.sourceforge.net");
