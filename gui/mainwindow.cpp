@@ -44,6 +44,7 @@
 #include <QApplication>
 #include <QPluginLoader>
 #include <QMessageBox>
+#include <QStyleFactory>
 
 MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -59,6 +60,8 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setupDockWindows();
 	updateRecentFileActions();
 	loadPlugins();
+
+	mSystemStyleName = qApp->style()->objectName();
 
 	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
 	connect(mController, SIGNAL(netChanged(PetriNetMatrices)), ui.matrixWidget, SLOT(updateMatrices(PetriNetMatrices)));
@@ -141,6 +144,10 @@ void MainWindow::setupActions() {
 			mController, SLOT(zoomIn()));
 	connect(ui.actionZoomOut, SIGNAL(triggered(bool)),
 			mController, SLOT(zoomOut()));
+
+	connect(ui.actionFusion_Dark, SIGNAL(triggered(bool)), this, SLOT(setupFusionDarkTheme()));
+	connect(ui.actionFusion, SIGNAL(triggered(bool)), this, SLOT(setupFusionTheme()));
+	connect(ui.actionSystem, SIGNAL(triggered(bool)), this, SLOT(setupSystemTheme()));
 
 	// open recent file actions
 	for (int i = 0; i < MAX_RECENT_FILES; ++i) {
@@ -411,6 +418,36 @@ void MainWindow::changeLanguage() {
 		it.key()->setText(it.value()->name());
 	}
 	QSettings().setValue("language", lang);
+}
+
+void MainWindow::setupFusionDarkTheme() {
+	QApplication::setStyle(QStyleFactory::create("fusion"));
+	QPalette palette;
+	palette.setColor(QPalette::Window, QColor(60,60,60));
+	palette.setColor(QPalette::WindowText, Qt::white);
+	palette.setColor(QPalette::Base, QColor(43,43,43));
+	palette.setColor(QPalette::AlternateBase, QColor(60,60,60));
+	palette.setColor(QPalette::ToolTipBase, Qt::white);
+	palette.setColor(QPalette::ToolTipText, Qt::white);
+	palette.setColor(QPalette::Text, Qt::white);
+	palette.setColor(QPalette::Button, QColor(60,60,60));
+	palette.setColor(QPalette::ButtonText, Qt::white);
+	palette.setColor(QPalette::BrightText, Qt::red);
+
+	palette.setColor(QPalette::Highlight, QColor(142,45,197).lighter());
+	palette.setColor(QPalette::HighlightedText, Qt::black);
+
+	qApp->setPalette(palette);
+}
+
+void MainWindow::setupFusionTheme() {
+	QApplication::setStyle(QStyleFactory::create("fusion"));
+	qApp->setPalette(qApp->style()->standardPalette());
+}
+
+void MainWindow::setupSystemTheme() {
+	QApplication::setStyle(QStyleFactory::create(mSystemStyleName));
+	qApp->setPalette(qApp->style()->standardPalette());
 }
 
 //#include "mainwindow.moc"

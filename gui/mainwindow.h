@@ -62,6 +62,9 @@ private slots:
 	void about();
 	void cleanStateChanged(bool);
 	void changeLanguage();
+	void setupFusionDarkTheme();
+	void setupFusionTheme();
+	void setupSystemTheme();
 protected:
 	void closeEvent(QCloseEvent* event);
 private:
@@ -87,6 +90,8 @@ private:
 	void searchAvailableLanguages();
 
 	PluginHandler mStaticPlugins;
+
+	QString mSystemStyleName;
 };
 
 #endif

@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -103,9 +103,18 @@
     <property name="title">
      <string>View</string>
     </property>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="actionSystem"/>
+     <addaction name="actionFusion"/>
+     <addaction name="actionFusion_Dark"/>
+    </widget>
     <addaction name="actionMiniature"/>
     <addaction name="actionProperty_Editor"/>
     <addaction name="actionInput_Output"/>
+    <addaction name="menuTheme"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTool"/>
@@ -555,6 +564,21 @@
    </property>
    <property name="text">
     <string>Input/Output</string>
+   </property>
+  </action>
+  <action name="actionSystem">
+   <property name="text">
+    <string>System</string>
+   </property>
+  </action>
+  <action name="actionFusion">
+   <property name="text">
+    <string>Fusion</string>
+   </property>
+  </action>
+  <action name="actionFusion_Dark">
+   <property name="text">
+    <string>Fusion Dark</string>
    </property>
   </action>
  </widget>
