@@ -60,6 +60,7 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setupDockWindows();
 	updateRecentFileActions();
 	loadPlugins();
+	setupProperties();
 
 	mSystemStyleName = qApp->style()->objectName();
 
@@ -438,16 +439,32 @@ void MainWindow::setupFusionDarkTheme() {
 	palette.setColor(QPalette::HighlightedText, Qt::black);
 
 	qApp->setPalette(palette);
+	settings.setValue("application/style", "fusion_dark");
 }
 
 void MainWindow::setupFusionTheme() {
 	QApplication::setStyle(QStyleFactory::create("fusion"));
 	qApp->setPalette(qApp->style()->standardPalette());
+	settings.setValue("application/style", "fusion");
 }
 
 void MainWindow::setupSystemTheme() {
 	QApplication::setStyle(QStyleFactory::create(mSystemStyleName));
 	qApp->setPalette(qApp->style()->standardPalette());
+	settings.setValue("application/style", "system");
+}
+
+void MainWindow::setupProperties() {
+	auto theme = settings.value("application/style", mSystemStyleName).toString();
+	if (theme == "fusion_dark") {
+		setupFusionDarkTheme();
+	}
+	if (theme == "fusion") {
+		setupFusionTheme();
+	}
+	if (theme == "system") {
+		setupSystemTheme();
+	}
 }
 
 //#include "mainwindow.moc"

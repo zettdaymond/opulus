@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QLinkedList>
+#include <QSettings>
 #include "ui_mainwindow.h"
 
 #include "pluginhandler.h"
@@ -77,6 +78,8 @@ private:
 	QActionGroup* mNonSimulationGroup;
 	QActionGroup* mSimulationGroup;
 
+	QSettings settings;
+
 	enum { MAX_RECENT_FILES = 7 };
 	QAction* mRecentFiles[MAX_RECENT_FILES];
 
@@ -88,10 +91,12 @@ private:
 	void loadPetriNet(const QString& fileName);
 	void loadPlugins();
 	void searchAvailableLanguages();
+	void setupProperties();
 
 	PluginHandler mStaticPlugins;
 
 	QString mSystemStyleName;
+
 };
 
 #endif
