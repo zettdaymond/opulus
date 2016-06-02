@@ -84,6 +84,9 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
     if (_petriNet->currentMarking() == startMarking) {
         return true;
     }
+	if (_petriNet->activeTransitionsCount() == 0 ) {
+		return false;
+	}
     Marking saveMrk = _petriNet->currentMarking();
     _petriNet->setCurrentMarking(marking);
     MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
