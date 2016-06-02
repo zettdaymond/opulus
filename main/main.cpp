@@ -21,6 +21,11 @@
 #include <QApplication>
 #include "mainwindow.h"
 
+#ifdef STATIC_QT_BUILD
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
+#endif //STATIC_QT_BUILD
+
 /**
 *	Application entry point.
 */

@@ -24,7 +24,11 @@ set(opuluscore_srcs
 #qt5_generate_moc(opuluscore ${opuluscore_srcs})
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
-add_library(opuluscore SHARED ${opuluscore_srcs})
+if(_STATIC_LIBS)
+    add_library(opuluscore STATIC ${opuluscore_srcs})
+else()
+    add_library(opuluscore SHARED ${opuluscore_srcs})
+endif(_STATIC_LIBS)
 
 #qt5_use_modules(opuluscore Core Widgets Xml Gui PrintSupport Svg Test)
 

@@ -22,7 +22,7 @@ endif(GRAPHVIZ_STATIC_FOUND)
 
 if(NOT GRAPHVIZ_FOUND)
     if(NOT GRAPHVIZ_STATIC_FOUND)
-        set("Coverage graph backend : NONE")
+        message("Coverage graph backend : NONE")
     endif(NOT GRAPHVIZ_STATIC_FOUND)
 endif(NOT GRAPHVIZ_FOUND)
 
@@ -67,7 +67,7 @@ target_link_libraries(
 )
 
 if(GRAPHVIZ_FOUND)
-    target_link_libraries(coverageGraph opuluscore cgraph gvc)
+    target_link_libraries(coverageGraph cgraph gvc)
 endif(GRAPHVIZ_FOUND)
 
 #DO NOT TOUCH this lines. I don't know how it works and why it works in that way, but it is.

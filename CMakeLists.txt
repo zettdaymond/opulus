@@ -26,22 +26,51 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # adtional compiler options for release and debug modes
-add_definitions(-Wall -Wextra)
+add_definitions(-std=c++14 -Wall -Wextra)
 if (${CMAKE_BUILD_TYPE} STREQUAL release)
-        add_definitions(-DQT_NO_DEBUG -O2)
+        add_definitions(-DQT_NO_DEBUG -O3)
 else (${CMAKE_BUILD_TYPE} STREQUAL release)
         add_definitions(-ggdb)
 endif (${CMAKE_BUILD_TYPE} STREQUAL release)
 
 #compiller flags
-set(GCC_COVERAGE_COMPILE_FLAGS "-std=c++1y")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-
+add_definitions(-fdata-sections -ffunction-sections -Wl,--gc-sections)
 #linker flags
 #set(GCC_COVERAGE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -Xlinker --allow-multiple-definition ")
-set(GCC_COVERAGE_LINKER_FLAGS "")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+#set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} ${GCC_COVERAGE_LINKER_FLAGS}")
+
+#TODO: Detect in future
+set(QT_STATIC 1)
+
+if(_STATIC_QT_BUILD)
+    if(WIN32)
+        if(QT_STATIC)
+            add_definitions(-DSTATIC_QT_BUILD)
+            add_definitions(-static -static-libstdc++ -static-libgcc)
+            set(_STATIC_PLUGINS 1)
+            set(_STATIC_LIBS 1)
+        else()
+            message( FATAL_ERROR "Your vesion of Qt is not STATIC. Could not statically link to non static Qt." )
+        endif()
+    else()
+        message( FATAL_ERROR "Static link to Qt implemented only for Windows. Cmake will exit." )
+    endif(WIN32)
+endif(_STATIC_QT_BUILD)
+
+#if variable not set, set default 0 value to nice printing build status.
+if(NOT _STATIC_QT_BUILD)
+    set (_STATIC_QT_BUILD 0)
+endif(NOT _STATIC_QT_BUILD)
+
+if(NOT _STATIC_LIBS)
+    set (_STATIC_LIBS 0)
+endif(NOT _STATIC_LIBS)
+
+if(NOT _STATIC_PLUGINS)
+    set (_STATIC_PLUGINS 0)
+endif(NOT _STATIC_PLUGINS)
 
 #additional features
 if(_STATIC_PLUGINS)
@@ -50,6 +79,15 @@ if(_STATIC_PLUGINS)
 else(_STATIC_PLUGINS)
     message("Plugins link : SHARED")
 endif(_STATIC_PLUGINS)
+
+
+#print options status
+message("BUILD STATUS:")
+message("# BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
+message("# STATIC_QT_BIULD: " ${_STATIC_QT_BUILD})
+message("# STATIC_LIBS: " ${_STATIC_LIBS})
+message("# STATIC_PLUGINS: " ${_STATIC_PLUGINS})
+
 
 add_subdirectory(core)
 add_subdirectory(gui)
