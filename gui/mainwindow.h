@@ -92,6 +92,7 @@ private:
 	void loadPlugins();
 	void searchAvailableLanguages();
 	void setupProperties();
+	void saveProperties();
 
 	PluginHandler mStaticPlugins;
 

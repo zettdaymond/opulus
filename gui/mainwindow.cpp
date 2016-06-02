@@ -60,9 +60,9 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 	setupDockWindows();
 	updateRecentFileActions();
 	loadPlugins();
-	setupProperties();
 
 	mSystemStyleName = qApp->style()->objectName();
+	setupProperties();
 
 	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
 	connect(mController, SIGNAL(netChanged(PetriNetMatrices)), ui.matrixWidget, SLOT(updateMatrices(PetriNetMatrices)));
@@ -210,6 +210,7 @@ void MainWindow::changeSimulationMode(bool mode) {
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
+	saveProperties();
 	event->accept();
 }
 
@@ -465,6 +466,14 @@ void MainWindow::setupProperties() {
 	if (theme == "system") {
 		setupSystemTheme();
 	}
+
+	move(settings.value("mainwindow/pos", this->pos()).toPoint());
+	resize(settings.value("mainwindow/size", this->size()).toSize());
+}
+
+void MainWindow::saveProperties() {
+	settings.setValue("mainwindow/size", size());
+	settings.setValue("mainwindow/pos", pos());
 }
 
 //#include "mainwindow.moc"
