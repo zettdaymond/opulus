@@ -33,6 +33,7 @@ class PetriNetView;
 class Controller;
 class QActionGroup;
 class Analyser;
+class PetriNetViewZoom;
 
 /**
 * Graphic user interface.
@@ -73,6 +74,7 @@ private:
 	Controller* mController;
 	QHash<QAction*, Analyser*> mAnalysers;
 	QLinkedList<QTranslator*> mTranslators;
+	PetriNetViewZoom* mZoomController;
 
 	QActionGroup* mToolGroup;
 	QActionGroup* mNonSimulationGroup;

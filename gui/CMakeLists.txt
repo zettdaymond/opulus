@@ -25,6 +25,7 @@ set(opulusgui_srcs
     analyserstatusdlg.cpp
     netmatrixmodel.cpp
     pluginhandler.cpp
+    petrinetviewzoom.cpp
 
     commands/cmdcreateplace.cpp
     commands/cmdcreatetransition.cpp

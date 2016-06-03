@@ -26,6 +26,7 @@
 #include "analyser.h"
 #include "version.h"
 #include "petrinetscene.h"
+#include "petrinetviewzoom.h"
 
 #include <QMenuBar>
 #include <QMenu>
@@ -63,6 +64,9 @@ MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
 
 	mSystemStyleName = qApp->style()->objectName();
 	setupProperties();
+
+	mZoomController = new PetriNetViewZoom(ui.petriNetView);
+	mZoomController->setModifiers(Qt::ControlModifier);
 
 	connect(mController, SIGNAL(cleanChanged(bool)), this, SLOT(cleanStateChanged(bool)));
 	connect(mController, SIGNAL(netChanged(PetriNetMatrices)), ui.matrixWidget, SLOT(updateMatrices(PetriNetMatrices)));
