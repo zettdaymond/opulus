@@ -25,6 +25,8 @@
 #include "simulation.h"
 #include "exceptions.h"
 #include "analysisreporter.h"
+#include "graphicsviewzoom.h"
+
 #include <QtPlugin>
 #include <QMessageBox>
 #include <QTextStream>
@@ -185,7 +187,11 @@ void CoverageGraph::finish(QWidget* parentWidget) {
     item->setSharedRenderer(&svgRenderer);
     scene->addItem(item);
 
-    ui.view->setScene(scene);
+	ui.view->setScene(scene);
+
+	mZoomController = new GraphicsViewZoom(ui.view);
+	mZoomController->setModifiers(Qt::ControlModifier);
+
     ui.markingOrder->setText(mMarkingOrder);
 
 	connect(ui.zoomIn, SIGNAL(clicked(bool)), this, SLOT(zoomIn()));

@@ -29,6 +29,7 @@ endif(NOT GRAPHVIZ_FOUND)
 set(coverageGraph_SRCS
     coveragegraph.cpp
     utils.cpp
+    graphicsviewzoom.cpp
     #extended
     extended/analysis_utils.cpp
     extended/preservingmatrixanalyser.cpp

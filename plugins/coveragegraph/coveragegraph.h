@@ -30,6 +30,7 @@
 
 class QTextStream;
 class Marking;
+class GraphicsViewZoom;
 
 /**
 * This plugin creates the Petri Net coverage graph and draw it using the dot util.
@@ -60,8 +61,9 @@ private:
 
 	QString _analyseResult;
 
-	void writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName);
+	GraphicsViewZoom* mZoomController;
 
+	void writeNode(QTextStream& out, const Marking& from, const Marking& to, const QString& arcName);
     QString analyseProperty();
 };
 
