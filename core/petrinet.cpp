@@ -56,7 +56,7 @@ Place* PetriNet::createPlace(const QPointF& pos, const ItemId& id) {
 	place->setNumber(mPlaces.count());
 
 	addItem(place); // order of these two calls matters, no idea why :D
-	mPlaces.insert(place);
+	mPlaces.insert(place); //FIXME: addItem() already insert place
 	return place;
 }
 
@@ -65,7 +65,7 @@ Transition* PetriNet::createTransition(const QPointF& pos, const ItemId& id) {
 	t->setNumber(mTransitions.size());
 
 	addItem(t);  // order of these two calls matters, no idea why :D
-	mTransitions.insert(t);
+	mTransitions.insert(t); //FIXME: addItem() already insert transition
 	return t;
 }
 
@@ -160,7 +160,14 @@ void PetriNet::addItem(Item* item, bool notify) {
 				}
 			}
 		}
+
+		//Fixed BUG when transition became no active after removing and undoing.
 		mTransitions.insert(static_cast<Transition*>(item));
+		transitem->updateStatus();
+		if(transitem->canFire() && not mActiveTransitions.contains(transitem)) {
+			mActiveTransitions.insert(transitem);
+		}
+
 		if (notify) {
 			emit transitionCreated(static_cast<Transition*>(item));
 		}
