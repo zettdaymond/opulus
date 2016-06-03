@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2015 Zett Daymond zettday@gmail.com and catgirl captainslowpoke@gmail.com
+* Copyright (C) 2015-2016 Zett Daymond <zettday@gmail.com> and catgirl <captainslowpoke@gmail.com>
 *
 * This software may be modified and distributed under the terms
 * of the MIT license.
