@@ -71,26 +71,22 @@ if(GRAPHVIZ_FOUND)
     target_link_libraries(coverageGraph cgraph gvc)
 endif(GRAPHVIZ_FOUND)
 
-#DO NOT TOUCH this lines. I don't know how it works and why it works in that way, but it is.
+#This libraries MUST be sent to linker in proper order.
 if(GRAPHVIZ_STATIC_FOUND)
+#set(link_libraries "dotgen;common;xdot;gvc;cgraph;cdt;pathplan;ortho;pack;label;ingraphs")
     target_link_libraries(coverageGraph
-        libcgraph.a
-        libgvc.a
-        libgvplugin_dot_layout.a
-    )
-
-    target_link_libraries( coverageGraph
-        libcdt.a
-        libgvc.a
-        libcommon.a
-        libdotgen.a
         libgvplugin_core.a
         libgvplugin_dot_layout.a
-        liblabel.a
+        libdotgen.a
+        libcommon.a
+        libxdot.a
+        libgvc.a
+        libcgraph.a
+        libcdt.a
+        libpathplan.a
         libortho.a
         libpack.a
-        libpathplan.a
-        libxdot.a
+        liblabel.a
     )
 
 endif(GRAPHVIZ_STATIC_FOUND)
