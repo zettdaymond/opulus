@@ -1,5 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2007 by Hugo Parente Lima <hugo.pl@gmail.com>           *
+ *                 2015-2016 by Zett Daymond <zettday@gmail.com>           *
+ *                 2015-2016 by Catgirl      <captainslowpoke@gmail.com>   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +24,7 @@
 
 /// Returns the application version string.
 inline const char* opulusVersion() {
-	return "0.9.5";
+	return "0.9.6";
 }
 
 #endif

@@ -2,6 +2,8 @@
 **
 ** Copyright (C) 1992-2006 Trolltech ASA. All rights reserved.
 ** Copyright (C) 2006 Hugo Parente Lima <hugo.pl@gmail.com>
+**               2015-2016 by Zett Daymond <zettday@gmail.com>
+**               2015-2016 by Catgirl      <captainslowpoke@gmail.com>
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **

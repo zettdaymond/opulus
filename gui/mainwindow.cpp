@@ -1,5 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2007 by Hugo Parente Lima <hugo.pl@gmail.com>           *
+ *                 2015-2016 by Zett Daymond <zettday@gmail.com>           *
+ *                 2015-2016 by Catgirl      <captainslowpoke@gmail.com>   *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -348,7 +350,7 @@ void MainWindow::executeAnalyser() {
 void MainWindow::about() {
 	QMessageBox::about(this, tr("About"),
 			tr("<h1>Opulus version %1</h1>\n"
-			"<p>Copyright 2007-2015 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://opulus.sf.net\">http://opulus.sf.net</a>.</p>\n"
+			"<p>Copyright 2007-2016 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://bitbucket.org/zettdaymond/opulus\">http://bitbucket.org/zettdaymond/opulus</a>.</p>\n"
 			"<h2>Authors</h2>\n"
 			"<dl>\n"
 			"<dt>Hugo Parente Lima</dt>\n"
@@ -360,10 +362,10 @@ void MainWindow::about() {
 			"<dt>Clerton Ribeiro de Araújo Filho</dt>\n"
 			"<dd><a href=\"mailto:clertonfilho@gmail.com\">clertonfilho@gmail.com</a><br>\n"
 			"Developer.</dd>\n"
-			"<dt>cat</dt>\n"
+			"<dt>Cat</dt>\n"
 			"<dd><a href=\"mailto:captainslowpoke@gmail.com\">captainslowpoke@gmail.com</a><br>\n"
 			"Developer.</dd>\n"
-			"<dt>zd</dt>\n"
+			"<dt>Zett Daymond</dt>\n"
 			"<dd><a href=\"mailto:zettday@gmail.com\">zettday@gmail.com</a><br>\n"
 			"Developer.</dd>\n"
 			"<h2>Contributors</h2>\n"
