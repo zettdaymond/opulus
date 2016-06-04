@@ -1,6 +1,8 @@
 # Description: #
 Opulus is a simple Petri Net simulator/editor written in C++/Qt5. This is the fork of [opulus.sourceforge.net](opulus.sourceforge.net).
 
+![1.png](https://bitbucket.org/repo/7X6BR9/images/653296000-1.png)
+
 # Features: #
 * Intuitive interface.
 * Create and edit Petri Net in several ways: using visual graph, D+ and D- matrices, or IO-functions.
