@@ -350,7 +350,7 @@ void MainWindow::executeAnalyser() {
 void MainWindow::about() {
 	QMessageBox::about(this, tr("About"),
 			tr("<h1>Opulus version %1</h1>\n"
-			"<p>Copyright 2007-2016 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://opulus.sf.net\">http://bitbucket.org/zettdaymond/opulus</a>.</p>\n"
+			"<p>Copyright 2007-2016 Opulus developers. Opulus is distributed under the terms of GPL v2, see the COPYING file for details or visit <a href=\"http://bitbucket.org/zettdaymond/opulus\">http://bitbucket.org/zettdaymond/opulus</a>.</p>\n"
 			"<h2>Authors</h2>\n"
 			"<dl>\n"
 			"<dt>Hugo Parente Lima</dt>\n"
