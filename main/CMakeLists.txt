@@ -40,6 +40,6 @@ if (CMAKE_BUILD_TYPE STREQUAL release)
 endif (CMAKE_BUILD_TYPE STREQUAL release)
 
 #copy
-#add_dependencies( opulus copyfiles )
+add_dependencies( opulus copyfiles )
 
 install(TARGETS opulus DESTINATION bin)
