@@ -44,49 +44,49 @@ add_definitions(-fdata-sections -ffunction-sections -Wl,--gc-sections)
 #TODO: Detect in future
 set(QT_STATIC 1)
 
-if(_STATIC_QT_BUILD)
+if(STATIC_QT_BUILD)
     if(WIN32)
         if(QT_STATIC)
             add_definitions(-DSTATIC_QT_BUILD)
             add_definitions(-static -static-libstdc++ -static-libgcc)
-            set(_STATIC_PLUGINS 1)
-            set(_STATIC_LIBS 1)
+            set(STATIC_PLUGINS 1)
+            set(STATIC_LIBS 1)
         else()
             message( FATAL_ERROR "Your vesion of Qt is not STATIC. Could not statically link to non static Qt." )
         endif()
     else()
         message( FATAL_ERROR "Static link to Qt implemented only for Windows. Cmake will exit." )
     endif(WIN32)
-endif(_STATIC_QT_BUILD)
+endif(STATIC_QT_BUILD)
 
 #if variable not set, set default 0 value to nice printing build status.
-if(NOT _STATIC_QT_BUILD)
-    set (_STATIC_QT_BUILD 0)
-endif(NOT _STATIC_QT_BUILD)
+if(NOT STATIC_QT_BUILD)
+    set (STATIC_QT_BUILD 0)
+endif(NOT STATIC_QT_BUILD)
 
-if(NOT _STATIC_LIBS)
-    set (_STATIC_LIBS 0)
-endif(NOT _STATIC_LIBS)
+if(NOT STATIC_LIBS)
+    set (STATIC_LIBS 0)
+endif(NOT STATIC_LIBS)
 
-if(NOT _STATIC_PLUGINS)
-    set (_STATIC_PLUGINS 0)
-endif(NOT _STATIC_PLUGINS)
+if(NOT STATIC_PLUGINS)
+    set (STATIC_PLUGINS 0)
+endif(NOT STATIC_PLUGINS)
 
 #additional features
-if(_STATIC_PLUGINS)
+if(STATIC_PLUGINS)
     add_definitions(-DSTATIC_PLUGINS)
     message("Plugins link : STATIC")
-else(_STATIC_PLUGINS)
+else(STATIC_PLUGINS)
     message("Plugins link : SHARED")
-endif(_STATIC_PLUGINS)
+endif(STATIC_PLUGINS)
 
 
 #print options status
 message("BUILD STATUS:")
 message("# BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
-message("# STATIC_QT_BIULD: " ${_STATIC_QT_BUILD})
-message("# STATIC_LIBS: " ${_STATIC_LIBS})
-message("# STATIC_PLUGINS: " ${_STATIC_PLUGINS})
+message("# STATIC_QT_BIULD: " ${STATIC_QT_BUILD})
+message("# STATIC_LIBS: " ${STATIC_LIBS})
+message("# STATIC_PLUGINS: " ${STATIC_PLUGINS})
 
 
 add_subdirectory(core)

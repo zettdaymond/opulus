@@ -1,10 +1,10 @@
 #project(opulus)
 
-#if(_STATIC_PLUGINS)
+#if(STATIC_PLUGINS)
 #    set(MAIN_LINKED_LIBS )
-#elseif(_STATIC_PLUGINS)
+#elseif(STATIC_PLUGINS)
 #    set(MAIN_LINKED_LIBS opulusgui)
-#endif(_STATIC_PLUGINS)
+#endif(STATIC_PLUGINS)
 
 if( MINGW )
 	# resource compilation for MinGW

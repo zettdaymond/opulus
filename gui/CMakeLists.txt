@@ -58,11 +58,11 @@ qt5_wrap_ui(opulusgui_ui_srcs ${opulusgui_uis})
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../core)
 
-if(_STATIC_LIBS)
+if(STATIC_LIBS)
     add_library(opulusgui STATIC ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
 else()
     add_library(opulusgui SHARED ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
-endif(_STATIC_LIBS)
+endif(STATIC_LIBS)
 #target_link_libraries(opulusgui ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} opuluscore)
 
 if(_STATIC_PLUGINS)
