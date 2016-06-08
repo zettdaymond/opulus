@@ -75,7 +75,7 @@ Use revision number and commit hash instead of numeric version. Disable if build
 
 - **GRAPHVIZ_BACKEND=STATIC/SHARED/NONE**
 
-Specifies what type of graph drawing backend coverage graph plugin will use. 
+Specifies what type of a graph-visualization backend the coverage graph plugin will use. STATIC - means that you have and want to use static Graphviz libraries, SHARED - the same, but shared libraries, NONE - you don't want to use any graph-visualization backend. Thus, the coverage graph, by itself, become unavailable, but the analisys result stays available.
 
 # About Windows: #
 The easiest way to compile on Windows is to use MSYS2. To install all dependencies execute following commands in MinGW shell:
