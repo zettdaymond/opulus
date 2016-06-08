@@ -14,7 +14,7 @@ Opulus is a simple Petri Net simulator/editor written in C++/Qt5. This is the fo
 To compile Opulus you will need:
 
 * *Qt* >= 5.3
-* *CMake* >= 2.8.12
+* *CMake* >= 3.4
 * Compiler that supports C++14 (*GCC* >= 4.9 or *Clang* >= 3.4)
 * *Eigen* >= 3.2
 
@@ -43,6 +43,40 @@ On some distros (like Arch Linux) /usr/local/bin is not in the path, so is bette
 $ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 ```
 
+# Build options #
+
+- **WITH_PLUGINS=ON/OFF** 
+
+Switch it ON, if you want to build and install reachability and coverage graph analysis plugins.
+
+- **WITH_TRANSLATIONS=ON/OFF**
+
+Switch it ON, if you want to build and install Spanish(partially), Portuguese(partially) and Russian translation files.
+
+- **WITH_TESTS=ON/OFF**
+
+Switch it ON, if you want to build program tests.
+
+- **BUILD_STATIC_CORE_LIBS=ON/OFF** 
+
+Switch it ON, if you want to embed opulusgui and opuluscore libraries statically in application.
+
+- **BUILD_STATIC_PLUGINS=ON/OFF**
+
+Switch it ON, if you want to embed reachability and coverage graph analysis plugins in application.
+
+- **BUILD_WITH_QT5_STATIC=ON/OFF** 
+
+Switch it ON, if you build Opulus with **STATIC** version of Qt5. Build will fail, in another case.
+
+- **USE_REVISION** 
+
+Use revision number and commit hash instead of numeric version. Disable if building final release or without git.
+
+- **GRAPHVIZ_BACKEND=STATIC/SHARED/NONE**
+
+Specifies what type of graph drawing backend coverage graph plugin will use. 
+
 # About Windows: #
 The easiest way to compile on Windows is to use MSYS2. To install all dependencies execute following commands in MinGW shell:
 ```
@@ -62,8 +96,8 @@ To determine .dll's you'll need to copy, run `ldd bin/opulus.exe` and copy all /
 - Hugo Parente <hugo.pl@gmail.com>
 - Adauto Trigueiro de Almeida Filho <adautofilho@gmail.com>
 - Clerton Ribeiro de Araújo Filho <clertonfilho@gmail.com>
+- Zett Daymond <zettday@gmail.com>
+- Cat <captainslowpoke@gmail.com>
 
 # Contributors #
 - Carlos Sanchis (Spanish translation) <csanchisb@yahoo.es>
-- cat <captainslowpoke@gmail.com>
-- zett <zettday@gmail.com>
