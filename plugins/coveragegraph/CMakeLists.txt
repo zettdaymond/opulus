@@ -1,5 +1,3 @@
-#<<<<<<< HEAD
-project(coverage)
 cmake_minimum_required(VERSION 3.4)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/plugins/coveragegraph/cmake" ${CMAKE_MODULE_PATH})
@@ -17,7 +15,8 @@ else()
     if(GRAPHVIZ_BACKEND STREQUAL "STATIC")
         find_package(GraphVizStatic REQUIRED)
     else()
-        message("GRAPHVIZ_BACKEND is not set. Using \"NONE\"")
+        message("GRAPHVIZ_BACKEND is not set. You may use GRAPHVIZ_BACKEND=STATIC/SHARED/NONE. Using \"NONE\"")
+        set(GRAPHVIZ_BACKEND "NONE")
     endif()
 endif()
 
@@ -42,6 +41,11 @@ if(GRAPHVIZ_STATIC_FOUND)
         libortho.a
         libpack.a
         liblabel.a)
+endif()
+
+if(NOT GRAPHVIZ_FOUND AND NOT GRAPHVIZ_STATIC_FOUND)
+    message("Could not find libraries of specified GRAPHVIZ_BACKEND=${GRAPHVIZ_BACKEND}. Using \"NONE\" instead.")
+    set(GRAPHVIZ_BACKEND "NONE")
 endif()
 
 set(coverage_srcs
@@ -76,15 +80,9 @@ target_include_directories(coverage PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
-#set_target_properties(coverageGraph PROPERTIES
-#    LIBRARY_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
-#    RUNTIME_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
-#)
+message("PLUGIN Coverage status:")
+message("# GRAPHVIZ_BACKEND: ${GRAPHVIZ_BACKEND}")
 
-#install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
-
-#install(TARGETS coverageGraph DESTINATION share/opulus/plugins)
-#=======
 set_target_properties(coverage PROPERTIES
 	LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
