@@ -1,4 +1,5 @@
 project (opulusgui)
+cmake_minimum_required(VERSION 3.4)
 
 set(opulusgui_srcs
     mainwindow.cpp
@@ -40,44 +41,48 @@ set(opulusgui_srcs
     commands/cmdpack.cpp
     matrixwidget.cpp
     opulusmath.h
-)
-
-set(opulusgui_uis
-    mainwindow.ui
-    analyserstatus.ui
-    matrixwidget.ui
-)
-
-set(opulusgui_rcs
     gui.qrc
 )
 
-qt5_add_resources(opulusgui_rc_srcs ${opulusgui_rcs})
-#qt5_generate_moc(opulusgui ${opulusgui_srcs})
-qt5_wrap_ui(opulusgui_ui_srcs ${opulusgui_uis})
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../core)
 
-if(STATIC_LIBS)
+find_package(Qt5 REQUIRED COMPONENTS Gui Svg Xml PrintSupport)
+
+if(BUILD_STATIC_CORE_LIBS)
     add_library(opulusgui STATIC ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
 else()
     add_library(opulusgui SHARED ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
-endif(STATIC_LIBS)
-#target_link_libraries(opulusgui ${QT_QTGUI_LIBRARY} ${QT_QTSVG_LIBRARY} opuluscore)
+endif()
+add_library(opulus::gui ALIAS opulusgui)
 
-if(_STATIC_PLUGINS)
-    target_link_libraries(opulusgui opuluscore coverageGraph reachability)
-else(_STATIC_PLUGINS)
-    target_link_libraries(opulusgui opuluscore)
-endif(_STATIC_PLUGINS)
+target_include_directories(opulusgui PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+)
+
 
 target_link_libraries(
     opulusgui
-    Qt5::Core
+    opulus::core
     Qt5::Gui
     Qt5::Svg
     Qt5::Xml
     Qt5::PrintSupport
 )
 
-install(TARGETS opulusgui DESTINATION lib)
+#if(BUILD_STATIC_PLUGINS)
+#    target_link_libraries(opulusgui c)
+#endif()
+
+set_target_properties(opulusgui PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
+
+install(TARGETS opulusgui
+    ARCHIVE DESTINATION lib 
+    LIBRARY DESTINATION lib 
+    RUNTIME DESTINATION bin)

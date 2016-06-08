@@ -1,43 +1,59 @@
-project(opuluscore)
+project (opuluscore)
+cmake_minimum_required(VERSION 3.4)
 
 set(opuluscore_srcs
-    petrinet.cpp
-    item.cpp
-    node.cpp
-    place.cpp
-    transition.cpp
-    abstractarc.cpp
-    arc.cpp
-    inhibitorarc.cpp
-    simulation.cpp
-    marking.cpp
-    analyser.h
-    analysisrunner.cpp
-    analysisreporter.cpp
-    matrix_util.cpp
-    exceptions.h
-    version.h
-    itemid.h
+	petrinet.cpp
+	item.cpp
+	node.cpp
+	place.cpp
+	transition.cpp
+	abstractarc.cpp
+	arc.cpp
+	inhibitorarc.cpp
+	simulation.cpp
+	marking.cpp
+	analysisrunner.cpp
+	analysisreporter.cpp
+	matrix_util.cpp
 )
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
-#qt5_generate_moc(opuluscore ${opuluscore_srcs})
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+find_package(Qt5 REQUIRED COMPONENTS Core Xml)
+find_package(PkgConfig)
+find_package(Git)
+pkg_search_module(EIGEN3 REQUIRED eigen3)
 
-if(STATIC_LIBS)
+
+if(BUILD_STATIC_CORE_LIBS)
     add_library(opuluscore STATIC ${opuluscore_srcs})
 else()
     add_library(opuluscore SHARED ${opuluscore_srcs})
-endif(STATIC_LIBS)
+endif()
+add_library(opulus::core ALIAS opuluscore)
 
-#qt5_use_modules(opuluscore Core Widgets Xml Gui PrintSupport Svg Test)
 
+target_include_directories(opuluscore INTERFACE ${EIGEN3_INCLUDE_DIRS})
 
-#target_link_libraries(opuluscore ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
-#${Qt5Core_QTMAIN_LIBRARIES}target_link_libraries(opuluscore ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
-target_link_libraries(
-    opuluscore
-    Qt5::Core
-    Qt5::Xml
+target_include_directories(opuluscore PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
-install(TARGETS opuluscore DESTINATION lib)
+
+target_link_libraries(opuluscore Qt5::Core Qt5::Xml)
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_compile_options(opuluscore PUBLIC -Wall -Wextra)
+	if(GIT_FOUND AND USE_REVISION)
+		execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
+		execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
+		target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
+	endif()
+endif()
+
+set_target_properties(opuluscore PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+
+install(TARGETS opuluscore 
+	ARCHIVE DESTINATION lib 
+	LIBRARY DESTINATION lib 
+	RUNTIME DESTINATION bin)

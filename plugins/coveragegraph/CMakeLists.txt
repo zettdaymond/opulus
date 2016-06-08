@@ -1,80 +1,35 @@
-project(coverageGraph)
+#<<<<<<< HEAD
+project(coverage)
+cmake_minimum_required(VERSION 3.4)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/plugins/coveragegraph/cmake" ${CMAKE_MODULE_PATH})
 
-if(GRAPHVIZ_BACKEND)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(Qt5 REQUIRED COMPONENTS Gui Svg)
+
+if(GRAPHVIZ_BACKEND STREQUAL "SHARED")
     find_package(GraphViz REQUIRED)
-else(GRAPHVIZ_BACKEND)
-    if(GRAPHVIZ_STATIC_BACKEND)
+else()
+    if(GRAPHVIZ_BACKEND STREQUAL "STATIC")
         find_package(GraphVizStatic REQUIRED)
-    endif(GRAPHVIZ_STATIC_BACKEND)
-endif(GRAPHVIZ_BACKEND)
+    else()
+        message("GRAPHVIZ_BACKEND is not set. Using \"NONE\"")
+    endif()
+endif()
 
 if(GRAPHVIZ_FOUND)
     add_definitions(-DGRAPHVIZ_BACKEND)
-    message("Coverage graph backend : Graphviz SHARED")
-endif(GRAPHVIZ_FOUND)
+    set(GRAPHVIZ_BACKEND_LIBS cgraph gvc)
+endif()
 
 if(GRAPHVIZ_STATIC_FOUND)
     add_definitions(-DGRAPHVIZ_STATIC_BACKEND)
-    message("Coverage graph backend : Graphviz STATIC")
-endif(GRAPHVIZ_STATIC_FOUND)
-
-if(NOT GRAPHVIZ_FOUND)
-    if(NOT GRAPHVIZ_STATIC_FOUND)
-        message("Coverage graph backend : NONE")
-    endif(NOT GRAPHVIZ_STATIC_FOUND)
-endif(NOT GRAPHVIZ_FOUND)
-
-set(coverageGraph_SRCS
-    coveragegraph.cpp
-    utils.cpp
-    graphicsviewzoom.cpp
-    #extended
-    extended/analysis_utils.cpp
-    extended/preservingmatrixanalyser.cpp
-    extended/propertyanalyser.cpp
-    extended/transitionanaliser.cpp
-    extended/markingnode.cpp
-    extended/invertibilityanalyser.cpp
-)
-set(coverageGraph_UIS
-	coveragegraph.ui
-)
-
-#qt5_add_translations(coverageGraph .)
-
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../core ${CMAKE_CURRENT_BINARY_DIR})
-qt5_wrap_ui(coverageGraph_ui_srcs ${coverageGraph_UIS})
-
-
-#add_definitions(${QT_DEFINITIONS})
-#add_definitions(-DQT_PLUGIN)
-#add_definitions(-DQT_SHARED)
-
-if(STATIC_PLUGINS)
-    add_library(coverageGraph STATIC ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
-else(STATIC_PLUGINS)
-    add_library(coverageGraph SHARED ${coverageGraph_SRCS} ${coverageGraph_ui_srcs} ${coverageGraph_moc_srcs})
-endif(STATIC_PLUGINS)
-
-target_link_libraries(coverageGraph opuluscore)
-target_link_libraries(
-    coverageGraph
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::Svg
-)
-
-if(GRAPHVIZ_FOUND)
-    target_link_libraries(coverageGraph cgraph gvc)
-endif(GRAPHVIZ_FOUND)
-
-#This libraries MUST be sent to linker in proper order.
-if(GRAPHVIZ_STATIC_FOUND)
-#set(link_libraries "dotgen;common;xdot;gvc;cgraph;cdt;pathplan;ortho;pack;label;ingraphs")
-    target_link_libraries(coverageGraph
+    #This libraries MUST be sent to linker in proper order.
+    set(GRAPHVIZ_BACKEND_LIBS
         libgvplugin_core.a
         libgvplugin_dot_layout.a
         libdotgen.a
@@ -86,17 +41,53 @@ if(GRAPHVIZ_STATIC_FOUND)
         libpathplan.a
         libortho.a
         libpack.a
-        liblabel.a
-    )
+        liblabel.a)
+endif()
 
-endif(GRAPHVIZ_STATIC_FOUND)
+set(coverage_srcs
+    coveragegraph.cpp
+    utils.cpp
+    graphicsviewzoom.cpp
 
-set_target_properties(coverageGraph PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
-    RUNTIME_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
+	extended/analysis_utils.cpp
+	extended/preservingmatrixanalyser.cpp
+	extended/propertyanalyser.cpp
+	extended/transitionanaliser.cpp
+	extended/markingnode.cpp
+	extended/invertibilityanalyser.cpp
 )
 
-install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
+if(BUILD_STATIC_PLUGINS)
+    add_library(coverage STATIC ${coverage_srcs})
+else()
+    add_library(coverage SHARED ${coverage_srcs})
+endif()
 
-install(TARGETS coverageGraph DESTINATION share/opulus/plugins)
+target_link_libraries(
+    coverage
+	opulus::core
+	Qt5::Widgets
+	Qt5::Gui
+	Qt5::Svg
+    ${GRAPHVIZ_BACKEND_LIBS}
+)
 
+target_include_directories(coverage PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+
+#set_target_properties(coverageGraph PROPERTIES
+#    LIBRARY_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
+#    RUNTIME_OUTPUT_DIRECTORY ${CMAPROJECT_BINARY_DIR}../../share/opulus/plugins
+#)
+
+#install(FILES ${coverageGraph_QMS} DESTINATION share/opulus/i18n)
+
+#install(TARGETS coverageGraph DESTINATION share/opulus/plugins)
+#=======
+set_target_properties(coverage PROPERTIES
+	LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+)
+
+install(TARGETS coverage DESTINATION share/opulus/plugins)

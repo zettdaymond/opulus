@@ -24,7 +24,11 @@
 
 /// Returns the application version string.
 inline const char* opulusVersion() {
-	return "0.9.6";
+#ifdef OPULUS_REVISION
+	return OPULUS_REVISION;
+#else
+    return "0.9.6";
+#endif
 }
 
 #endif

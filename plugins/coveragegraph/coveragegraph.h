@@ -26,7 +26,7 @@
 #include "analyser.h"
 #include "ui_coveragegraph.h"
 
-#ifdef STATIC_PLUGINS
+#ifdef BUILD_STATIC_PLUGINS
 #	define QT_STATICPLUGIN
 #endif
 
