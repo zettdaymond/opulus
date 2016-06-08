@@ -74,10 +74,6 @@ target_link_libraries(
     Qt5::PrintSupport
 )
 
-#if(BUILD_STATIC_PLUGINS)
-#    target_link_libraries(opulusgui c)
-#endif()
-
 set_target_properties(opulusgui PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
 )

@@ -68,7 +68,6 @@ endif()
 
 add_subdirectory(core)
 add_subdirectory(gui)
-add_subdirectory(main)
 
 if(WITH_TRANSLATIONS)
     message(STATUS "Translations enabled")
@@ -86,6 +85,8 @@ if(WITH_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+add_subdirectory(main)
 
 #print options status
 message("BUILD STATUS:")

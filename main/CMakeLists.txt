@@ -9,11 +9,15 @@ if(WIN32)
 	set(SUBSYSTEM WIN32)
 endif()
 
+if(BUILD_STATIC_PLUGINS)
+    set(PLUGINS_TO_LINK coverage reachability)
+else()
+    set(PLUGINS_TO_LINK)
+endif()
+
 add_executable(opulus ${SUBSYSTEM} main.cpp ${UI_RESOURCES_RCC})
 
-target_link_libraries(opulus opulus::gui
-    coverage
-    reachability)
+target_link_libraries(opulus opulus::gui ${PLUGINS_TO_LINK})
 
 #copy
 #add_dependencies( opulus copyfiles )

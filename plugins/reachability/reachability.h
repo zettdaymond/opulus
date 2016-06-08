@@ -36,7 +36,7 @@
 #include "ui_reachability.h"
 #include "ui_results.h"
 
-#ifdef BUILD_STATIC_PLUGINS
+#ifdef STATIC_PLUGINS
 #	define QT_STATICPLUGIN
 #endif
 
