@@ -95,7 +95,7 @@ To determine .dll's you'll need to copy, run `ldd bin/opulus.exe` and copy all /
 # Releases #
 We provide binary builds for Windows. See https://bitbucket.org/zettdaymond/opulus/downloads. 
 
-Note, that the program will not work on processors, older than Intel Core2Duo.
+Note, that the our build will not work on processors, older than Intel Core2Duo.
 
 
 # Autors: #
