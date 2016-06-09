@@ -92,6 +92,12 @@ If the build was successful, `cd` into `bin` directory and run the program: `$ .
 To distribute the program, you will need to copy some GCC and Qt .dll's to `bin` directory, along with entire *graphviz* distribution.
 To determine .dll's you'll need to copy, run `ldd bin/opulus.exe` and copy all /mingw* .dll's.
 
+# Releases #
+We provide binary builds for Windows. See https://bitbucket.org/zettdaymond/opulus/downloads. 
+
+Note, that the program will not work on processors, older than Intel Core2Duo.
+
+
 # Autors: #
 - Hugo Parente <hugo.pl@gmail.com>
 - Adauto Trigueiro de Almeida Filho <adautofilho@gmail.com>
