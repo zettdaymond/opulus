@@ -1,4 +1,3 @@
-project (opulusgui)
 cmake_minimum_required(VERSION 3.4)
 
 set(opulusgui_srcs
@@ -76,6 +75,7 @@ target_link_libraries(
 
 set_target_properties(opulusgui PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
 )
 
 install(TARGETS opulusgui

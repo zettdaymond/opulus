@@ -1,4 +1,3 @@
-project (opuluscore)
 cmake_minimum_required(VERSION 3.4)
 
 set(opuluscore_srcs
@@ -51,7 +50,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	endif()
 endif()
 
-set_target_properties(opuluscore PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set_target_properties(opuluscore PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
 
 install(TARGETS opuluscore 
 	ARCHIVE DESTINATION lib 
