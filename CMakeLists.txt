@@ -22,8 +22,8 @@ endif()
 option(WITH_PLUGINS "Build and install plugins." ON)
 option(WITH_TRANSLATIONS "Build and install translations." ON)
 option(WITH_TESTS "Build tests." OFF)
-option(BUILD_STATIC_CORE_LIBS "Build static core libraries." ON)
-option(BUILD_STATIC_PLUGINS "Build static core libraries." ON)
+option(BUILD_STATIC_CORE_LIBS "Build static core libraries." OFF)
+option(BUILD_STATIC_PLUGINS "Build static core libraries." OFFh)
 option(BUILD_WITH_QT5_STATIC "Link to static Qt5 libraries." OFF)
 option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
 
@@ -68,6 +68,7 @@ endif()
 
 add_subdirectory(core)
 add_subdirectory(gui)
+add_subdirectory(main)
 
 if(WITH_TRANSLATIONS)
     message(STATUS "Translations enabled")
@@ -86,7 +87,6 @@ if(WITH_TESTS)
     add_subdirectory(tests)
 endif()
 
-add_subdirectory(main)
 
 #print options status
 message("BUILD STATUS:")
