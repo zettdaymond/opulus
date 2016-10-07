@@ -26,8 +26,11 @@
 #include "exceptions.h"
 #include "matrix_util.h"
 #include "commands/cmdchangeproperty.hpp"
-//#include "commands/cmdcreatearc.h"
-//#include "commands/cmdcreatearcwithweight.h"
+
+//workaround over auto bug
+#include "commands/cmdcreatearc.h"
+#include "commands/cmdcreatearcwithweight.h"
+#include "abstractarc.h"
 
 class QWidget;
 class QGraphicsView;
@@ -59,7 +62,7 @@ class CmdPack;
 * @ingroup gui
 */
 class Controller : public QObject {
-Q_OBJECT
+	Q_OBJECT
 public:
 	/// Constructs a new Controller with the parent \p parent.
 	Controller(QWidget* parent, QGraphicsView* view);
@@ -152,8 +155,29 @@ public:
 		return new CmdChangeProperty<Type, Base, ParamType> (obj, method, param, old, mPetriNet);
 	}
 
-	QUndoCommand* createAddArcCmd(auto from, auto to);
-	QUndoCommand* createAddArcWithWeightCmd(auto from, auto to, uint weight);
+	template<class T, class U>
+	QUndoCommand* createAddArcCmd(T from, U to) {
+		AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+		if(!arc) {
+			return new CmdCreateArc(mPetriNet, from, to);
+		} else {
+			return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+			arc->weight() + 1, arc->weight());
+		}
+	}
+
+	template<class T, class U>
+	QUndoCommand* createAddArcWithWeightCmd(T from, U to, uint weight) {
+		AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
+		if(!arc) {
+			return new CmdCreateArcWithWeight(mPetriNet, from, to, weight);
+		} else {
+			return createItemAttributeCmd(arc, &AbstractArc::setWeight,
+			arc->weight() + weight, arc->weight());
+		}
+	}
+
+
 	void enableGuiNotifications();
 	void disableGuiNotifications();
 private slots:

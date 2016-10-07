@@ -74,26 +74,26 @@ Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), 
 	connect(mAnalysisRunner, SIGNAL(finished()), this, SLOT(analysisFinished()));
 	// prop editor notifications
 	connect(mPetriNet, SIGNAL(itemModified(Item*)),
-			mPropEditorModel, SLOT(itemModified(Item*)));
+	        mPropEditorModel, SLOT(itemModified(Item*)));
 	// scene notifications
 	connect(mPetriNet, SIGNAL(placeCreated(Place*)),
-			mScene, SLOT(createPlace(Place*)));
+	        mScene, SLOT(createPlace(Place*)));
 	connect(mPetriNet, SIGNAL(transitionCreated(Transition*)),
-			mScene, SLOT(createTransition(Transition*)));
+	        mScene, SLOT(createTransition(Transition*)));
 	connect(mPetriNet, SIGNAL(arcCreated(Arc*)),
-			mScene, SLOT(createArc(Arc*)));
+	        mScene, SLOT(createArc(Arc*)));
 	connect(mPetriNet, SIGNAL(inhibitorArcCreated(InhibitorArc*)),
-			mScene, SLOT(createInhibitorArc(InhibitorArc*)));
+	        mScene, SLOT(createInhibitorArc(InhibitorArc*)));
 	connect(mPetriNet, SIGNAL(itemModified(Item*)),
-			mScene, SLOT(updateItem(Item*)));
+	        mScene, SLOT(updateItem(Item*)));
 	connect(mPetriNet, SIGNAL(itemRemoved(Item*)),
-			mScene, SLOT(removeItem(Item*)));
+	        mScene, SLOT(removeItem(Item*)));
 	connect(mScene, SIGNAL(itemSelected(Item*)),
-			mPropEditorModel, SLOT(setModelSource(Item*)));
-    connect(mPetriNet, SIGNAL(itemGroupRemoved(QVector<Item*>)),
-            mScene, SLOT(removeItemGroup(QVector<Item*>)));
-    connect(mPetriNet, SIGNAL(itemGroupCreated(QVector<Item*>)),
-            mScene, SLOT(createItemGroup(QVector<Item*>)));
+	        mPropEditorModel, SLOT(setModelSource(Item*)));
+	connect(mPetriNet, SIGNAL(itemGroupRemoved(QVector<Item*>)),
+	        mScene, SLOT(removeItemGroup(QVector<Item*>)));
+	connect(mPetriNet, SIGNAL(itemGroupCreated(QVector<Item*>)),
+	        mScene, SLOT(createItemGroup(QVector<Item*>)));
 
 
 	connect(mPetriNet, SIGNAL(placeCreated(Place*)), this, SLOT(netUpdated()));
@@ -255,8 +255,8 @@ void Controller::updateMatrixValue(MatrixType which, int row, int col, int val) 
 	if(row >= mPetriNet->transitionCount() || col >= mPetriNet->placeCount()) {
 		bool st = this->blockSignals(true);
 		resizeCmd = createResizeMatrixCmds(
-					std::max(row+1, mPetriNet->transitionCount()),
-					std::max(col+1, mPetriNet->placeCount()));
+		                std::max(row+1, mPetriNet->transitionCount()),
+		                std::max(col+1, mPetriNet->placeCount()));
 		this->blockSignals(st);
 	}
 
@@ -291,7 +291,7 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 					//Set weight
 					if (val != arc->weight()) {
 						return createItemAttributeCmd (arc, &AbstractArc::setWeight,
-								(uint)val, arc->weight());
+						                               (uint)val, arc->weight());
 					} else {
 						return nullptr;
 					}
@@ -316,7 +316,7 @@ QUndoCommand* Controller::createUpdateMatrixCmds(MatrixType which, int row, int 
 					//Set weight
 					if( val != arc->weight()) {
 						return createItemAttributeCmd(arc, &AbstractArc::setWeight,
-								(uint)val, arc->weight());
+						                              (uint)val, arc->weight());
 					} else {
 						return nullptr;
 					}
@@ -469,7 +469,7 @@ void Controller::fireRandomTransition() {
 void Controller::fireNRandomTransitions() {
 	try {
 		if (mSimulation){
-		int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
+			int n = QInputDialog::getInt(mParentWidget, tr("Fire N Random Transitons"), tr("How many times do you want to fire random transitions?"), 1,1);
 			mSimulation->fireNRandomTransitions(n);
 		}
 	} catch (Exception& e) {
@@ -574,35 +574,19 @@ void Controller::savePetriNet(const QString& fileName) {
 	mUndoStack->setClean();
 }
 
-QUndoCommand* Controller::createAddArcWithWeightCmd(auto from, auto to, uint weight) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if(!arc) {
-		return new CmdCreateArcWithWeight(mPetriNet, from, to, weight);
-	} else {
-		return createItemAttributeCmd(arc, &AbstractArc::setWeight,
-		arc->weight() + weight, arc->weight());
-	}
-}
 
-QUndoCommand*Controller::createAddArcCmd(auto from, auto to) {
-	AbstractArc* arc = from->findArcTo(static_cast<Node*>(to));
-	if(!arc) {
-		return new CmdCreateArc(mPetriNet, from, to);
-	} else {
-		return createItemAttributeCmd(arc, &AbstractArc::setWeight,
-		arc->weight() + 1, arc->weight());
-	}
-}
+
+
 
 void Controller::executeAnalyser(Analyser* analyser) {
 	if (!mAnalyserStatusDlg) {
 		mAnalyserStatusDlg = new AnalyserStatusDlg(mParentWidget);
 		connect(mAnalysisRunner, SIGNAL(analysisStatusMessageChanged(const QString&)),
-		mAnalyserStatusDlg, SLOT(setStatusMessage(const QString&)));
+		        mAnalyserStatusDlg, SLOT(setStatusMessage(const QString&)));
 		connect(mAnalysisRunner, SIGNAL(analysisPercentageChanged(int)),
-			mAnalyserStatusDlg, SLOT(setPercenage(int)));
+		        mAnalyserStatusDlg, SLOT(setPercenage(int)));
 		connect(mAnalysisRunner, SIGNAL(analysisFatalErrorOccurred(const QString&)),
-			this, SLOT(analysisFatalError(const QString&)));
+		        this, SLOT(analysisFatalError(const QString&)));
 	}
 
 	if (analyser->setup(mParentWidget))
@@ -619,7 +603,7 @@ void Controller::analysisFinished() {
 void Controller::analysisFatalError(const QString& msg) {
 	mAnalyserStatusDlg->hide();
 	QMessageBox::critical(mParentWidget,
-			  mAnalysisRunner->analyser()->name(), msg);
+	                      mAnalysisRunner->analyser()->name(), msg);
 }
 
 void Controller::zoomIn() {
