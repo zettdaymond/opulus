@@ -92,7 +92,7 @@ QWidget* PropertyEditorDelegate::createEditor(QWidget *parent,
     const PropertyEditorModel* model = static_cast<const PropertyEditorModel*>(index.model());
     const Property* property = model->privateData(index);
 
-	QWidget* editor = 0;
+    QWidget* editor = nullptr;
     if (property && property->hasEditor())
 		editor = property->createEditor(parent, this, SLOT(sync()));
 	return editor;

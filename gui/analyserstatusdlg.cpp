@@ -57,11 +57,11 @@ void AnalyserStatusDlg::setPercenage(int value) {
 // 	ui.progressBar->setValue(0);
 // }
 
-void AnalyserStatusDlg::hideEvent(QHideEvent* ev) {
+void AnalyserStatusDlg::hideEvent(QHideEvent* ) {
 	mTimer->stop();
 }
 
-void AnalyserStatusDlg::showEvent(QShowEvent* ev) {
+void AnalyserStatusDlg::showEvent(QShowEvent* ) {
 	mTimer->start(200);
 }
 

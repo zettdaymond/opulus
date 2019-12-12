@@ -39,8 +39,8 @@ class Item {
 	friend class PetriNet;
 public:
 	/// Constructs a new Item at position (0,0).
-	Item(PetriNet* pn, const ItemId& id) : mPetriNet(pn), mId(id) {}
-	virtual ~Item() {}
+    Item(PetriNet* pn, const ItemId& id) : mPetriNet(pn), mId(id) {}
+    virtual ~Item() = default;
 	/// Returns the item's petri net
 	PetriNet* petriNet() const { return mPetriNet; }
 	/// Syntax sugar to a dynamic cast

@@ -66,7 +66,7 @@ class Controller : public QObject {
 public:
 	/// Constructs a new Controller with the parent \p parent.
 	Controller(QWidget* parent, QGraphicsView* view);
-	~Controller();
+    ~Controller() override;
 	/// Returns the PetriNet QGV scene
 	QGraphicsScene* scene();
 	/// Returns a model with the properties of the current selected item.

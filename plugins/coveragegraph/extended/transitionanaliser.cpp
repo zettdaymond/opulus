@@ -58,7 +58,7 @@ QSet<Transition *> TransitionAnalyser::stableTransitions() const
 
 bool TransitionAnalyser::isNetStable()
 {
-    if (_petriNet != 0)
+    if (_petriNet != nullptr)
         return _stableTransitions.contains(_petriNet->transitions());
     else
         return false;
@@ -66,11 +66,10 @@ bool TransitionAnalyser::isNetStable()
 
 bool TransitionAnalyser::isNetLive()
 {
-    if (_petriNet != 0) {
+    if (_petriNet != nullptr) {
         foreach(Transition * t, _petriNet->transitions()) {
             if (!_liveTransitions.contains(t)) {
                 return false;
-                break;
             }
         }
         return true;
@@ -89,7 +88,7 @@ QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &st
     if (!_petriNet->activeTransitionsCount())
         return _petriNet->transitions();
 
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
@@ -140,7 +139,7 @@ QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking
 {
     Marking saveMrk = _petriNet->currentMarking();
     _petriNet->setCurrentMarking(startMarking);
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     QSet <Transition *> ptnLiveTransition;
 
     if (!_petriNet->activeTransitionsCount())
@@ -189,7 +188,7 @@ QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking
 void TransitionAnalyser::activityLevelAnalyse()
 {
 
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
@@ -198,6 +197,8 @@ void TransitionAnalyser::activityLevelAnalyse()
 
     QSet<Marking> markings;
     markings << root->marking();
+
+    const auto rootMarking = root->marking();
 
     while (newNodes.count()) {
         MarkingNode* node = newNodes.takeLast();
@@ -243,13 +244,13 @@ void TransitionAnalyser::activityLevelAnalyse()
         }
     }
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
+    _petriNet->setCurrentMarking(rootMarking);
 }
 
 void TransitionAnalyser::stabilityAnalyse()
 {
     QSet <Transition *> _stable;
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
@@ -258,6 +259,8 @@ void TransitionAnalyser::stabilityAnalyse()
 
     QSet<Marking> markings;
     markings << root->marking();
+
+    const auto rootMarking = root->marking();
 
     while (newNodes.count()) {
         MarkingNode* node = newNodes.takeLast();
@@ -319,8 +322,8 @@ void TransitionAnalyser::stabilityAnalyse()
             //---
         }
     }
+    _petriNet->setCurrentMarking(rootMarking);
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
 
     _stableTransitions = _stable;
 }
@@ -333,7 +336,7 @@ TransitionAnalyser::TransitionAnalyser(PetriNet* pn) {
 
 bool TransitionAnalyser::analyse()
 {
-    if (_petriNet == 0) {
+    if (_petriNet == nullptr) {
         return false;
     }
     _deadTransitions = _petriNet->transitions();

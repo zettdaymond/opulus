@@ -1,51 +1,13 @@
-cmake_minimum_required(VERSION 3.4)
-
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/plugins/coveragegraph/cmake" ${CMAKE_MODULE_PATH})
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-find_package(Qt5 REQUIRED COMPONENTS Gui Svg)
+set(GRAPHVIZ_BACKEND "NONE" CACHE STRING "Use graphviz or not" )
 
 if(GRAPHVIZ_BACKEND STREQUAL "SHARED")
-    find_package(GraphViz REQUIRED)
+    find_package(PkgConfig)
+    pkg_check_modules(cgraph REQUIRED IMPORTED_TARGET libcgraph)
+    pkg_check_modules(gvc REQUIRED IMPORTED_TARGET libgvc)
 else()
     if(GRAPHVIZ_BACKEND STREQUAL "STATIC")
         find_package(GraphVizStatic REQUIRED)
-    else()
-        message("GRAPHVIZ_BACKEND is not set. You may use GRAPHVIZ_BACKEND=STATIC/SHARED/NONE. Using \"NONE\"")
-        set(GRAPHVIZ_BACKEND "NONE")
     endif()
-endif()
-
-if(GRAPHVIZ_FOUND)
-    add_definitions(-DGRAPHVIZ_BACKEND)
-    set(GRAPHVIZ_BACKEND_LIBS cgraph gvc)
-endif()
-
-if(GRAPHVIZ_STATIC_FOUND)
-    add_definitions(-DGRAPHVIZ_STATIC_BACKEND)
-    #This libraries MUST be sent to linker in proper order.
-    set(GRAPHVIZ_BACKEND_LIBS
-        libgvplugin_core.a
-        libgvplugin_dot_layout.a
-        libdotgen.a
-        libcommon.a
-        libxdot.a
-        libgvc.a
-        libcgraph.a
-        libcdt.a
-        libpathplan.a
-        libortho.a
-        libpack.a
-        liblabel.a)
-endif()
-
-if(NOT GRAPHVIZ_FOUND AND NOT GRAPHVIZ_STATIC_FOUND)
-    message("Could not find libraries of specified GRAPHVIZ_BACKEND=${GRAPHVIZ_BACKEND}. Using \"NONE\" instead.")
-    set(GRAPHVIZ_BACKEND "NONE")
 endif()
 
 set(coverage_srcs
@@ -67,14 +29,49 @@ else()
     add_library(coverage SHARED ${coverage_srcs})
 endif()
 
-target_link_libraries(
-    coverage
-	opulus::core
-	Qt5::Widgets
-	Qt5::Gui
-	Qt5::Svg
-    ${GRAPHVIZ_BACKEND_LIBS}
+target_link_libraries(coverage
+    PUBLIC
+        opulus::core
+        Qt5::Widgets
+        Qt5::Gui
+        Qt5::Svg
 )
+
+if(${cgraph_FOUND} AND ${gvc_FOUND})
+    target_compile_definitions(coverage
+        PRIVATE
+            -DGRAPHVIZ_BACKEND
+    )
+
+    target_link_libraries(coverage
+        PRIVATE
+            PkgConfig::cgraph
+            PkgConfig::gvc
+    )
+endif()
+
+if(GRAPHVIZ_STATIC_FOUND)
+    target_compile_definitions(coverage
+        PRIVATE
+            -DGRAPHVIZ_STATIC_BACKEND
+    )
+
+    #This libraries MUST be sent to linker in proper order.
+    target_link_libraries(coverage
+        PRIVATE
+            libgvplugin_core.a
+            libgvplugin_dot_layout.a
+            libdotgen.a
+            libcommon.a
+            libxdot.a
+            libgvc.a
+            libcgraph.a
+            libcdt.a
+            libpathplan.a
+            libortho.a
+            libpack.a
+            liblabel.a)
+endif()
 
 target_include_directories(coverage PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

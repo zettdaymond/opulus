@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 
-MiniView::MiniView(QWidget* parent) : QGraphicsView(parent), mSource(0) {
+MiniView::MiniView(QWidget* parent) : QGraphicsView(parent), mSource(nullptr) {
 	mPen.setColor(palette().highlight().color());
 	mPen.setWidth(2);
 	viewport()->setMouseTracking(false);
@@ -68,8 +68,8 @@ void MiniView::removeSource() {
 		mSource->verticalScrollBar()->disconnect(this);
 		mSource->horizontalScrollBar()->disconnect(this);
 		scene()->disconnect(this);
-		mSource = 0;
-		setScene(0);
+        mSource = nullptr;
+        setScene(nullptr);
 	}
 }
 

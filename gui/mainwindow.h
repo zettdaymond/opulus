@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QLinkedList>
 #include <QSettings>
-#include "ui_mainwindow.h"
+#include <QTranslator>
 
 #include "pluginhandler.h"
 
@@ -34,6 +34,10 @@ class Controller;
 class QActionGroup;
 class Analyser;
 class PetriNetViewZoom;
+
+namespace Ui {
+    class MainWindow;
+}
 
 /**
 * Graphic user interface.
@@ -70,7 +74,7 @@ private slots:
 protected:
 	void closeEvent(QCloseEvent* event);
 private:
-	Ui::MainWindow ui;
+    Ui::MainWindow& ui;
 	Controller* mController;
 	QHash<QAction*, Analyser*> mAnalysers;
 	QLinkedList<QTranslator*> mTranslators;

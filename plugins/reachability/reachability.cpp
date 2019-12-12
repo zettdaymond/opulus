@@ -103,7 +103,7 @@ bool ReachabilityPlugin::setup(QWidget *parentWidget)
     if ( dlg.exec() == QDialog::Accepted) {
         for(int col = 0; col < _endMtx->columnCount(); col++){
             QTableWidgetItem * item = _endMtx->item(_endMtx->rowCount() - 1 ,col);
-            if (item == 0){
+            if (item == nullptr){
                 QMessageBox::critical(parentWidget, tr("Error"),tr("Some of cells is empty"));
                 return false;
             }
@@ -165,7 +165,7 @@ void ReachabilityPlugin::setColumnNumber(int c)
 
 void ReachabilityPlugin::setupMatrixNames()
 {
-    if (_endMtx == 0)
+    if (_endMtx == nullptr)
         return;
     //_startMtx->setColumnCount(mPetriNet->placeCount());
     _endMtx->setColumnCount(mPetriNet->placeCount());

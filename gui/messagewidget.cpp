@@ -27,7 +27,7 @@
 //#include <kiconloader.h>
 
 MessageWidget::MessageWidget(QWidget* parent)
-	: QWidget(parent), mTimer(0), mInfo(":/dialog-information"), mWarning(":/dialog-warning"), mError(":/dialog-error") {
+    : QWidget(parent), mTimer(nullptr), mInfo(":/dialog-information"), mWarning(":/dialog-warning"), mError(":/dialog-error") {
 	move(10, 10);
 	hide();
 }

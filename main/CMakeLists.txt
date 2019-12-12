@@ -1,10 +1,3 @@
-cmake_minimum_required(VERSION 3.4)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 if(WIN32)
 	set(SUBSYSTEM WIN32)
 endif()
@@ -15,14 +8,17 @@ else()
     set(PLUGINS_TO_LINK)
 endif()
 
-add_executable(opulus ${SUBSYSTEM} main.cpp ${UI_RESOURCES_RCC})
+add_executable(${PROJECT_NAME} ${SUBSYSTEM} main.cpp ${UI_RESOURCES_RCC})
 
-target_link_libraries(opulus opulus::gui ${PLUGINS_TO_LINK})
+target_link_libraries(${PROJECT_NAME}
+    opulus::gui
+    ${PLUGINS_TO_LINK}
+)
 
-#copy
-#add_dependencies( opulus copyfiles )
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+)
 
-set_target_properties(opulus PROPERTIES	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-
-install(TARGETS opulus DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)

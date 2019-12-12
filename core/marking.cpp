@@ -108,8 +108,8 @@ void Marking::normalize(const PetriNet* pn) {
 	foreach (const Place* p, pn->places()) {
 		setNumTokens(p, p->numTokens());
 		mPrintOrder << p;
-	}
-	qSort(mPrintOrder.begin(), mPrintOrder.end(), PlacePtrComparator());
+    }
+    std::sort(mPrintOrder.begin(), mPrintOrder.end(), PlacePtrComparator());
 }
 
 uint qHash(const Marking& m) {

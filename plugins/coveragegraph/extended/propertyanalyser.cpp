@@ -57,7 +57,7 @@ bool PropertyAnalyser::isConflict() const
 
 bool PropertyAnalyser::analyse()
 {
-    if (_petriNet == 0) {
+    if (_petriNet == nullptr) {
         _isSafety = false;
         _isRestricted = false;
         _isParallel = false;
@@ -82,6 +82,8 @@ void PropertyAnalyser::checkSafetyAndRestricted()
     QLinkedList<MarkingNode*> allNodes;
     newNodes.append(root);
     Simulation sim(_petriNet);
+
+    const auto rootMarking = root->marking();
 
     QSet<Marking> markings;
     markings << root->marking();
@@ -115,13 +117,13 @@ void PropertyAnalyser::checkSafetyAndRestricted()
             }
         }
     }
+    _petriNet->setCurrentMarking(rootMarking);
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
 }
 
 void PropertyAnalyser::checkParallelAndConflict()
 {
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
@@ -130,6 +132,8 @@ void PropertyAnalyser::checkParallelAndConflict()
 
     QSet<Marking> markings;
     markings << root->marking();
+
+    const auto rootMarking = root->marking();
 
     while (newNodes.count()) {
         MarkingNode* node = newNodes.takeLast();
@@ -172,8 +176,8 @@ void PropertyAnalyser::checkParallelAndConflict()
             }
         }
     }
+    _petriNet->setCurrentMarking(rootMarking);
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
 }
 
 bool PropertyAnalyser::IsTreeNodeBounded(MarkingNode *node)

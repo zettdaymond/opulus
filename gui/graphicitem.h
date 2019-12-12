@@ -31,7 +31,7 @@ class Item;
 */
 class GraphicItem : public QGraphicsItem {
 public:
-	GraphicItem(QGraphicsItem* parent = 0);
+    GraphicItem(QGraphicsItem* parent = nullptr);
 	virtual ~GraphicItem() {}
 	virtual Item* item() const = 0;
 	virtual void itemChanged() = 0;

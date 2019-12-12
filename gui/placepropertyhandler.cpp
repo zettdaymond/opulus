@@ -65,7 +65,7 @@ bool PlacePropertyHandler::setPropertyValue(int propertyIdx, const QVariant& val
 		}
 		prop->setValue(value);
 		return true;
-	} catch (Exception& e) {
+    } catch (Exception& ) {
 		return false;
 	}
 }

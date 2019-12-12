@@ -38,5 +38,5 @@ PropertyHandler* PropertyHandler::create(Controller* controller, Item* item) {
 	if (item->isA<Arc>())
 		return new ArcPropertyHandler(controller, static_cast<Arc*>(item));
 	qWarning("PropHandler not found!");
-	return 0;
+    return nullptr;
 }

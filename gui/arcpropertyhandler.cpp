@@ -43,7 +43,7 @@ bool ArcPropertyHandler::setPropertyValue(int propertyIdx, const QVariant& value
 			prop->setValue(value);
 			return true;
 		}
-	} catch (Exception& e) {
+    } catch (Exception& ) {
 	}
 	return false;
 }

@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.4)
+set(OpulusGui_SRCs
 
-set(opulusgui_srcs
     mainwindow.cpp
     controller.cpp
     petrinetscene.cpp
@@ -40,22 +39,18 @@ set(opulusgui_srcs
     commands/cmdpack.cpp
     matrixwidget.cpp
     opulusmath.h
+
     gui.qrc
+
+    mainwindow.ui
 )
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-
-find_package(Qt5 REQUIRED COMPONENTS Gui Svg Xml PrintSupport)
-
 if(BUILD_STATIC_CORE_LIBS)
-    add_library(opulusgui STATIC ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
+    add_library(opulusgui STATIC ${OpulusGui_SRCs})
 else()
-    add_library(opulusgui SHARED ${opulusgui_srcs} ${opulusgui_ui_srcs} ${opulusgui_rc_srcs})
+    add_library(opulusgui SHARED ${OpulusGui_SRCs})
 endif()
+
 add_library(opulus::gui ALIAS opulusgui)
 
 target_include_directories(opulusgui PUBLIC
@@ -63,10 +58,9 @@ target_include_directories(opulusgui PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 )
 
-
-target_link_libraries(
-    opulusgui
+target_link_libraries( opulusgui
     opulus::core
+
     Qt5::Gui
     Qt5::Svg
     Qt5::Xml
@@ -74,8 +68,8 @@ target_link_libraries(
 )
 
 set_target_properties(opulusgui PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
         LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
 )
 
 install(TARGETS opulusgui

@@ -34,7 +34,7 @@
 #include <QLineF>
 #include <QPainterPathStroker>
 
-GraphicAbstractArc::GraphicAbstractArc(AbstractArc* arc) : mArc(arc), mMovingPoint(0) {
+GraphicAbstractArc::GraphicAbstractArc(AbstractArc* arc) : mArc(arc), mMovingPoint(nullptr) {
 	setFlags(ItemIsSelectable);
 	setZValue(0);
 }
@@ -225,8 +225,8 @@ void GraphicAbstractArc::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	itemChanged();
 }
 
-void GraphicAbstractArc::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	mMovingPoint = 0;
+void GraphicAbstractArc::mouseReleaseEvent(QGraphicsSceneMouseEvent* ) {
+    mMovingPoint = nullptr;
 }
 
 QPointF* GraphicAbstractArc::getIntermediatePoint(const QPointF& ref) const {
@@ -234,5 +234,5 @@ QPointF* GraphicAbstractArc::getIntermediatePoint(const QPointF& ref) const {
 		if (Distance(ref, *point) < 20.0)
 			return point;
 	}
-	return 0;
+    return nullptr;
 }

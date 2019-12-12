@@ -34,7 +34,7 @@
 #include <QDebug>
 
 PropertyEditorModel::PropertyEditorModel(Controller* controller)
-    : QAbstractTableModel(controller), mPropHandler(0), mController(controller) {
+    : QAbstractTableModel(controller), mPropHandler(nullptr), mController(controller) {
 }
 
 PropertyEditorModel::~PropertyEditorModel() {
@@ -45,12 +45,12 @@ void PropertyEditorModel::setModelSource(Item* item) {
 	if (!item) {
         beginResetModel();
 		delete mPropHandler;
-        mPropHandler = 0;
+        mPropHandler = nullptr;
         endResetModel();
 	} else {
         beginResetModel();
 		delete mPropHandler;
-		mPropHandler = 0;
+        mPropHandler = nullptr;
         mPropHandler = PropertyHandler::create(mController, item);
         endResetModel();
 	}
