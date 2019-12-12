@@ -69,7 +69,7 @@ QByteArray utils::renderToGraph(QString graphDesc)
 
 #ifdef GRAPHVIZ_BACKEND
 
-#include "graphviz/gvc.h"
+#include "gvc.h"
 
 QByteArray utils::renderToGraph(QString graphDesc)
 {

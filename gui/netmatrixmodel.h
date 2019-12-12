@@ -27,7 +27,7 @@
 #define NETMATRIXMODEL_H
 
 #include <QAbstractTableModel>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 class NetMatrixModel : public QAbstractTableModel
 {

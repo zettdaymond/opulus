@@ -26,7 +26,7 @@
 #include "petrinet.h"
 #include <QMutexLocker>
 
-AnalysisRunner::AnalysisRunner(QObject* parent) : QThread(parent), mAnalysing(false), mAnalyser(0), mPetriNet(0), mReporter(0) {
+AnalysisRunner::AnalysisRunner(QObject* parent) : QThread(parent), mAnalysing(false), mAnalyser(nullptr), mPetriNet(nullptr), mReporter(nullptr) {
 	connect(this, SIGNAL(finished()), this, SLOT(enablePetriNetNotifications()));
 
 	mReporter = new AnalysisReporter(this);

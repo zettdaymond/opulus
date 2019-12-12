@@ -30,6 +30,8 @@
 #include "petrinetscene.h"
 #include "petrinetviewzoom.h"
 
+#include "ui_mainwindow.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
@@ -49,7 +51,17 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 
-MainWindow::MainWindow(bool firstWindow) : QMainWindow(0, Qt::Window) {
+namespace SMainWindow
+{
+static Ui::MainWindow mw;
+}
+
+MainWindow::MainWindow(bool firstWindow)
+    : QMainWindow(nullptr, Qt::Window)
+      , ui(SMainWindow::mw)
+{
+    qDebug() << "Styles name : " << QStyleFactory::keys();
+
 	setAttribute(Qt::WA_DeleteOnClose);
 	if (firstWindow) {
 		QSettings settings;

@@ -83,6 +83,8 @@ void PropertyAnalyser::checkSafetyAndRestricted()
     newNodes.append(root);
     Simulation sim(_petriNet);
 
+    const auto rootMarking = root->marking();
+
     QSet<Marking> markings;
     markings << root->marking();
 
@@ -115,8 +117,8 @@ void PropertyAnalyser::checkSafetyAndRestricted()
             }
         }
     }
+    _petriNet->setCurrentMarking(rootMarking);
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
 }
 
 void PropertyAnalyser::checkParallelAndConflict()
@@ -130,6 +132,8 @@ void PropertyAnalyser::checkParallelAndConflict()
 
     QSet<Marking> markings;
     markings << root->marking();
+
+    const auto rootMarking = root->marking();
 
     while (newNodes.count()) {
         MarkingNode* node = newNodes.takeLast();
@@ -172,8 +176,8 @@ void PropertyAnalyser::checkParallelAndConflict()
             }
         }
     }
+    _petriNet->setCurrentMarking(rootMarking);
     qDeleteAll(allNodes);
-    _petriNet->setCurrentMarking(root->marking());
 }
 
 bool PropertyAnalyser::IsTreeNodeBounded(MarkingNode *node)

@@ -1,6 +1,18 @@
-project(opulus)
 cmake_minimum_required(VERSION 3.4)
 
+project(opulus)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Svg Xml PrintSupport)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(STATUS "Source Directory: " ${CMAKE_SOURCE_DIR})
@@ -10,8 +22,8 @@ endif()
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_FOUND})
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_FOUND})
 endif(CCACHE_FOUND)
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -23,23 +35,15 @@ option(WITH_PLUGINS "Build and install plugins." ON)
 option(WITH_TRANSLATIONS "Build and install translations." ON)
 option(WITH_TESTS "Build tests." OFF)
 option(BUILD_STATIC_CORE_LIBS "Build static core libraries." OFF)
-option(BUILD_STATIC_PLUGINS "Build static core libraries." OFFh)
+option(BUILD_STATIC_PLUGINS "Build static core libraries." OFF)
 option(BUILD_WITH_QT5_STATIC "Link to static Qt5 libraries." OFF)
 option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
 
 
-# adtional compiler options for release and debug modes
-add_definitions(-std=c++14 -Wall -Wextra)
-if (${CMAKE_BUILD_TYPE} STREQUAL Release)
-    add_definitions(-DQT_NO_DEBUG -O3)
-else ()
-    add_definitions(-ggdb)
-endif()
-
 #----------Build configuration---------------------
 
-#TODO: Detect in future
-set(QT_STATIC 1)
+# Detect in future
+set(QT_STATIC 0)
 
 if(BUILD_WITH_QT5_STATIC)
     if(WIN32)

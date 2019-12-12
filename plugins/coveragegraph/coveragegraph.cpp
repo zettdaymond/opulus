@@ -78,8 +78,8 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     reporter->setStatusMessage(tr("Creating graph..."));
 
 	QString draphDescription;
-	QTextStream scriptStream(&draphDescription);
-	scriptStream.setCodec("UTF-8");
+    QTextStream scriptStream(&draphDescription);
+    scriptStream.setCodec("UTF-8");
     scriptStream << "digraph G {\n";
     scriptStream << "node [shape=box, style=rounded, fontsize=12, height=0.2]\n";
     scriptStream << "edge [fontsize=12]\n";
