@@ -32,7 +32,7 @@ PreservingMatrixAnalyser::PreservingMatrixAnalyser(PetriNet * pn) {
 
 bool PreservingMatrixAnalyser::analyse()
 {
-    if (_petriNet == 0) {
+    if (_petriNet == nullptr) {
         return false;
     }
     _isPreserving = false;

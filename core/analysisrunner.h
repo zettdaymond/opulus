@@ -36,7 +36,7 @@ class AnalysisRunner : public QThread {
 Q_OBJECT
 public:
 	/// Constructs a new AnalyserRunner.
-	AnalysisRunner(QObject* parent = 0);
+    AnalysisRunner(QObject* parent = nullptr);
 	/**
 	* Execute the analyser \p analyser on the \p petriNet.
 	* @note This method is non blocking, a thread is created and the analyser is executed in another thread.

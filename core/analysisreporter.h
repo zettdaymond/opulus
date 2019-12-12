@@ -32,7 +32,7 @@ class QWidget;
 class AnalysisReporter : public QObject {
 Q_OBJECT
 public:
-	AnalysisReporter(QObject* parent = 0);
+    AnalysisReporter(QObject* parent = nullptr);
 	/// Set the current status of the plugin, a typical "What I am doing?" message.
 	void setStatusMessage(const QString& msg);
 	/// Set the amount of job done, a value from 0 to 100

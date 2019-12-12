@@ -38,12 +38,13 @@ class QDomElement;
 class Arc : public AbstractArc {
 friend class PetriNet;
 public:
-	bool canFireTransition() const;
-	void fire();
+    static void load(PetriNet* pn, const QDomElement& elem);
+
+    bool canFireTransition() const override;
+    void fire() override;
 	void setWeight(uint weight) override;
 
-	void save(QXmlStreamWriter& out);
-	static void load(PetriNet* pn, const QDomElement& elem);
+    void save(QXmlStreamWriter& out) override;
 protected:
 
 protected:

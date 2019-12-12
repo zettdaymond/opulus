@@ -61,7 +61,14 @@
 #include "commands/cmdmovenodegroup.h"
 #include "commands/cmdpack.h"
 
-Controller::Controller(QWidget* parent, QGraphicsView* view) : QObject(parent), mView(view), mParentWidget(parent), mAnalyserStatusDlg(0), mUndoStack(0), mSimulation(0) {
+Controller::Controller(QWidget* parent, QGraphicsView* view)
+    : QObject(parent),
+      mView(view),
+      mParentWidget(parent),
+      mAnalyserStatusDlg(nullptr),
+      mUndoStack(nullptr),
+      mSimulation(nullptr)
+{
 	mUndoStack = new QUndoStack(this);
 	mPetriNet = new PetriNet(this);
 	mScene = new PetriNetScene(this);
@@ -498,7 +505,7 @@ void Controller::startSimulation() {
 
 void Controller::stopSimulation() {
 	delete mSimulation;
-	mSimulation = 0;
+    mSimulation = nullptr;
 }
 
 void Controller::renameNode(Node* node, const QString& newName) {
@@ -510,8 +517,8 @@ QString Controller::showExportFileDialog(const QString& filter, const QString& d
 	dlg.setAcceptMode(QFileDialog::AcceptSave);
 	dlg.setNameFilter(filter);
 	dlg.setDefaultSuffix(defaultSuffix);
-	if (dlg.exec() == QDialog::Rejected)
-		return QString::null;
+    if (dlg.exec() == QDialog::Rejected)
+        return QString();
 	return dlg.selectedFiles().first();
 }
 

@@ -51,7 +51,7 @@ PetriNetScene::PetriNetScene(Controller* controller) : mController(controller), 
 	QGraphicsScene::addItem(mArcLine);
 	useSelectTool();
 	
-	setSceneRect(QDesktopWidget().screenGeometry());
+    setSceneRect(QDesktopWidget().screenGeometry());
 }
 
 void PetriNetScene::moveNode(Node* node, const QPointF& pos) {
@@ -181,7 +181,7 @@ void PetriNetScene::keyPressEvent(QKeyEvent * event) {
 
 void PetriNetScene::emitItemSelected() {
 	QList<QGraphicsItem*> items = selectedItems();
-	Item* item = 0;
+    Item* item = nullptr;
 	if (items.size() == 1) {
 		GraphicItem* gitem = dynamic_cast<GraphicItem*>(items.first());
 		if (gitem)

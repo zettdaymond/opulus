@@ -84,7 +84,7 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     scriptStream << "node [shape=box, style=rounded, fontsize=12, height=0.2]\n";
     scriptStream << "edge [fontsize=12]\n";
 
-    MarkingNode* root = new MarkingNode(0, mPetriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, mPetriNet->currentMarking());
     root->marking().normalize(mPetriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
@@ -169,7 +169,7 @@ QString CoverageGraph::analyseProperty()
     return out;
 }
 
-bool CoverageGraph::setup(QWidget* parentWidget) {
+bool CoverageGraph::setup(QWidget* ) {
     return true;
 }
 

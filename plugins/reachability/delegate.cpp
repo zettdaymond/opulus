@@ -28,7 +28,7 @@
 #include <QIntValidator>
 #include <QLineEdit>
 #include <limits>
-QWidget *Delegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *Delegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const
 {
     QLineEdit *lineEdit = new QLineEdit(parent);
     // Set validator

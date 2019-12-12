@@ -85,7 +85,7 @@ AbstractArc *Node::findArcTo(Node *to) {
 		if(arc->to() == to)
 			return arc;
 	}
-	return NULL;
+    return nullptr;
 }
 
 AbstractArc *Node::findArcFrom(Node *from) {
@@ -93,7 +93,7 @@ AbstractArc *Node::findArcFrom(Node *from) {
 		if(arc->from() == from)
 			return arc;
 	}
-	return NULL;
+    return nullptr;
 }
 
 QLinkedList<Item*> Node::beforeDelete() {

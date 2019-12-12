@@ -41,7 +41,7 @@ void Simulation::fireNRandomTransitions(int n) {
 		for (i = 0; i < n; i++){
 			mPetriNet->fireRandomTransition();
 		}
-	}catch (Exception& e){
+    }catch (Exception& ){
 		throw NoActiveTransitionsException(i);
 	}
 }

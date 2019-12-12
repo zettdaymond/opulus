@@ -54,7 +54,7 @@ bool TransitionPropertyHandler::setPropertyValue(int propertyIdx, const QVariant
 		}
 		mProperties[propertyIdx]->setValue(value);
 		return true;
-	} catch (Exception& e) {
+    } catch (Exception& ) {
 		return false;
 	}
 }

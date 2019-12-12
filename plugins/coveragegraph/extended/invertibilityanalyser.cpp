@@ -29,12 +29,12 @@
 #include "simulation.h"
 bool InvertibilityAnalyser::analyse()
 {
-    if (_petriNet == 0) {
+    if (_petriNet == nullptr) {
         return false;
     }
 
     Marking saveMrk = _petriNet->currentMarking();
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
 
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
@@ -89,7 +89,7 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
 	}
     Marking saveMrk = _petriNet->currentMarking();
     _petriNet->setCurrentMarking(marking);
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
 
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
@@ -133,7 +133,7 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
 
 InvertibilityAnalyser::InvertibilityAnalyser(PetriNet *pn) {
     _petriNet = pn;
-    if (_petriNet != 0)
+    if (_petriNet != nullptr)
         startMarking = _petriNet->currentMarking();
 }
 bool InvertibilityAnalyser::isInvertibility() const

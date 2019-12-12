@@ -91,26 +91,26 @@ InhibitorArc* PetriNet::createInhibitorArc(Place* place, Transition* transition,
 
 Transition* PetriNet::findTransitionWithNumber(int number) {
 	if(number < 0)
-		return NULL;
+        return nullptr;
 
 	foreach (Transition* t, mTransitions) {
 		if(t->number() == number)
 			return t;
 	}
 
-	return NULL;
+    return nullptr;
 }
 
 Place* PetriNet::findPlaceWithNumber(int number) {
 	if(number < 0)
-		return NULL;
+        return nullptr;
 
 	foreach (Place* p, mPlaces) {
 		if(p->number() == number)
 			return p;
 	}
 
-	return NULL;
+    return nullptr;
 }
 
 
@@ -263,10 +263,12 @@ Item* PetriNet::item(const ItemId& id) const {
 void PetriNet::setCurrentMarking(const Marking& marking) {
 	mCurrentMarking = marking;
 	foreach(Transition* t, mTransitions)
-		t->updateStatus();
-	if (isModifyNotificationEnabled())
-		foreach (Place* place, mPlaces)
-			place->notifyModification();
+        t->updateStatus();
+    if (isModifyNotificationEnabled()) {
+        for(Place* place : mPlaces) {
+            place->notifyModification();
+        }
+    }
 }
 
 void PetriNet::save(QIODevice* device){

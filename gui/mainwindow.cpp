@@ -122,8 +122,8 @@ void MainWindow::loadI18n(const QString& language) {
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
 			QApplication::installTranslator(tr);
 			mTranslators << tr;
-		} else {
-			qWarning(qPrintable("Error loading translation: "+dir.absolutePath()+'/'+langFile));
+        } else {
+            qWarning() << qPrintable("Error loading translation: "+dir.absolutePath()+'/'+langFile);
 			delete tr;
 		}
 	}
@@ -334,11 +334,10 @@ void MainWindow::loadPlugins() {
 		QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 		QObject* plugin = loader.instance();
         if (!plugin) {
-			qWarning(qPrintable("Error loading plugin: "
-					+loader.errorString()));
+            qWarning() << qPrintable("Error loading plugin: " + loader.errorString());
         }
         else if (mStaticPlugins.loadedPlugins().contains(plugin->objectName()) == true) {
-            qWarning(qPrintable(QString("Plugin %1 already loaded as static plugin and will be skipped.").arg(plugin->objectName())));
+            qWarning() << qPrintable(QString("Plugin %1 already loaded as static plugin and will be skipped.").arg(plugin->objectName()));
         }
         else {
 			Analyser* analyser = qobject_cast<Analyser*>(plugin);

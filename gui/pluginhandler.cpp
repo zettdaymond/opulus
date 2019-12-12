@@ -57,7 +57,7 @@ Analyser* PluginHandler::loadStaticPlugin(const QString& objectName)
 		{
 			Analyser* plugin = qobject_cast< Analyser* >(object);
 
-			if(plugin != 0)
+            if(plugin != nullptr)
 			{
 				mLoadedPlugins.insert(objectName);
 				return plugin;

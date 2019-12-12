@@ -54,7 +54,7 @@ class PetriNet : public QObject {
 Q_OBJECT
 public:
 	/// Constructs a new petri net.
-	explicit PetriNet(QObject* parent = 0);
+    explicit PetriNet(QObject* parent = nullptr);
 	/// Destroy this petri net.
 	~PetriNet();
 

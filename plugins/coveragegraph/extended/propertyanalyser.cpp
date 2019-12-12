@@ -57,7 +57,7 @@ bool PropertyAnalyser::isConflict() const
 
 bool PropertyAnalyser::analyse()
 {
-    if (_petriNet == 0) {
+    if (_petriNet == nullptr) {
         _isSafety = false;
         _isRestricted = false;
         _isParallel = false;
@@ -123,7 +123,7 @@ void PropertyAnalyser::checkSafetyAndRestricted()
 
 void PropertyAnalyser::checkParallelAndConflict()
 {
-    MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
+    MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
     QLinkedList<MarkingNode*> newNodes;
     QLinkedList<MarkingNode*> allNodes;
