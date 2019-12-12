@@ -32,7 +32,7 @@ jobs:
         fetch-depth: 1
     - name: Prepare
       run: |
-        brew install qt5 cmake graphviz eigen
+        brew install qt5 cmake graphviz eigen pkg-config
          
     - name: Build
       run: |
