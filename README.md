@@ -1,5 +1,11 @@
 # Description: #
+
 Opulus is a simple Petri Net simulator/editor written in C++/Qt5. This is the fork of [opulus.sourceforge.net](opulus.sourceforge.net).
+
+| Platform | CI |
+|----------|:--:|
+| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/linux.svg" height="20" /> GNU/Linux | ![GNU/Linux Build Status](https://github.com/zettdaymond/opulus/workflows/build/badge.svg)|
+| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/apple.svg" height="20" /> macOS | ![macOS Build Status](https://github.com/zettdaymond/opulus/workflows/build/badge.svg)|
 
 ![1.png](https://bitbucket.org/repo/7X6BR9/images/653296000-1.png)
 
