@@ -1,0 +1,24 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+      with: 
+        fetch-depth: 1
+    - name: Prepare
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ qt5-default cmake libeigen3-dev graphviz
+         
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build
