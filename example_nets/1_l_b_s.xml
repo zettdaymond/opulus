@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ptnet>
+    <transition id="8" name="T3" x="698" y="447" rotation="0"/>
+    <arc id="9" source="1" target="5" weight="1"/>
+    <arc id="10" source="5" target="2" weight="1"/>
+    <place id="4" name="P3" x="828" y="473" tokens="0"/>
+    <transition id="5" name="T0" x="625" y="351" rotation="0"/>
+    <transition id="6" name="T1" x="748" y="293" rotation="0"/>
+    <transition id="7" name="T2" x="837" y="392" rotation="0"/>
+    <place id="1" name="P0" x="588" y="397" tokens="1"/>
+    <arc id="15" source="4" target="8" weight="1"/>
+    <place id="2" name="P1" x="672" y="304" tokens="0"/>
+    <arc id="16" source="8" target="1" weight="1"/>
+    <place id="3" name="P2" x="843" y="294" tokens="0"/>
+    <arc id="11" source="2" target="6" weight="1"/>
+    <arc id="12" source="6" target="3" weight="1"/>
+    <arc id="13" source="3" target="7" weight="1"/>
+    <arc id="14" source="7" target="4" weight="1"/>
+</ptnet>
