@@ -1,20 +1,14 @@
-set(reachability_srcs
+add_library(reachability ${PLUGIN_LIBS_TYPE}
     reachability.cpp
     delegate.cpp
 )
 
-if(BUILD_STATIC_PLUGINS)
-    add_library(reachability STATIC ${reachability_srcs})
-else()
-    add_library(reachability SHARED ${reachability_srcs})
-endif()
-
 target_link_libraries(reachability
-    PUBLIC
+    PRIVATE
         opulus::core
-        Qt5::Widgets
-        Qt5::Gui
-        Qt5::Svg
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Svg
 )
 
 set_target_properties(reachability PROPERTIES
@@ -22,5 +16,10 @@ set_target_properties(reachability PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
-install(TARGETS reachability DESTINATION share/opulus/plugins)
+install(TARGETS reachability
+    ARCHIVE DESTINATION share/opulus/plugins
+    LIBRARY DESTINATION share/opulus/plugins
+    RUNTIME DESTINATION share/opulus/plugins
+    COMPONENT plugins
+)
 

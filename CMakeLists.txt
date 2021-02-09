@@ -1,16 +1,19 @@
 cmake_minimum_required(VERSION 3.4)
 
-project(opulus)
+project(opulus LANGUAGES CXX)
+
+include(cmake/Utils.cmake)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Svg Xml PrintSupport)
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets Svg Xml PrintSupport REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Svg Xml PrintSupport REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -22,90 +25,91 @@ endif()
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
+    message(STATUS "[#] Ccache found")
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_FOUND})
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_FOUND})
 endif(CCACHE_FOUND)
 
 if (NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Build type not set, using \"Release\"")
+    message(STATUS "[#] Build type not set, using \"Release\"")
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 option(WITH_PLUGINS "Build and install plugins." ON)
 option(WITH_TRANSLATIONS "Build and install translations." ON)
+option(DEPLOY_QT_AND_SYSTEM_LIBRARIES "Ship Qt in bin folder during install" ON)
 option(WITH_TESTS "Build tests." OFF)
 option(BUILD_STATIC_CORE_LIBS "Build static core libraries." OFF)
 option(BUILD_STATIC_PLUGINS "Build static core libraries." OFF)
 option(BUILD_WITH_QT5_STATIC "Link to static Qt5 libraries." OFF)
 option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
 
+# Build configuration
 
-#----------Build configuration---------------------
-
-# Detect in future
-set(QT_STATIC 0)
-
-if(BUILD_WITH_QT5_STATIC)
-    if(WIN32)
-        if(QT_STATIC)
-            set(BUILD_STATIC_CORE_LIBS ON)
-            set(BUILD_STATIC_PLUGINS ON)
-            message("Warning: BUILD_STATIC_CORE_LIBS and BUILD_STATIC_PLUGINS does not allowed. Force set to OFF.")
-            add_definitions(-DSTATIC_QT_BUILD)
-            add_definitions(-static -static-libstdc++ -static-libgcc)
-        else()
-            message( FATAL_ERROR "Your vesion of Qt is not STATIC. Could not statically link to non static Qt. Please use -DBUILD_WITH_QT5_STATIC=OFF" )
-        endif()
-    else()
-        message( FATAL_ERROR "Static link to Qt implemented only for Windows. Cmake will exit. Please use -DBUILD_WITH_QT5_STATIC=OFF to build shared version" )
-    endif()
-endif()
-
-if(BUILD_STATIC_CORE_LIBS AND NOT BUILD_STATIC_PLUGINS )
-    message("Warning: BUILD_STATIC_CORE_LIBS with static plugins doesn't make sense . Thus BUILD_STATIC_PLUGINS sets to OFF")
-    set(BUILD_STATIC_PLUGINS OFF)
+if(BUILD_STATIC_CORE_LIBS)
+    set(CORE_LIBS_TYPE STATIC)
+else()
+    set(CORE_LIBS_TYPE SHARED)
 endif()
 
 if(BUILD_STATIC_PLUGINS)
-    add_definitions(-DSTATIC_PLUGINS)
+    set(PLUGIN_LIBS_TYPE STATIC)
+else()
+    set(PLUGIN_LIBS_TYPE SHARED)
 endif()
 
-add_subdirectory(core)
-add_subdirectory(gui)
-add_subdirectory(main)
-
-if(WITH_TRANSLATIONS)
-    message(STATUS "Translations enabled")
-    add_subdirectory(i18n)
-    add_dependencies(opulus opulus_compile_qm)
-endif()
+add_subdirectory(libs/core)
+add_subdirectory(libs/gui)
 
 if(WITH_PLUGINS)
-    message(STATUS "Plugins enabled")
+    message(STATUS "[#] Plugins enabled")
     add_subdirectory(plugins)
 endif()
 
 if(WITH_TESTS)
-    message(STATUS "Tests enabled")
+    message(STATUS "[#] Tests enabled")
     enable_testing()
     add_subdirectory(tests)
 endif()
 
+add_subdirectory(app/opulus)
 
-#print options status
-message("BUILD STATUS:")
-message("# WITH_PLUGINS: " ${WITH_PLUGINS})
-message("# WITH_TRANSLATIONS: " ${WITH_TRANSLATIONS})
-message("# WITH_TESTS: " ${WITH_TESTS})
-message("# BUILD_WITH_QT5_STATIC: " ${BUILD_WITH_QT5_STATIC})
-message("# BUILD_STATIC_CORE_LIBS: " ${BUILD_STATIC_CORE_LIBS})
-message("# BUILD_STATIC_PLUGINS: " ${BUILD_STATIC_PLUGINS})
-message("# USE_REVISION: " ${USE_REVISION})
+if(WITH_TRANSLATIONS)
+    message(STATUS "[#] Translations enabled")
+    add_subdirectory(i18n)
+endif()
 
-# .desktop file
-install(FILES opulus.desktop DESTINATION share/applications)
-# icons
-install(FILES opulus16.png DESTINATION share/icons/hicolor/16x16/apps RENAME opulus.png)
-install(FILES opulus22.png DESTINATION share/icons/hicolor/22x22/apps RENAME opulus.png)
-install(FILES opulus32.png DESTINATION share/icons/hicolor/32x32/apps RENAME opulus.png)
-install(FILES opulus48.png DESTINATION share/icons/hicolor/48x48/apps RENAME opulus.png)
+# Print options status
+message("[#] BUILD STATUS:")
+message("[#] WITH_PLUGINS: " ${WITH_PLUGINS})
+message("[#] WITH_TRANSLATIONS: " ${WITH_TRANSLATIONS})
+message("[#] WITH_TESTS: " ${WITH_TESTS})
+message("[#] BUILD_WITH_QT5_STATIC: " ${BUILD_WITH_QT5_STATIC})
+message("[#] BUILD_STATIC_CORE_LIBS: " ${BUILD_STATIC_CORE_LIBS})
+message("[#] BUILD_STATIC_PLUGINS: " ${BUILD_STATIC_PLUGINS})
+message("[#] USE_REVISION: " ${USE_REVISION})
+
+if(UNIX AND NOT APPLE)
+    # .desktop file
+    install(FILES opulus.desktop DESTINATION share/applications)
+    # icons
+    install(FILES opulus16.png DESTINATION share/icons/hicolor/16x16/apps RENAME opulus.png)
+    install(FILES opulus22.png DESTINATION share/icons/hicolor/22x22/apps RENAME opulus.png)
+    install(FILES opulus32.png DESTINATION share/icons/hicolor/32x32/apps RENAME opulus.png)
+    install(FILES opulus48.png DESTINATION share/icons/hicolor/48x48/apps RENAME opulus.png)
+endif()
+
+if(APPLE AND NOT CPACK_GENERATOR)
+    set(CPACK_GENERATOR "Bundle")
+elseif(WIN32 AND NOT CPACK_GENERATOR)
+    set(CPACK_GENERATOR "ZIP")
+elseif(UNIX AND NOT APPLE AND NOT CPACK_GENERATOR)
+    set(CPACK_GENERATOR "TGZ")
+endif()
+
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VENDOR "zett_n_cat")
+set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${PROJECT_NAME}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Opulus is a simple Petri Net simulator/editor written in C++/Qt5")
+
+include(CPack)

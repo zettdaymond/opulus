@@ -10,31 +10,26 @@ else()
     endif()
 endif()
 
-set(coverage_srcs
+
+add_library(coverage ${PLUGIN_LIBS_TYPE}
     coveragegraph.cpp
     utils.cpp
     graphicsviewzoom.cpp
 
-	extended/analysis_utils.cpp
-	extended/preservingmatrixanalyser.cpp
-	extended/propertyanalyser.cpp
-	extended/transitionanaliser.cpp
-	extended/markingnode.cpp
-	extended/invertibilityanalyser.cpp
+    extended/analysis_utils.cpp
+    extended/preservingmatrixanalyser.cpp
+    extended/propertyanalyser.cpp
+    extended/transitionanaliser.cpp
+    extended/markingnode.cpp
+    extended/invertibilityanalyser.cpp
 )
 
-if(BUILD_STATIC_PLUGINS)
-    add_library(coverage STATIC ${coverage_srcs})
-else()
-    add_library(coverage SHARED ${coverage_srcs})
-endif()
-
 target_link_libraries(coverage
-    PUBLIC
+    PRIVATE
         opulus::core
-        Qt5::Widgets
-        Qt5::Gui
-        Qt5::Svg
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Svg
 )
 
 if(${cgraph_FOUND} AND ${gvc_FOUND})
@@ -81,8 +76,13 @@ message("PLUGIN Coverage status:")
 message("# GRAPHVIZ_BACKEND: ${GRAPHVIZ_BACKEND}")
 
 set_target_properties(coverage PROPERTIES
-	LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
-	RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
-install(TARGETS coverage DESTINATION share/opulus/plugins)
+install(TARGETS coverage
+    ARCHIVE DESTINATION share/opulus/plugins
+    LIBRARY DESTINATION share/opulus/plugins
+    RUNTIME DESTINATION share/opulus/plugins
+    COMPONENT plugins
+)
