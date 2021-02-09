@@ -23,7 +23,7 @@
 
 #include <QMainWindow>
 #include <QDir>
-#include <QLinkedList>
+#include <list>
 #include <QSettings>
 #include <QTranslator>
 
@@ -77,7 +77,7 @@ private:
     Ui::MainWindow& ui;
 	Controller* mController;
 	QHash<QAction*, Analyser*> mAnalysers;
-	QLinkedList<QTranslator*> mTranslators;
+    std::list<QTranslator*> mTranslators;
 	PetriNetViewZoom* mZoomController;
 
 	QActionGroup* mToolGroup;

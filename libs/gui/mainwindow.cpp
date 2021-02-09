@@ -121,7 +121,7 @@ void MainWindow::loadI18n(const QString& language) {
         	QTranslator* tr = new QTranslator;
 		if (tr->load(dir.absolutePath()+'/'+langFile)) {
 			QApplication::installTranslator(tr);
-			mTranslators << tr;
+            mTranslators.push_back(tr);
         } else {
             qWarning() << qPrintable("Error loading translation: "+dir.absolutePath()+'/'+langFile);
 			delete tr;

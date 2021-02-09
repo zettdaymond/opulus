@@ -21,7 +21,7 @@
 #define CMDREMOVEITEM_H
 
 #include <QUndoCommand>
-#include <QLinkedList>
+#include <list>
 #include <QCoreApplication>
 #include "itemid.h"
 
@@ -38,7 +38,7 @@ public:
 private:
 	ItemId mId;
 	PetriNet* mPetriNet;
-	QLinkedList<Item*> mItems;
+    std::list<Item*> mItems;
 };
 
 #endif

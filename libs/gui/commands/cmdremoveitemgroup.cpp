@@ -61,5 +61,6 @@ void CmdRemoveItemGroup::undo() {
 void CmdRemoveItemGroup::redo() {
 	//FIXME: does we need to call destructor?
 	mItems.clear();
-	mItems += mPetriNet->removeItemGroup(mIds);
+    auto items = mPetriNet->removeItemGroup(mIds);
+    mItems.insert(mItems.end(), items.begin(), items.end());
 }

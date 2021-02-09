@@ -89,7 +89,7 @@ public:
 
 protected:
 	void beforeAdd() { }
-	QLinkedList<Item*> beforeDelete();
+	std::list<Item *> beforeDelete();
 
 private:
 	void updateDefaultName();

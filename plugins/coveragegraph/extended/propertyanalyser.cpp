@@ -78,9 +78,9 @@ void PropertyAnalyser::checkSafetyAndRestricted()
 
     MarkingNode* root = new MarkingNode(0, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
 
     const auto rootMarking = root->marking();
@@ -88,9 +88,10 @@ void PropertyAnalyser::checkSafetyAndRestricted()
     QSet<Marking> markings;
     markings << root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
 
         const QSet<Transition*> activeTransitions = sim.activeTransitions();
@@ -110,7 +111,7 @@ void PropertyAnalyser::checkSafetyAndRestricted()
                 }
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -125,9 +126,9 @@ void PropertyAnalyser::checkParallelAndConflict()
 {
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
 
     QSet<Marking> markings;
@@ -135,9 +136,10 @@ void PropertyAnalyser::checkParallelAndConflict()
 
     const auto rootMarking = root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*> activeTransitions = sim.activeTransitions();
 
@@ -167,7 +169,7 @@ void PropertyAnalyser::checkParallelAndConflict()
                 }
                 //----
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;

@@ -56,7 +56,7 @@ protected:
 	AbstractArc(PetriNet* pn, Place* from, Transition* to, const ItemId& id);
 
 	void beforeAdd();
-	QLinkedList<Item*> beforeDelete();
+    std::list<Item*> beforeDelete();
 
 	enum ArcDirection {
 		At_ToTransition,

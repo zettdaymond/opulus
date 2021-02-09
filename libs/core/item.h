@@ -24,7 +24,7 @@
 
 #include <QPointF>
 #include <QString>
-#include <QLinkedList>
+#include <list>
 #include "itemid.h"
 
 class PetriNet;
@@ -62,7 +62,7 @@ protected:
 	* @return A list of all items removed due to dependence on this item.
 	* @note This item is \b NOT included in the return value.
 	*/
-	virtual QLinkedList<Item*> beforeDelete() = 0;
+    virtual std::list<Item*> beforeDelete() = 0;
 private:
 	PetriNet* mPetriNet;
 	ItemId mId;

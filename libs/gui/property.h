@@ -25,7 +25,7 @@
 #ifndef DBMODELLERPROPERTY_H
 #define DBMODELLERPROPERTY_H
 
-#include <QLinkedList>
+#include <list>
 #include <QVariant>
 #include <QStringList>
 

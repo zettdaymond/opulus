@@ -65,11 +65,11 @@ void AbstractArc::beforeAdd() {
 	updateTransitionStatus();
 }
 
-QLinkedList<Item*> AbstractArc::beforeDelete() {
+std::list<Item *> AbstractArc::beforeDelete() {
 	mTo->removeInputArc(this);
 	mFrom->removeOutputArc(this);
 	updateTransitionStatus();
-	return QLinkedList<Item*>() << this;
+    return {this};
 }
 
 void AbstractArc::updateTransitionStatus() {

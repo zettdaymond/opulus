@@ -33,8 +33,9 @@ CmdRemoveItem::~CmdRemoveItem() {
 }
 
 void CmdRemoveItem::undo() {
-	while (mItems.count()) {
-		Item* i = mItems.takeLast();
+    while (mItems.size()) {
+        Item* i = mItems.back();
+        mItems.pop_back();
 		mPetriNet->addItem(i);
 	}
 	mItems.clear();

@@ -37,16 +37,17 @@ bool InvertibilityAnalyser::analyse()
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
 
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
     QSet<Marking> markings;
     markings << root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*>& activeTransitions = sim.activeTransitions();
 
@@ -66,7 +67,7 @@ bool InvertibilityAnalyser::analyse()
                 }
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -92,16 +93,17 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
 
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
     QSet<Marking> markings;
     markings << root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*>& activeTransitions = sim.activeTransitions();
 
@@ -119,7 +121,7 @@ bool InvertibilityAnalyser::isStartReachableFromMarking(Marking marking)
                 }
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;

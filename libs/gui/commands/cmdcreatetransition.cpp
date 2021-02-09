@@ -26,8 +26,8 @@ CmdCreateTransition::CmdCreateTransition(PetriNet* petriNet, const QPointF& pos)
 }
 
 void CmdCreateTransition::undo() {
-	QLinkedList<Item*> items = mPetriNet->removeItem(mId);
-	Q_ASSERT(items.count() == 1);
+    std::list<Item*> items = mPetriNet->removeItem(mId);
+    Q_ASSERT(items.size() == 1);
 	qDeleteAll(items);
 }
 

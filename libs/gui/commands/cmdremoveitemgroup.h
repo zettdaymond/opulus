@@ -27,7 +27,7 @@
 #define CMDREMOVEITEMGROUP_H
 
 #include <QUndoCommand>
-#include <QLinkedList>
+#include <list>
 #include <QVector>
 #include <QCoreApplication>
 #include "itemid.h"
@@ -45,7 +45,7 @@ public:
 private:
 	PetriNet* mPetriNet;
     QVector<ItemId> mIds;
-    QLinkedList<Item*> mItems;
+    std::list<Item*> mItems;
 };
 
 #endif

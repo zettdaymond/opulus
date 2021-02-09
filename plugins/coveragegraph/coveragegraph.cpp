@@ -32,7 +32,7 @@
 #include <QtPlugin>
 #include <QMessageBox>
 #include <QTextStream>
-#include <QLinkedList>
+#include <list>
 #include <QStringList>
 #include <QImage>
 #include <QDialog>
@@ -86,18 +86,19 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
 
     MarkingNode* root = new MarkingNode(nullptr, mPetriNet->currentMarking());
     root->marking().normalize(mPetriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(mPetriNet);
 
     QSet<Marking> markings;
     markings << root->marking();
     scriptStream << '\"' << root->marking() << "\" [color = green]\n";
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         mPetriNet->setCurrentMarking(node->marking());
         const QSet<Transition*>& activeTransitions = sim.activeTransitions();
 
@@ -111,7 +112,7 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
                 writeNode(scriptStream, node->marking(), child->marking(), t->name());
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -122,7 +123,7 @@ void CoverageGraph::analyse(PetriNet* pn, AnalysisReporter* reporter) {
     }
     scriptStream << '}';
 	scriptStream.flush();
-    reporter->setStatusMessage(tr("Creating graph image with %1 nodes...").arg(allNodes.count()));
+    reporter->setStatusMessage(tr("Creating graph image with %1 nodes...").arg(allNodes.size()));
     reporter->setPercenage(40);
 
     mMarkingOrder.clear();

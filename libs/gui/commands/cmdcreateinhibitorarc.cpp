@@ -28,8 +28,8 @@ CmdCreateInhibitorArc::CmdCreateInhibitorArc(PetriNet* petriNet, Place* from, Tr
 }
 
 void CmdCreateInhibitorArc::undo() {
-	QLinkedList<Item*> items = mPetriNet->removeItem(mArc);
-	Q_ASSERT(items.count() == 1);
+    std::list<Item*> items = mPetriNet->removeItem(mArc);
+    Q_ASSERT(items.size() == 1);
 	qDeleteAll(items);
 }
 

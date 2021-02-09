@@ -96,14 +96,19 @@ AbstractArc *Node::findArcFrom(Node *from) {
     return nullptr;
 }
 
-QLinkedList<Item*> Node::beforeDelete() {
-	QLinkedList<Item*> arcs;
+std::list<Item*> Node::beforeDelete() {
+    std::list<Item*> arcs;
 
-	foreach(AbstractArc* arc, mInput)
-		arcs += petriNet()->removeItem(arc);
-	foreach(AbstractArc* arc, mOutput)
-		arcs += petriNet()->removeItem(arc);
-	return arcs << this;
+    foreach(AbstractArc* arc, mInput) {
+        auto arcList = petriNet()->removeItem(arc);
+        arcs.insert(arcs.end(), arcList.begin(), arcList.end());
+    }
+    foreach(AbstractArc* arc, mOutput) {
+        auto arcList = petriNet()->removeItem(arc);
+        arcs.insert(arcs.end(), arcList.begin(), arcList.end());
+    }
+    arcs.push_back(this);
+    return arcs;
 }
 
 void Node::save(QXmlStreamWriter& out) {

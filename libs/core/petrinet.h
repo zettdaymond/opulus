@@ -24,7 +24,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QLinkedList>
+#include <list>
 #include <QHash>
 #include <QSet>
 #include <QPointF>
@@ -73,9 +73,9 @@ public:
 	* Places or transitions will have their numbers corrected, if necessary.
 	* @return A list of all items removed. \p item will be the last item in the list.
 	*/
-	QLinkedList<Item*> removeItem(Item* item, bool notify = true);
-	QLinkedList<Item*> removeItem(const ItemId& id);
-	QLinkedList<Item*> removeItemGroup(const QVector<ItemId>& ids);
+    std::list<Item*> removeItem(Item* item, bool notify = true);
+    std::list<Item*> removeItem(const ItemId& id);
+    std::list<Item*> removeItemGroup(const QVector<ItemId>& ids);
 	/// Check if the \p item belong to this petri net.
 	bool contains(Item* item) const;
 	/// Returns the item with id \p id.
