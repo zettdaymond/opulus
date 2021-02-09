@@ -99,6 +99,8 @@ if(UNIX AND NOT APPLE)
     install(FILES opulus48.png DESTINATION share/icons/hicolor/48x48/apps RENAME opulus.png)
 endif()
 
+install(DIRECTORY example_nets DESTINATION share/opulus/)
+
 if(APPLE AND NOT CPACK_GENERATOR)
     set(CPACK_GENERATOR "Bundle")
 elseif(WIN32 AND NOT CPACK_GENERATOR)

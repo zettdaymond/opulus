@@ -86,3 +86,7 @@ install(TARGETS coverage
     RUNTIME DESTINATION share/opulus/plugins
     COMPONENT plugins
 )
+
+if(GRAPHVIZ_BACKEND STREQUAL "SHARED")
+    install_executable_system_dependencies($<TARGET_FILE:coverage> "${QT_QMAKE_EXECUTABLE}/..")
+endif()

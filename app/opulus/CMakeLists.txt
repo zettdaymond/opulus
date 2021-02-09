@@ -1,8 +1,8 @@
 if(WIN32)
-	set(SUBSYSTEM WIN32)
+        set(SUBSYSTEM WIN32)
 endif()
 
-add_executable(${PROJECT_NAME} ${SUBSYSTEM} main.cpp)
+add_executable(${PROJECT_NAME} ${SUBSYSTEM} main.cpp opulus.rc)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

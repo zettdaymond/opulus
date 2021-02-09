@@ -90,9 +90,9 @@ QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &st
 
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
 
     QSet<Marking> markings;
@@ -101,9 +101,10 @@ QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &st
     QSet <Transition *> deadTransitions;
     deadTransitions = _petriNet->transitions();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*>& activeTransitions = sim.activeTransitions();
 
@@ -119,7 +120,7 @@ QSet<Transition *> TransitionAnalyser::deadTransitionInSubTree(const Marking &st
                 MarkingNode* child = new MarkingNode(node, _petriNet->currentMarking());
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -146,16 +147,17 @@ QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking
         return ptnLiveTransition;
 
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
     QSet<Marking> markings;
     markings << root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*>& activeTransitions = sim.activeTransitions();
 
@@ -172,7 +174,7 @@ QSet<Transition *> TransitionAnalyser::ptnLiveTransitionsInSubTree(const Marking
                 MarkingNode* child = new MarkingNode(node, _petriNet->currentMarking());
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -190,9 +192,9 @@ void TransitionAnalyser::activityLevelAnalyse()
 
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_back(root);
     Simulation sim(_petriNet);
 
     QSet<Marking> markings;
@@ -200,9 +202,10 @@ void TransitionAnalyser::activityLevelAnalyse()
 
     const auto rootMarking = root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
 
         const QSet<Transition*> activeTransitions = sim.activeTransitions();
@@ -236,7 +239,7 @@ void TransitionAnalyser::activityLevelAnalyse()
                 _liveTransitions.intersect(lt);
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
@@ -252,9 +255,9 @@ void TransitionAnalyser::stabilityAnalyse()
     QSet <Transition *> _stable;
     MarkingNode* root = new MarkingNode(nullptr, _petriNet->currentMarking());
     root->marking().normalize(_petriNet);
-    QLinkedList<MarkingNode*> newNodes;
-    QLinkedList<MarkingNode*> allNodes;
-    newNodes.append(root);
+    std::list<MarkingNode*> newNodes;
+    std::list<MarkingNode*> allNodes;
+    newNodes.push_front(root);
     Simulation sim(_petriNet);
 
     QSet<Marking> markings;
@@ -262,9 +265,10 @@ void TransitionAnalyser::stabilityAnalyse()
 
     const auto rootMarking = root->marking();
 
-    while (newNodes.count()) {
-        MarkingNode* node = newNodes.takeLast();
-        allNodes.append(node);
+    while (newNodes.size()) {
+        MarkingNode* node = newNodes.back();
+        newNodes.pop_back();
+        allNodes.push_back(node);
         _petriNet->setCurrentMarking(node->marking());
         const QSet<Transition*> activeTransitions = sim.activeTransitions();
 
@@ -311,7 +315,7 @@ void TransitionAnalyser::stabilityAnalyse()
                 //----
 
                 if (!markings.contains(child->marking())) {
-                    newNodes.prepend(child);
+                    newNodes.push_front(child);
                     markings << child->marking();
                 } else
                     delete child;
