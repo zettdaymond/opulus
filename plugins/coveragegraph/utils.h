@@ -32,7 +32,7 @@
 
 namespace utils {
 
-QByteArray renderToGraph(QString graphDesc);
+QByteArray renderToGraph(const QString &graphDesc);
 
 } //namespace utils
 

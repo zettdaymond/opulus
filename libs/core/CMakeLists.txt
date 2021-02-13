@@ -1,5 +1,3 @@
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-
 add_library(opuluscore
     ${CORE_LIBS_TYPE}
         petrinet.cpp
@@ -30,18 +28,15 @@ target_link_libraries(opuluscore
         Eigen3::Eigen
 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	target_compile_options(opuluscore PUBLIC -Wall -Wextra)
-        if(USE_REVISION)
-            find_package(Git)
-            if(GIT_FOUND)
-		execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
-		execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
-		target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
-            else()
-                message(ERROR "Could not find git in PATH")
-            endif()
-	endif()
+if(USE_REVISION)
+    find_package(Git)
+    if(GIT_FOUND)
+	execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
+	target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
+    else()
+	message(ERROR "Could not find git in PATH")
+    endif()
 endif()
 
 set_target_properties(opuluscore PROPERTIES

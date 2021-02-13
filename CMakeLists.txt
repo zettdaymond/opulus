@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.15)
 
 project(opulus LANGUAGES CXX)
 
@@ -14,8 +14,9 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets Svg Xml PrintSupport REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Svg Xml PrintSupport REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+add_subdirectory(thirdparty/OGDF)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(STATUS "Source Directory: " ${CMAKE_SOURCE_DIR})
@@ -28,7 +29,7 @@ if(CCACHE_FOUND)
     message(STATUS "[#] Ccache found")
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_FOUND})
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_FOUND})
-endif(CCACHE_FOUND)
+endif()
 
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "[#] Build type not set, using \"Release\"")
@@ -37,12 +38,16 @@ endif()
 
 option(WITH_PLUGINS "Build and install plugins." ON)
 option(WITH_TRANSLATIONS "Build and install translations." ON)
-option(DEPLOY_QT_AND_SYSTEM_LIBRARIES "Ship Qt in bin folder during install" ON)
+option(DEPLOY_QT_AND_SYSTEM_LIBRARIES "Ship Qt in bin folder during install" OFF)
 option(WITH_TESTS "Build tests." OFF)
 option(BUILD_STATIC_CORE_LIBS "Build static core libraries." OFF)
-option(BUILD_STATIC_PLUGINS "Build static core libraries." OFF)
-option(BUILD_WITH_QT5_STATIC "Link to static Qt5 libraries." OFF)
 option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
+
+if (MSVC)
+    add_compile_options(/W4)
+else()
+    add_compile_options(-Wall -Wextra -pedantic)
+endif()
 
 # Build configuration
 
@@ -52,11 +57,7 @@ else()
     set(CORE_LIBS_TYPE SHARED)
 endif()
 
-if(BUILD_STATIC_PLUGINS)
-    set(PLUGIN_LIBS_TYPE STATIC)
-else()
-    set(PLUGIN_LIBS_TYPE SHARED)
-endif()
+set(PLUGIN_LIBS_TYPE SHARED)
 
 add_subdirectory(libs/core)
 add_subdirectory(libs/gui)
@@ -84,9 +85,7 @@ message("[#] BUILD STATUS:")
 message("[#] WITH_PLUGINS: " ${WITH_PLUGINS})
 message("[#] WITH_TRANSLATIONS: " ${WITH_TRANSLATIONS})
 message("[#] WITH_TESTS: " ${WITH_TESTS})
-message("[#] BUILD_WITH_QT5_STATIC: " ${BUILD_WITH_QT5_STATIC})
 message("[#] BUILD_STATIC_CORE_LIBS: " ${BUILD_STATIC_CORE_LIBS})
-message("[#] BUILD_STATIC_PLUGINS: " ${BUILD_STATIC_PLUGINS})
 message("[#] USE_REVISION: " ${USE_REVISION})
 
 if(UNIX AND NOT APPLE)
@@ -102,7 +101,7 @@ endif()
 install(DIRECTORY example_nets DESTINATION share/opulus/)
 
 if(APPLE AND NOT CPACK_GENERATOR)
-    set(CPACK_GENERATOR "Bundle")
+#    set(CPACK_GENERATOR "Bundle")
 elseif(WIN32 AND NOT CPACK_GENERATOR)
     set(CPACK_GENERATOR "ZIP")
 elseif(UNIX AND NOT APPLE AND NOT CPACK_GENERATOR)

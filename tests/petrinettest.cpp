@@ -47,39 +47,41 @@ void PetriNetTest::testNoActiveTransitions() {
 	}
 }
 
-void PetriNetTest::testActiveTransitions() try {
-	Place* place1 = mPn->createPlace();
-	Place* place2 = mPn->createPlace();
-	Transition* t = mPn->createTransition();
-	mPn->createArc(place1, t);
-	mPn->createArc(t, place2);
-	place1->addTokens(5);
-	Simulation sim(mPn);
-	sim.fireRandomTransition();
-	QCOMPARE(place1->numTokens(), 4u);
-	QCOMPARE(place2->numTokens(), 1u);
-	sim.fireRandomTransition();
-	QCOMPARE(place1->numTokens(), 3u);
-	QCOMPARE(place2->numTokens(), 2u);
-	sim.fireRandomTransition();
-	QCOMPARE(place1->numTokens(), 2u);
-	QCOMPARE(place2->numTokens(), 3u);
-	sim.fireRandomTransition();
-	QCOMPARE(place1->numTokens(), 1u);
-	QCOMPARE(place2->numTokens(), 4u);
-	sim.fireRandomTransition();
-	QCOMPARE(place1->numTokens(), 0u);
-	QCOMPARE(place2->numTokens(), 5u);
-	try {
-		Simulation sim(mPn);
-		sim.fireRandomTransition();
-		QFAIL("expected NoActiveTransitionsException");
-	} catch (NoActiveTransitionsException& e) {
-	}
-	QCOMPARE(place1->numTokens(), 0u);
-	QCOMPARE(place2->numTokens(), 5u);
-} catch (Exception& e) {
-	QFAIL(qPrintable(e.message()));
+void PetriNetTest::testActiveTransitions() {
+    try {
+        Place* place1 = mPn->createPlace();
+        Place* place2 = mPn->createPlace();
+        Transition* t = mPn->createTransition();
+        mPn->createArc(place1, t);
+        mPn->createArc(t, place2);
+        place1->addTokens(5);
+        Simulation sim(mPn);
+        sim.fireRandomTransition();
+        QCOMPARE(place1->numTokens(), 4u);
+        QCOMPARE(place2->numTokens(), 1u);
+        sim.fireRandomTransition();
+        QCOMPARE(place1->numTokens(), 3u);
+        QCOMPARE(place2->numTokens(), 2u);
+        sim.fireRandomTransition();
+        QCOMPARE(place1->numTokens(), 2u);
+        QCOMPARE(place2->numTokens(), 3u);
+        sim.fireRandomTransition();
+        QCOMPARE(place1->numTokens(), 1u);
+        QCOMPARE(place2->numTokens(), 4u);
+        sim.fireRandomTransition();
+        QCOMPARE(place1->numTokens(), 0u);
+        QCOMPARE(place2->numTokens(), 5u);
+        try {
+            Simulation sim2(mPn);
+            sim2.fireRandomTransition();
+            QFAIL("expected NoActiveTransitionsException");
+        } catch (NoActiveTransitionsException& e) {
+        }
+        QCOMPARE(place1->numTokens(), 0u);
+        QCOMPARE(place2->numTokens(), 5u);
+    } catch (Exception& e) {
+        QFAIL(qPrintable(e.message()));
+    }
 }
 
 
@@ -225,9 +227,9 @@ void PetriNetTest::testRemoveNode() {
 	Arc* a3 = mPn->createArc(t2, place);
 	Arc* a4 = mPn->createArc(t1, place);
 
-	QLinkedList<Item*> removeItems = mPn->removeItem(place);
+    auto removeItems = mPn->removeItem(place);
 	QCOMPARE(spy.count(), 5);
- 	QCOMPARE(removeItems.count(), 5);
+    QCOMPARE(removeItems.size(), 5);
 	QVERIFY(!mPn->contains(a1));
 	QVERIFY(!mPn->contains(a2));
 	QVERIFY(!mPn->contains(a3));
@@ -268,7 +270,7 @@ void PetriNetTest::testOmega() {
 		QCOMPARE(p->numTokens(), Marking::OMEGA);
 	}
 
-	QLinkedList<Item*> removeItems = mPn->removeItem(arc);
+    auto removeItems = mPn->removeItem(arc);
 
 	arc = mPn->createArc(t, p);
 	{
