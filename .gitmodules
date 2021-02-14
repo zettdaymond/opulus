@@ -1,0 +1,4 @@
+[submodule "thirdparty/graphviz-cmake"]
+	path = thirdparty/graphviz-cmake
+	url = https://github.com/zettdaymond/graphviz-cmake.git
+	branch = update
