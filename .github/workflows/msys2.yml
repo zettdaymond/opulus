@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on: ["push"]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  windows_static_build:
+    name: Build (Windows x86_64) static
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          release: true
+          update: true
+          install: >-
+            mingw-w64-x86_64-clang
+            mingw-w64-x86_64-qt5-static
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-gcc-libs
+            mingw-w64-x86_64-cmake 
+            mingw-w64-x86_64-eigen3
+            git
+            base-devel
+      - name: Build & Run
+        run: |
+          git submodule update --init
+          mkdir build
+          cd build
+          cmake -G "Ninja" -DQt5_DIR=/mingw64/qt5-static/lib/cmake/Qt5 -DQT_QMAKE_EXECUTABLE=/mingw64/qt5-static/qmake -DQt5Core_DIR=/mingw64/qt5-static/lib/cmake/Qt5Core -DBUILD_STATIC_CORE_LIBS=ON -DBUILD_STATIC_PLUGINS=ON -DCOVERAGE_GRAPH_DOT_STATIC=ON ..
+          cmake --build . --config Release --target package
