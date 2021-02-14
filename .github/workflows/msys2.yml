@@ -19,17 +19,15 @@ jobs:
         with:
           msystem: MINGW64
           path-type: inherit
-          release: true
-          update: true
+          release: false
+          update: false
           install: >-
-            mingw-w64-x86_64-clang
             mingw-w64-x86_64-qt5-static
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
             mingw-w64-x86_64-cmake 
             mingw-w64-x86_64-eigen3
             git
-            base-devel
       - name: Build & Run
         run: |
           git submodule update --init
