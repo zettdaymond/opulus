@@ -1,4 +1,4 @@
-option(COVERAGE_GRAPH_DOT "Enables coverage graph graphviz' dot backend" ON)
+option(COVERAGE_GRAPH_DOT "Enables coverage graph graphviz' dot backend" OFF)
 option(COVERAGE_GRAPH_DOT_STATIC "Enables coverage graph graphviz' dot STATIC backend" OFF)
 
 add_library(coverage ${PLUGIN_LIBS_TYPE}
@@ -13,6 +13,13 @@ add_library(coverage ${PLUGIN_LIBS_TYPE}
     extended/markingnode.cpp
     extended/invertibilityanalyser.cpp
 )
+
+if(BUILD_STATIC_PLUGINS)
+    target_compile_definitions(coverage
+        PRIVATE
+            STATIC_PLUGINS
+    )
+endif()
 
 target_link_libraries(coverage
     PRIVATE
@@ -61,7 +68,7 @@ if(COVERAGE_GRAPH_DOT_STATIC AND NOT COVERAGE_GRAPH_DOT)
         )
 endif()
 
-if((COVERAGE_GRAPH_DOT_STATIC AND COVERAGE_GRAPH_DOT) OR (NOT COVERAGE_GRAPH_DOT_STATIC AND NOT COVERAGE_GRAPH_DOT))
+if(COVERAGE_GRAPH_DOT_STATIC AND COVERAGE_GRAPH_DOT)
     message(FATAL_ERROR "[#] Coverage Graph plugin Backend is not determined!")
 endif()
 
@@ -82,13 +89,15 @@ set_target_properties(coverage PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/share/opulus/plugins
 )
 
-install(TARGETS coverage
-    ARCHIVE DESTINATION share/opulus/plugins
-    LIBRARY DESTINATION share/opulus/plugins
-    RUNTIME DESTINATION share/opulus/plugins
-    COMPONENT plugins
-)
+if(NOT BUILD_STATIC_PLUGINS)
+    install(TARGETS coverage
+        ARCHIVE DESTINATION share/opulus/plugins
+        LIBRARY DESTINATION share/opulus/plugins
+        RUNTIME DESTINATION share/opulus/plugins
+        COMPONENT plugins
+    )
 
-if(COVERAGE_GRAPH_DOT)
-    install_executable_system_dependencies($<TARGET_FILE:coverage> "${QT_QMAKE_EXECUTABLE}/..")
+    if(COVERAGE_GRAPH_DOT)
+        install_executable_system_dependencies($<TARGET_FILE:coverage> "${CMAKE_CXX_COMPILER}/..")
+    endif()
 endif()

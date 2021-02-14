@@ -16,8 +16,6 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets Svg Xml PrintSupport R
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Svg Xml PrintSupport REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-add_subdirectory(thirdparty/OGDF)
-
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(STATUS "Source Directory: " ${CMAKE_SOURCE_DIR})
     message(STATUS "Build Directory:  " ${CMAKE_BINARY_DIR})
@@ -41,6 +39,7 @@ option(WITH_TRANSLATIONS "Build and install translations." ON)
 option(DEPLOY_QT_AND_SYSTEM_LIBRARIES "Ship Qt in bin folder during install" OFF)
 option(WITH_TESTS "Build tests." OFF)
 option(BUILD_STATIC_CORE_LIBS "Build static core libraries." OFF)
+option(BUILD_STATIC_PLUGINS "Build static core libraries." OFF)
 option(USE_REVISION "Use revision number and commit hash instead of numeric version. Disable if building final release or without git." ON)
 
 if (MSVC)
@@ -57,7 +56,11 @@ else()
     set(CORE_LIBS_TYPE SHARED)
 endif()
 
-set(PLUGIN_LIBS_TYPE SHARED)
+if(BUILD_STATIC_PLUGINS)
+    set(PLUGIN_LIBS_TYPE STATIC)
+else()
+    set(PLUGIN_LIBS_TYPE SHARED)
+endif()
 
 add_subdirectory(libs/core)
 add_subdirectory(libs/gui)
@@ -86,6 +89,7 @@ message("[#] WITH_PLUGINS: " ${WITH_PLUGINS})
 message("[#] WITH_TRANSLATIONS: " ${WITH_TRANSLATIONS})
 message("[#] WITH_TESTS: " ${WITH_TESTS})
 message("[#] BUILD_STATIC_CORE_LIBS: " ${BUILD_STATIC_CORE_LIBS})
+message("[#] BUILD_STATIC_PLUGINS: " ${BUILD_STATIC_PLUGINS})
 message("[#] USE_REVISION: " ${USE_REVISION})
 
 if(UNIX AND NOT APPLE)

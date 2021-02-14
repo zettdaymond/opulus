@@ -7,8 +7,14 @@ add_executable(${PROJECT_NAME} ${SUBSYSTEM} main.cpp opulus.rc)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         opulus::gui
-        ${PLUGINS_TO_LINK}
 )
+
+if(WITH_PLUGINS AND BUILD_STATIC_PLUGINS)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            opulus::plugins
+    )
+endif()
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
@@ -44,5 +50,5 @@ if(DEPLOY_QT_AND_SYSTEM_LIBRARIES)
         DESTINATION bin
     )
 
-    install_executable_system_dependencies($<TARGET_FILE:${PROJECT_NAME}> "${QT_QMAKE_EXECUTABLE}/..")
 endif()
+install_executable_system_dependencies($<TARGET_FILE:${PROJECT_NAME}> "${CMAKE_CXX_COMPILER}/..")

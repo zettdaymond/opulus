@@ -47,6 +47,13 @@ add_library(opulusgui
 
 add_library(opulus::gui ALIAS opulusgui)
 
+if(BUILD_STATIC_PLUGINS)
+    target_compile_definitions(opulusgui
+        PRIVATE
+            STATIC_PLUGINS
+    )
+endif()
+
 target_include_directories(opulusgui PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
@@ -66,8 +73,10 @@ set_target_properties(opulusgui PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
 )
 
-install(TARGETS opulusgui
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-)
+if(NOT BUILD_STATIC_CORE_LIBS)
+    install(TARGETS opulusgui
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
+endif()
