@@ -25,7 +25,7 @@ jobs:
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
             mingw-w64-x86_64-cmake 
-            mingw-w64-x86_64-eigen3
+            mingw-w64-x86_64-qt5-static
       - name: Build & Run
         run: |
           git submodule update --init
