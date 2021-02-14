@@ -29,6 +29,7 @@ jobs:
             mingw-w64-x86_64-qt5
             mingw-w64-x86_64-eigen3
             mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-libtool
             git
       - name: Build & Run
         run: |
