@@ -27,7 +27,7 @@ inline const char* opulusVersion() {
 #ifdef OPULUS_REVISION
 	return OPULUS_REVISION;
 #else
-    return "0.9.6";
+    return OPULUS_VERSION;
 #endif
 }
 

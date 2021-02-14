@@ -29,14 +29,9 @@ target_link_libraries(opuluscore
 )
 
 if(USE_REVISION)
-    find_package(Git)
-    if(GIT_FOUND)
-	execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
-	target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
-    else()
-	message(ERROR "Could not find git in PATH")
-    endif()
+    target_compile_definitions(opuluscore PUBLIC "-DOPULUS_REVISION=\"r${git_revcount}.${git_revhash}\"")
+else()
+    target_compile_definitions(opuluscore PUBLIC "-DOPULUS_VERSION=\"${OPULUS_VERSION}\"")
 endif()
 
 set_target_properties(opuluscore PROPERTIES

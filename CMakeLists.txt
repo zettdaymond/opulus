@@ -4,6 +4,8 @@ project(opulus LANGUAGES CXX)
 
 include(cmake/Utils.cmake)
 
+set(OPULUS_VERSION 0.9.6)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -49,6 +51,16 @@ else()
 endif()
 
 # Build configuration
+
+if(USE_REVISION)
+    find_package(Git)
+    if(GIT_FOUND)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revcount OUTPUT_STRIP_TRAILING_WHITESPACE)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE git_revhash  OUTPUT_STRIP_TRAILING_WHITESPACE)
+    else()
+        message(ERROR "Could not find git in PATH")
+    endif()
+endif()
 
 if(BUILD_STATIC_CORE_LIBS)
     set(CORE_LIBS_TYPE STATIC)
@@ -114,6 +126,11 @@ endif()
 
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "zett_n_cat")
+if(USE_REVISION)
+    set(CPACK_PACKAGE_VERSION "${git_revcount}.${git_revhash}")
+else()
+    set(CPACK_PACKAGE_VERSION ${OPULUS_VERSION})
+endif()
 set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${PROJECT_NAME}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Opulus is a simple Petri Net simulator/editor written in C++/Qt5")
 
