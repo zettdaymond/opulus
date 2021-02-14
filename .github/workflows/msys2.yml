@@ -28,10 +28,6 @@ jobs:
             mingw-w64-x86_64-qt5-static
             mingw-w64-x86_64-eigen3
             git
-      - shell: msys2 {0}
-        run: |
-          pacman -Sy
-          pacman --noconfirm -S --needed mingw-w64-x86_64-qt5-static mingw-w64-x86_64-eigen3
       - name: Build & Run
         run: |
           git submodule update --init
