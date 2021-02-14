@@ -24,7 +24,9 @@ jobs:
           install: >-
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
-            mingw-w64-x86_64-cmake 
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-qt5-static
+            mingw-w64-x86_64-eigen3
             git
       - shell: msys2 {0}
         run: |
