@@ -38,3 +38,33 @@ jobs:
           cd build
           cmake -G "Ninja" -DQt5_DIR=/mingw64/qt5-static/lib/cmake/Qt5 -DQT_QMAKE_EXECUTABLE=/mingw64/qt5-static/qmake -DQt5Core_DIR=/mingw64/qt5-static/lib/cmake/Qt5Core -DBUILD_STATIC_CORE_LIBS=ON -DBUILD_STATIC_PLUGINS=ON -DCOVERAGE_GRAPH_DOT_STATIC=ON ..
           cmake --build . --config Release --target package
+  windows_dynamic_build:
+    name: Build (Windows x86_64) dynamic
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          release: false
+          update: false
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-gcc-libs
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-qt5
+            mingw-w64-x86_64-eigen3
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-libtool
+            git
+      - name: Build & Run
+        run: |
+          git submodule update --init
+          mkdir build
+          cd build
+          cmake -G "Ninja" -DDEPLOY_QT_AND_SYSTEM_LIBRARIES=ON -DCOVERAGE_GRAPH_DOT_STATIC=ON ..
+          cmake --build . --config Release --target package
