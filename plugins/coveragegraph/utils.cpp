@@ -31,7 +31,6 @@
 #ifdef GRAPHVIZ_STATIC_BACKEND
 
 #include "gvc.h"
-#include "graph.h"
 
 extern gvplugin_library_t gvplugin_core_LTX_library;
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
@@ -57,13 +56,13 @@ QByteArray utils::renderToGraph(const QString& graphDesc)
     unsigned int length;
     gvRenderData (gvc, G, "svg", &result, &length);
 
-    //Do
-    //gvFreeRenderData(result);
-
     gvFreeLayout(gvc, G);
     agclose (G);
 
-    return QByteArray(result, length);
+    QByteArray out(result, length);
+    free(result);
+
+    return out;
 }
 
 #endif //GRAPHVIZ_STATIC_BACKEND
@@ -87,13 +86,13 @@ QByteArray utils::renderToGraph(const QString& graphDesc)
 	unsigned int length;
 	gvRenderData (gvc, G, "svg", &result, &length);
 
-	//Do
-	//gvFreeRenderData(result);
-
 	gvFreeLayout(gvc, G);
 	agclose (G);
 
-	return QByteArray(result, length);
+    QByteArray out(result, length);
+    free(result);
+
+    return out;
 }
 
 #endif //GRAPHVIZ_BACKEND
