@@ -183,7 +183,7 @@ QByteArray utils::renderToGraph(QString graphDesc)
 #ifndef GRAPHVIZ_STATIC_BACKEND
 #ifndef OGDF_BACKEND
 
-QByteArray utils::renderToGraph(const QString& [[maybe_unused]] graphDesc)
+QByteArray utils::renderToGraph(const QString& graphDesc)
 {
     return {};
 }
