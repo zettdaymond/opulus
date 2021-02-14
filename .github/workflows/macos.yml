@@ -1,0 +1,27 @@
+# This is a basic workflow to help you get started with Actions
+
+name: MacOS
+
+# Controls when the action will run. 
+on: [push]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  macos_build:
+      runs-on: macOS-latest
+
+      steps:
+      - uses: actions/checkout@v1
+        with: 
+          fetch-depth: 1
+      - name: Prepare
+        run: |
+          brew install qt5 cmake graphviz eigen pkg-config
+
+      - name: Build
+        run: |
+          export PATH="/usr/local/opt/qt/bin:$PATH"
+          mkdir build
+          cd build
+          cmake -DCOVERAGE_GRAPH_DOT=ON ..
+          cmake --build .
