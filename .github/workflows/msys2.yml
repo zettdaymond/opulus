@@ -27,6 +27,7 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-qt5-static
             mingw-w64-x86_64-eigen3
+            mingw-w64-x86_64-ninja
             git
       - name: Build & Run
         run: |
