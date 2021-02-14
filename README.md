@@ -7,9 +7,9 @@ Opulus is a simple Petri Net simulator/editor written in C++/Qt5. This is the fo
 ## Build status ##
 | Platform | CI |
 |----------|:--:|
-| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/linux.svg?sanitize=true" height="20" /> Linux | ![GNU/Linux Build Status](https://github.com/zettdaymond/opulus/workflows/build/badge.svg)|
-| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/apple.svg?sanitize=true" height="20" /> MacOS | ![macOS Build Status](https://github.com/zettdaymond/opulus/workflows/build/badge.svg)|
-| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/windows.svg?sanitize=true" height="20" /> Windows | N/A |
+| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/linux.svg?sanitize=true" height="20" /> Linux | ![Linux](https://github.com/zettdaymond/opulus/workflows/Linux/badge.sv)|
+| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/apple.svg?sanitize=true" height="20" /> MacOS | ![MacOS](https://github.com/zettdaymond/opulus/workflows/MacOS/badge.svg)|
+| <img src="https://raw.githubusercontent.com/zettdaymond/Font-Awesome/master/svgs/brands/windows.svg?sanitize=true" height="20" /> Windows | ![Windows](https://github.com/zettdaymond/opulus/workflows/Windows/badge.svg) |
 
 
 # Features: #
