@@ -23,7 +23,7 @@ Opulus is a simple Petri Net simulator/editor written in C++/Qt5. This is the fo
 To compile Opulus you will need:
 
 * *Qt* >= 5.3
-* *CMake* >= 3.4
+* *CMake* >= 3.15
 * Compiler that supports C++14 (*GCC* >= 4.9 or *Clang* >= 3.4)
 * *Eigen* >= 3.2
 
@@ -34,12 +34,14 @@ First of all, clone the repo to your machine:
 ```
 $ git clone https://bitbucket.org/zettdaymond/opulus
 $ cd ./opulus
+$ git submodule update --init
 ```
 Then to compile just type:
 ```
 $ mkdir build
 $ cd build
 $ cmake ..
+$ cmake --build . --config Release --target all
 ```
 If you want to use another install prefix (the default is /usr/local) type:
 ```
@@ -50,6 +52,13 @@ instead of `cmake ..`
 On some distros (like Arch Linux) /usr/local/bin is not in the path, so is better to install on /usr, e.g:
 ```
 $ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+```
+
+# Packaging #
+On some platforms CMake can zip opulus and all dependent libraries together to prepare for distribution.
+For this, after compilation, just type in build directory:
+```
+$ cmake --build package .
 ```
 
 # Build options #
@@ -82,24 +91,44 @@ Switch it ON, if you build Opulus with **STATIC** version of Qt5. Build will fai
 
 Use revision number and commit hash instead of numeric version. Disable if building final release or without git.
 
-- **GRAPHVIZ_BACKEND=STATIC/SHARED/NONE**
+- **DEPLOY_QT_AND_SYSTEM_LIBRARIES=ON/OFF**
 
-Specifies what type of a graph-visualization backend the coverage graph plugin will use. STATIC - means that you have and want to use static Graphviz libraries, SHARED - the same, but shared libraries, NONE - you don't want to use any graph-visualization backend. Thus, the coverage graph, by itself, become unavailable, but the analisys result stays available.
+Switch it ON, if you want redistribute Qt and system shared libraries during `cmake --build . --target package` command.
+
+
+- **COVERAGE_GRAPH_DOT=ON/OFF**
+
+Switch it ON, if you want to build coverage graph plugin dynamically linked with GraphViz libraries. CMake will try to find GraphViz libraries on your system.
+
+- **COVERAGE_GRAPH_DOT_static=ON/OFF**
+
+Switch it ON, if you want to build coverage graph plugin statically linked with GraphViz libraries. In this case, CMake build dependent liraries itself (git submodule)
 
 # About Windows: #
-The easiest way to compile on Windows is to use MSYS2. To install all dependencies execute following commands in MinGW shell:
+The easiest way to compile on Windows is to use MSYS2. To install all dependencies and build opulus execute following commands in MinGW shell:
 ```
 $ pacman -Syu
-$ pacman -S git mingw-w64-x86_64-gcc mingw-w64-x86_64-qt5 mingw-w64-x86_64-cmake mingw-w64-x86_64-eigen3
+$ pacman -S git mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-libs mingw-w64-x86_64-cmake mingw-w64-x86_64-qt5 mingw-w64-x86_64-cmake mingw-w64-x86_64-eigen3 mingw-w64-x86_64-ninja  mingw-w64-x86_64-libtool
 $ git clone https://bitbucket.org/zettdaymond/opulus
 $ cd ./opulus
+$ git submodule update --init
 $ mkdir build && cd build
-$ cmake -G "MSYS Makefiles" ..
+$ cmake -G "Ninja" -DDEPLOY_QT_AND_SYSTEM_LIBRARIES=ON -DCOVERAGE_GRAPH_DOT_STATIC=ON ..
+$ cmake --build . --config Release --target package
 ```
+or using qt5-static distribution:
+```
+$ pacman -Syu
+$ pacman -S git mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-libs mingw-w64-x86_64-cmake mingw-w64-x86_64-qt5-static mingw-w64-x86_64-cmake mingw-w64-x86_64-eigen3 mingw-w64-x86_64-ninja  mingw-w64-x86_64-libtool
+$ git clone https://bitbucket.org/zettdaymond/opulus
+$ cd ./opulus
+$ git submodule update --init
+$ mkdir build && cd build
+$ cmake -G "Ninja" -DQt5_DIR=/mingw64/qt5-static/lib/cmake/Qt5 -DQT_QMAKE_EXECUTABLE=/mingw64/qt5-static/qmake -DQt5Core_DIR=/mingw64/qt5-static/lib/cmake/Qt5Core -DBUILD_STATIC_CORE_LIBS=ON -DBUILD_STATIC_PLUGINS=ON -DCOVERAGE_GRAPH_DOT_STATIC=ON ..
+$ cmake --build . --config Release --target package
+```
+
 Replace `mingw-w64-x86_64...` with `mingw-w64-i686...` if you want to build 32-bit binaries. 
-If the build was successful, `cd` into `bin` directory and run the program: `$ ./opulus`
-To distribute the program, you will need to copy some GCC and Qt .dll's to `bin` directory, along with entire *graphviz* distribution.
-To determine .dll's you'll need to copy, run `ldd bin/opulus.exe` and copy all /mingw* .dll's.
 
 # Releases #
 We provide binary builds for Windows. See https://bitbucket.org/zettdaymond/opulus/downloads. 
